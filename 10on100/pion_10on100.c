@@ -1,113 +1,115 @@
 void pion_10on100()
 {
 
- //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Enable this block when you process xrdfs files from collabration
   // Set up input file chain
-  /*TChain *mychain = new TChain("events");
+  TChain *mychain = new TChain("events");
 
-    std::ofstream error_file;
-    error_file.open("error_file.txt", std::ios::trunc);
-    if (!error_file.is_open()) {
+  std::ofstream error_file;
+  error_file.open("error_file.txt", std::ios::trunc);
+  if (!error_file.is_open()) {
     std::cerr << "Failed to open error log file!" << std::endl;
     return; // Exit the function if the file couldn't be opened
-    }
+  }
 
-    TString filepath;
-    unsigned int nFiles = 0;  // Initialize the total files counter
-    unsigned int nEntries;            // Variable to hold the number of entries in the tree
+  TString filepath;
+  unsigned int nFiles = 0;  // Initialize the total files counter
+  unsigned int nFiles2;
+  unsigned int nEntries;// Variable to hold the number of entries in the tree
 
-    // Loop through the specified ranges
-    for (unsigned int i = 10; i < 19; i++) { //19
-    for (unsigned int j = 0; j < 1921; j++) { //1921
-    // Construct the file path
-    if (j < 10) {
-    filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.09.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.0/10x100/pi+/DEMPgen-1.2.0_10x100_pi+_%i.000%i.eicrecon.tree.edm4eic.root", i, j);
-    } else if (j < 100) {
-    filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.09.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.0/10x100/pi+/DEMPgen-1.2.0_10x100_pi+_%i.00%i.eicrecon.tree.edm4eic.root", i, j);
-    } else if (j < 1000) {
-    filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.09.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.0/10x100/pi+/DEMPgen-1.2.0_10x100_pi+_%i.0%i.eicrecon.tree.edm4eic.root", i, j);
-    } else {
-    filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.09.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.0/10x100/pi+/DEMPgen-1.2.0_10x100_pi+_%i.%i.eicrecon.tree.edm4eic.root", i, j);
-    }
-    // Try opening the file to check if it's valid and then add to the TChain
-    TFile *file = TFile::Open(filepath);
-    if (file && !file->IsZombie()) {
-    TTree *tree = (TTree*)file->Get("events");
-
-    // Ensure the tree is valid before getting entries
-    if (tree) {
-    nEntries = tree->GetEntries();
-    // std::cout << "nEntries = " << nEntries << std::endl;
-
-    if (nEntries == 1259) {
-    nFiles++;
-    mychain->Add(filepath);  // Add valid file to the chain
-    } else {
-    error_file << "Unexpected number of entries: " << nEntries << " in file: " << filepath << std::endl;
-    }
-    } else {
-    error_file << "Tree 'events' not found in file: " << filepath << std::endl;
-    }
-
-    file->Close();  // Close the file
-    delete file;    // Delete the file pointer
-    } else {
-    // If the file fails to open, log the error to the txt file
-    error_file << "Failed to open file: " << filepath << std::endl;
-    if (file) {
-    file->Close();  // Close the file if it was partially opened
-    delete file;    // Delete the file pointer
-    }
-    continue; // Skip further processing if the file could not be opened
-    }
-    }
-    }
-
-    error_file.close();  // Close the error log file
-    unsigned int count2 = 0; // counter on neutrons within 4 mrad*/
+  // Loop through the specified ranges
+  for (unsigned int i = 0;  i < 3; i++){ // i's correspond to different Q2 regions
+      
+    if(i == 0) {nFiles2 = 357;}
+    else if(i == 1) {nFiles2 = 186;}
+    else if(i == 2) {nFiles2 = 407;}
+   
+    for (unsigned int j = 0; j < nFiles2; j++) { // j's correspond to files avaiable for each i
+   
+      // Construct the file path (used latest december-24.12.0 compaign files)
+      if (i == 0) { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/10x100/q2_%i_%i/pi+/DEMPgen-1.2.2_10x100_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+3, i+10, i+3, i+10, j);}
+      else if (i == 1) { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/10x100/q2_%i_%i/pi+/DEMPgen-1.2.2_10x100_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+9, i+19, i+9, i+19, j);}
+      else { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/10x100/q2_%i_%i/pi+/DEMPgen-1.2.2_10x100_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+18, i+33, i+18, i+33, j);} 
   
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Enable this block when you process the files from Love Preet
-  TChain *mychain = new TChain("events");
-  unsigned int count1 = 0; // Counter for the number of files successfully added
-  unsigned int count2 = 0; // Counter for neutrons within 4 mrad
+      // Try opening the file to check if it's valid and then add to the TChain
+      TFile *file = TFile::Open(filepath);
+      if (file && !file->IsZombie()) {
+	TTree *tree = (TTree*)file->Get("events");
 
-  unsigned int nFiles1 = 3; // Number of iterations for the first loop //4
-  unsigned int nFiles2 = 2; // Number of iterations for the second loop //484
-  unsigned int nFiles; // Total number of files to process
-  unsigned int nEntries;            // Variable to hold the number of entries in the tree
+	// Ensure the tree is valid before getting entries
+	if (tree) {
+	  nEntries = tree->GetEntries();
+	  // std::cout << "nEntries = " << nEntries << std::endl;
 
-  for (unsigned int i = 0; i < nFiles1; i++) {
-    /*if(i == 0) {nFiles2 = 40;}
-    else if(i == 1) {nFiles2 = 80;}
-    else if(i == 2) {nFiles2 = 91;}*/
-  
-    for (unsigned int j = 0; j < nFiles2; j++) {
-      count1++;
+	  if (nEntries == 1120) { // No. of entries in every file
+	    nFiles++;
+	    mychain->Add(filepath);  // Add valid file to the chain
+	  } else {
+	    error_file << "Unexpected number of entries: " << nEntries << " in file: " << filepath << std::endl;
+	  }
+	} else {
+	  error_file << "Tree 'events' not found in file: " << filepath << std::endl;
+	}
 
-      // Construct file name
-      TString fileName = Form("Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-        
-      //Files from Jlab server
-      //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Nov2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-      //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Dec2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-
-      // Check if the file exists
-      if (gSystem->AccessPathName(fileName) == kFALSE) {
-	mychain->Add(fileName); // Add file to the TChain
-	nEntries = mychain->GetEntries();
-	std::cout << "nEntries = " << nEntries << std::endl;
-      } 
-      else {
-	std::cerr << "Warning: File not found -> " << fileName << std::endl;
-	std::cerr << "Terminating execution." << std::endl;
-	std::exit(EXIT_FAILURE); // Exit with an error status
+	file->Close();  // Close the file
+	delete file;    // Delete the file pointer
+      } else {
+	// If the file fails to open, log the error to the txt file
+	error_file << "Failed to open file: " << filepath << std::endl;
+	if (file) {
+	  file->Close();  // Close the file if it was partially opened
+	  delete file;    // Delete the file pointer
+	}
+	continue; // Skip further processing if the file could not be opened
       }
     }
   }
-  nFiles = count1;
 
+  error_file.close();  // Close the error log file
+  unsigned int count2 = 0; // counter on neutrons within 4 mrad
+  
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Enable this block when you process the files from Love Preet
+  /* TChain *mychain = new TChain("events");
+     unsigned int count1 = 0; // Counter for the number of files successfully added
+     unsigned int count2 = 0; // Counter for neutrons within 4 mrad
+
+     unsigned int nFiles1 = 4; // Number of iterations for the first loop //4
+     unsigned int nFiles2 = 484; // Number of iterations for the second loop //484
+     unsigned int nFiles; // Total number of files to process
+     unsigned int nEntries;            // Variable to hold the number of entries in the tree
+
+     for (unsigned int i = 0; i < nFiles1; i++) {
+     //if(i == 0) {nFiles2 = 40;}
+     // else if(i == 1) {nFiles2 = 80;}
+     // else if(i == 2) {nFiles2 = 91;}
+  
+     for (unsigned int j = 0; j < nFiles2; j++) {
+     count1++;
+
+     // Construct file name
+     // TString fileName = Form("Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+        
+     //Files from Jlab server
+     //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Nov2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+     TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Dec2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+
+     // Check if the file exists
+     if (gSystem->AccessPathName(fileName) == kFALSE) {
+     mychain->Add(fileName); // Add file to the TChain
+     //	nEntries = mychain->GetEntries();
+     //	std::cout << "nEntries = " << nEntries << std::endl;
+     } 
+     else {
+     std::cerr << "Warning: File not found -> " << fileName << std::endl;
+     std::cerr << "Terminating execution." << std::endl;
+     std::exit(EXIT_FAILURE); // Exit with an error status
+     }
+     }
+     }
+     nFiles = count1;
+  */
 
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -300,15 +302,15 @@ void pion_10on100()
   
   for(unsigned int A = 0; A <8; A++) {
     if (A==0){
-      htw_t_cut_result[A] = new TH1D(Form("t_Result_Q2_%i", A), Form("-t dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; -t_{rec_corr} (GeV^{2}); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 10, 0, 0.4);
-      htw_Q2_cut_result[A] = new TH1D(Form("Q2_Result_Q2_%i", A), Form("Q^{2} dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; Q^{2} (GeV^{2}); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 25, Q2BinVal[0], Q2BinVal[7]);
-      htw_W_cut_result[A] = new TH1D(Form("W_Result_Q2_%i", A), Form("W dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; W (GeV); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 40, 0, 20);
+      htw_t_cut_result[A] = new TH1D(Form("t_Result_Q2_%i", A), Form("-t dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; -t_{rec_corr} (GeV^{2}); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 10, 0, 0.4);
+      htw_Q2_cut_result[A] = new TH1D(Form("Q2_Result_Q2_%i", A), Form("Q^{2} dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; Q^{2} (GeV^{2}); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 25, Q2BinVal[0], Q2BinVal[7]);
+      htw_W_cut_result[A] = new TH1D(Form("W_Result_Q2_%i", A), Form("W dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; W (GeV); Rate(Hz)", 		Q2BinVal[0],Q2BinVal[7]), 40, 0, 20);
     }
     
     else {
-      htw_t_cut_result[A] = new TH1D(Form("t_Result_Q2_%i", A), Form("-t dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; -t_{rec_corr} (GeV^{2}); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 10, 0, 0.4);
-      htw_Q2_cut_result[A] = new TH1D(Form("Q2_Result_Q2_%i", A), Form("Q^{2} dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; Q^{2} (GeV^{2}); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 25, Q2BinVal[A-1]-5, Q2BinVal[A]+5);
-      htw_W_cut_result[A] = new TH1D(Form("W_Result_Q2_%i", A), Form("W dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff}, W cuts; W (GeV); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 40, 0, 20);
+      htw_t_cut_result[A] = new TH1D(Form("t_Result_Q2_%i", A), Form("-t dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; -t_{rec_corr} (GeV^{2}); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 10, 0, 0.4);
+      htw_Q2_cut_result[A] = new TH1D(Form("Q2_Result_Q2_%i", A), Form("Q^{2} dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; Q^{2} (GeV^{2}); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 25, Q2BinVal[A-1]-5, Q2BinVal[A]+5);
+      htw_W_cut_result[A] = new TH1D(Form("W_Result_Q2_%i", A), Form("W dist w/ %2.1f < Q^{2} < %2.1f, -t, #theta_{diff} , #phi_{diff} cuts; W (GeV); Rate(Hz)", Q2BinVal[A-1],Q2BinVal[A]), 40, 0, 20);
     }
     
     htw_t_cut_result[A]->SetLineWidth(2);
@@ -541,7 +543,7 @@ void pion_10on100()
  
       hcal_clus_size = neutEng_hcal.GetSize(); // ZDC HCal cluster size -> No. of clusters in ZDC
       
-     if(hcal_clus_size > 0 && hcal_clus_size ==1 ){ // Selected the events correspond to one clusters
+      if(hcal_clus_size > 0 && hcal_clus_size ==1 ){ // Selected the events correspond to one clusters
 	neut_pos_hcal.SetXYZ(neutPosX_hcal[0], neutPosY_hcal[0], neutPosZ_hcal[0]);
         //cout<<"  "<<neut_pos_hcal.R()<<endl;     
         //cout<<"clus = "<<hcal_clus_size<<", neut_x0 =  "<<neutPosX_hcal[0]<<", neut_x1 = "<<neutPosX_hcal[i]<<endl;
@@ -584,7 +586,7 @@ void pion_10on100()
     tnbfalttruth = (prot_nbfbeam - neut_nbfmc); 
     t_nbfalttruth = -1*(tnbfalttruth.mag2()); // t_alttruth is the -t from the second loop for nbf
     
-     htw_Truth_t -> Fill(t_nbfalttruth, weight);
+    htw_Truth_t -> Fill(t_nbfalttruth, weight);
     // Efficiency plots
     if(neut_rot_mc.Theta()*1000. < 4.0){
       count2++; // truth neutrons
@@ -643,10 +645,10 @@ void pion_10on100()
 	htwz_rec4 -> Fill(t_reccorr, t_truth, weight); // zoomed version
  
 	/*// Absolute difference -t plots
-	htw_t1 -> Fill(t_rec - t_truth);
-	htw_t2 -> Fill(t_altrec - t_truth);
-	htw_t3 -> Fill(t_recpT - t_truth);
-	htw_t4 -> Fill(t_reccorr - t_truth);*/
+	  htw_t1 -> Fill(t_rec - t_truth);
+	  htw_t2 -> Fill(t_altrec - t_truth);
+	  htw_t3 -> Fill(t_recpT - t_truth);
+	  htw_t4 -> Fill(t_reccorr - t_truth);*/
 	
 	// Neutron theta-phi plots 
 	nTheta_Diff = p_miss_rot_rec.Theta() - neut_rot_rec.Theta();
@@ -703,26 +705,26 @@ void pion_10on100()
 	}
       
 	if ( Q2_rec > Q2_low && Q2_rec < Q2_high){
-	  if((t_reccorr < 0.4) && (nTheta_Diff*TMath::RadToDeg() > ThetaDiff_Cut_Low) && (nTheta_Diff*TMath::RadToDeg() < ThetaDiff_Cut_High) && (abs(nPhi_Diff*TMath::RadToDeg())) < PhiDiff_Cut && W_rec < 41.0){
+	  if((t_reccorr < 0.4) && (nTheta_Diff*TMath::RadToDeg() > ThetaDiff_Cut_Low) && (nTheta_Diff*TMath::RadToDeg() < ThetaDiff_Cut_High) && (abs(nPhi_Diff*TMath::RadToDeg())) < PhiDiff_Cut /*&& W_rec < 41.0*/){
             htw_t_cut_result[B] -> Fill(t_reccorr, weight);
 	    htw_Q2_cut_result[B] -> Fill(Q2_rec, weight);
 	    htw_W_cut_result[B] -> Fill(W_rec, weight);
             if(B==0) { 
-            t_truth = t_nbfalttruth; 
+	      t_truth = t_nbfalttruth; 
             
-            //effeciency plot
-            Q2_t_DetEff_Cut -> Fill(Q2_truth, t_truth, weight);
+	      //effeciency plot
+	      Q2_t_DetEff_Cut -> Fill(Q2_truth, t_truth, weight);
             
-            // Absolute difference -t plots
-	    htw_t1 -> Fill(t_rec - t_truth, weight);
-	    htw_t2 -> Fill(t_altrec - t_truth, weight);
-	    htw_t3 -> Fill(t_recpT - t_truth, weight);
-	    htw_t4 -> Fill(t_reccorr - t_truth, weight);
+	      // Absolute difference -t plots
+	      htw_t1 -> Fill(t_rec - t_truth, weight);
+	      htw_t2 -> Fill(t_altrec - t_truth, weight);
+	      htw_t3 -> Fill(t_recpT - t_truth, weight);
+	      htw_t4 -> Fill(t_reccorr - t_truth, weight);
 	    
-	    //neutron momemtum resolution
-	    htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weight);
+	      //neutron momemtum resolution
+	      htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weight);
 	  
-	   } // Efficiency plots
+	    } // Efficiency plots
 	  }// if statement over all cuts
 	} // if statement over Q2
       } // for loop over B
@@ -742,7 +744,7 @@ void pion_10on100()
   piEff_P -> Divide(piRecw_P_Cut, piTruthw_P_Uncut, 1, 1, "b");
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  //gStyle->SetOptStat(0);
+  // gStyle->SetOptStat(0);
   // gStyle->SetOptTitle(0);
   gStyle->SetPadRightMargin(0.125); // left space on right side
   gStyle->SetPadLeftMargin(0.12); // right space on right side
