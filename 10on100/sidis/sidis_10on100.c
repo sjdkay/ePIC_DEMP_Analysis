@@ -1,124 +1,133 @@
-void pion_5on41()
+void sidis_10on100()
 {
 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Enable this block when you process xrdfs files from collabration
   // Set up input file chain
-  /*TChain *mychain = new TChain("events");
+  TChain *mychain = new TChain("events");
 
-    std::ofstream error_file;
-    error_file.open("error_file.txt", std::ios::trunc);
-    if (!error_file.is_open()) {
+  std::ofstream error_file;
+  error_file.open("error_file.txt", std::ios::trunc);
+  if (!error_file.is_open()) {
     std::cerr << "Failed to open error log file!" << std::endl;
     return; // Exit the function if the file couldn't be opened
-    }
+  }
 
-    TString filepath;
-    unsigned int count1 = 0; // Counter for the number of files successfully added
-    unsigned int count2 = 0; // Counter for neutrons within 4 mrad
-    unsigned int nFiles = 1; // Total number of DEMPgen files added
-    unsigned int nFiles2;
-    unsigned int nEntries;// Variable to hold the number of entries in the tree
+  TString filepath;
+  unsigned int nFiles = 0;  // Initialize the total files counter
+  unsigned int nEntries;            // Variable to hold the number of entries in the tree
 
-    // Loop through the specified ranges
-    for (unsigned int i = 0;  i < 3; i++){ // i's correspond to different Q2 regions
-      
-    if(i == 0) {nFiles2 = 357;}
-    else if(i == 1) {nFiles2 = 186;}
-    else if(i == 2) {nFiles2 = 407;}
-   
-    for (unsigned int j = 0; j < nFiles2; j++) { // j's correspond to files avaiable for each i
-   
-    // Construct the file path (used latest december-24.12.0 compaign files)
-    if (i == 0) { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/5x41/q2_%i_%i/pi+/DEMPgen-1.2.2_5x41_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+3, i+10, i+3, i+10, j);}
-    else if (i == 1) { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/5x41/q2_%i_%i/pi+/DEMPgen-1.2.2_5x41_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+9, i+19, i+9, i+19, j);}
-    else { filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.2/5x41/q2_%i_%i/pi+/DEMPgen-1.2.2_10x100_pi+_q2_%i_%i.%04i.eicrecon.tree.edm4eic.root", i+18, i+33, i+18, i+33, j);} 
-  
-    // Try opening the file to check if it's valid and then add to the TChain
-    TFile *file = TFile::Open(filepath);
-    if (file && !file->IsZombie()) {
-    TTree *tree = (TTree*)file->Get("events");
+  // Loop through the specified ranges
+  for (unsigned int i = 0; i < 5; i++) { //19
+    for (unsigned int j = 0; j < 1485; j++) { //1921
+      // Construct the file path
+      filepath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/DIS/NC/10x100/minQ2=100/pythia8NCDIS_10x100_minQ2=100_beamEffects_xAngle=-0.025_hiDiv_%i.%04i.eicrecon.tree.edm4eic.root", i + 1, j);
+      // Try opening the file to check if it's valid and then add to the TChain
+      TFile *file = TFile::Open(filepath);
+      if (file && !file->IsZombie()) {
+	TTree *tree = (TTree*)file->Get("events");
 
-    // Ensure the tree is valid before getting entries
-    if (tree) {
-    nEntries = tree->GetEntries();
-    // std::cout << "nEntries = " << nEntries << std::endl;
+	// Ensure the tree is valid before getting entries
+	if (tree) {
+	  nEntries = tree->GetEntries();
+	  // std::cout << "nEntries = " << nEntries << std::endl;
 
-    if (nEntries == 1120) { // No. of entries in every file
-    count1++;
-    mychain->Add(filepath);  // Add valid file to the chain
-    } else {
-    error_file << "Unexpected number of entries: " << nEntries << " in file: " << filepath << std::endl;
-    }
-    } else {
-    error_file << "Tree 'events' not found in file: " << filepath << std::endl;
-    }
+	  if (nEntries == 672) {
+	    nFiles++;
+	    mychain->Add(filepath);  // Add valid file to the chain
+	  } else {
+	    error_file << "Unexpected number of entries: " << nEntries << " in file: " << filepath << std::endl;
+	  }
+	} else {
+	  error_file << "Tree 'events' not found in file: " << filepath << std::endl;
+	}
 
-    file->Close();  // Close the file
-    delete file;    // Delete the file pointer
-    } else {
-    // If the file fails to open, log the error to the txt file
-    error_file << "Failed to open file: " << filepath << std::endl;
-    if (file) {
-    file->Close();  // Close the file if it was partially opened
-    delete file;    // Delete the file pointer
-    }
-    continue; // Skip further processing if the file could not be opened
-    }
-    }
-    }
-
-    error_file.close();  // Close the error log file 
-  */
-  
-  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  // Enable this block when you process the files from Love Preet
-  TChain *mychain = new TChain("events");
-  unsigned int count1 = 0; // Counter for the number of files successfully added
-  unsigned int count2 = 0; // Counter for neutrons within 4 mrad
-
-  unsigned int nFiles1 = 4; // Number of iterations for the first loop // 4
-  unsigned int nFiles2; // Number of iterations for the second loop // 950
-  
-  unsigned int nFiles = 4.0; // Total number of DEMPgen files added
-  unsigned int nEntries; // Variable to hold the number of entries in the tree
-
-  for (unsigned int i = 0; i < nFiles1; i++) {
-    /*if(i == 0) {nFiles2 = 40;}
-      else if(i == 1) {nFiles2 = 80;}
-      else if(i == 2) {nFiles2 = 91;}*/
-    
-    if(i == 1) {nFiles2 = 953;}
-    else {nFiles2 = 954;}
-  
-    for (unsigned int j = 0; j < nFiles2; j++) {
-      count1++;
-
-      // Construct file name
-      //  TString fileName = Form("Test_5on41_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-     
-      //Files from Jlab server
-      //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Nov2024_Files/pi+/5on41/Test_5on41_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-      TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Dec2024_Files/pi+/5on41/Test_5on41_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
-
-      // Check if the file exists
-      if (gSystem->AccessPathName(fileName) == kFALSE) {
-	mychain->Add(fileName); // Add file to the TChain
-	nEntries = mychain->GetEntries();
-	//std::cout << "nEntries = " << nEntries << std::endl;
-      } 
-      else {
-	std::cerr << "Warning: File not found -> " << fileName << std::endl;
-	std::cerr << "Terminating execution." << std::endl;
-	std::exit(EXIT_FAILURE); // Exit with an error status
+	file->Close();  // Close the file
+	delete file;    // Delete the file pointer
+      } else {
+	// If the file fails to open, log the error to the txt file
+	error_file << "Failed to open file: " << filepath << std::endl;
+	if (file) {
+	  file->Close();  // Close the file if it was partially opened
+	  delete file;    // Delete the file pointer
+	}
+	continue; // Skip further processing if the file could not be opened
       }
     }
   }
 
+  error_file.close();  // Close the error log file
+  unsigned int count2 = 0; // counter on neutrons within 4 mrad
+  
+  //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  // Enable this block when you process the files from Love Preet
+  /*TChain *mychain = new TChain("events");
+    unsigned int count1 = 0; // Counter for the number of files successfully added
+    unsigned int count2 = 0; // Counter for neutrons within 4 mrad
+
+    unsigned int nFiles1 = 3; // Number of iterations for the first loop //4
+    unsigned int nFiles2 = 2; // Number of iterations for the second loop //484
+    unsigned int nFiles; // Total number of files to process
+    unsigned int nEntries;            // Variable to hold the number of entries in the tree
+
+    for (unsigned int i = 0; i < nFiles1; i++) {
+    // if(i == 0) {nFiles2 = 40;}
+    // else if(i == 1) {nFiles2 = 80;}
+    // else if(i == 2) {nFiles2 = 91;}
+  
+    for (unsigned int j = 0; j < nFiles2; j++) {
+    count1++;
+
+    // Construct file name
+    TString fileName = Form("Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+        
+    //Files from Jlab server
+    //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Nov2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+    //TString fileName = Form("/volatile/eic/preet/reco_simulation_output/Dec2024_Files/pi+/10on100/Test_10on100_pi+_Reco_AllEvents_%i_%i.root", 1 + i, 5000 + j * 5000);
+
+    // Check if the file exists
+    if (gSystem->AccessPathName(fileName) == kFALSE) {
+    mychain->Add(fileName); // Add file to the TChain
+    nEntries = mychain->GetEntries();
+    std::cout << "nEntries = " << nEntries << std::endl;
+    } 
+    else {
+    std::cerr << "Warning: File not found -> " << fileName << std::endl;
+    std::cerr << "Terminating execution." << std::endl;
+    std::exit(EXIT_FAILURE); // Exit with an error status
+    }
+    }
+    }
+    nFiles = count1;*/
+  
+  /*  TChain *mychain = new TChain("events");
+      unsigned int count1 = 0; // Counter for the number of files successfully added
+      unsigned int count2 = 0; // Counter for neutrons within 4 mrad
+
+      unsigned int nFiles1 = 1; // Number of iterations for the first loop // 1
+      unsigned int nFiles2 = 1; // Number of iterations for the second loop // 828
+      unsigned int nFiles; // Total number of files to process
+      unsigned int nEntries;            // Variable to hold the number of entries in the tree
+   
+      for (unsigned int i = 0; i < nFiles1; i++) {
+      for (unsigned int j = 0; j < nFiles2; j++) {
+      count1++;
+        
+      // TString filePath = Form("root://dtn-eic.jlab.org//work/eic2/EPIC/RECO/24.12.0/epic_craterlake/DIS/NC/5x41/minQ2=100/pythia8NCDIS_5x41_minQ2=100_beamEffects_xAngle=-0.025_hiDiv_%i.%04i.eicrecon.tree.edm4eic.root", i + 1, j);
+        
+      TString filePath = Form("pythia8NCDIS_10x100_minQ2=100_beamEffects_xAngle=-0.025_hiDiv_%i.%04i.eicrecon.tree.edm4eic.root", i + 1, j);
+        
+      mychain->Add(filePath);
+      nEntries = mychain->GetEntries();
+      std::cout << "nEntries = " << nEntries << std::endl;
+      } // for loop over j
+      } // for loop over i
+      nFiles = count1;*/
+
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Set output file for the histograms
-  TFile *ofile = TFile::Open("pion_hist_5on41.root","RECREATE");
-
+  TFile *ofile = TFile::Open("sidis_hist_10on100.root","RECREATE");
+  
   // Initialize reader
   TTreeReader tree_reader(mychain);
 
@@ -165,31 +174,31 @@ void pion_5on41()
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Define Histograms
-  TH2* enbfTruthw_Thetap = new TH2D("enbfTruthw_Thethap","e' truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,110,170,100,4.0,6.5);
-  TH2* pinbfTruthw_Thetap = new TH2D("pinbfTruthw_Thethap","#pi^{+} truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,100,100,0,30); //change
-  TH2* nnbfTruthw_Thetap  = new TH2D("nnbfTruthw_Thethap","n truth no beam effects #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,3.5,100,0,40); //change 
+  TH2* enbfTruthw_Thetap = new TH2D("enbfTruthw_Thethap","e' truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,70);
+  TH2* pinbfTruthw_Thetap = new TH2D("pinbfTruthw_Thethap","#pi^{+} truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,80); //change
+  TH2* nnbfTruthw_Thetap  = new TH2D("nnbfTruthw_Thethap","n truth no beam effects #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,100); //change 
   
-  TH2* eTruthw_Thetap  = new TH2D("eTruthw_Thethap","e' truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,110,170,100,4.0,6.5);
-  TH2* piTruthw_Thetap = new TH2D("piTruthw_Thethap","#pi^{+} truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,100,100,0,30); //change
-  TH2* nTruthw_Thetap  = new TH2D("nTruthw_Thethap","n truth #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,3.5,100,0,40); //change 
-  TH2* nTruthw_Thetaphi  = new TH2D("nTruthw_Thethaphi","n truth #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,0.0,60,100,-200,200); //change
-  TH2* nTruthw_rot_Thetap  = new TH2D("nTruthw_rot_Thethap","n truth #theta* vs P around p axis; #theta* (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,2.0,100,0.0,40); //change
-  TH2* nTruthw_rot_Thetaphi  = new TH2D("nTruthw_rot_Thethaphi","n truth #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,35,100,-200,200); //change
+  TH2* eTruthw_Thetap  = new TH2D("eTruthw_Thethap","e' truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,70);
+  TH2* piTruthw_Thetap = new TH2D("piTruthw_Thethap","#pi^{+} truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,80); //change
+  TH2* nTruthw_Thetap  = new TH2D("nTruthw_Thethap","n truth #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,100); //change 
+  TH2* nTruthw_Thetaphi  = new TH2D("nTruthw_Thethaphi","n truth #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,0.0,3500,100,-200,200); //change
+  TH2* nTruthw_rot_Thetap  = new TH2D("nTruthw_rot_Thethap","n truth #theta* vs P around p axis; #theta* (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,180,100,0,100); //change
+  TH2* nTruthw_rot_Thetaphi  = new TH2D("nTruthw_rot_Thethaphi","n truth #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,3500,100,-200,200); //change
 
-  TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e' rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,110,170,100,2.5,7.5);
-  TH2* eRecw_Thetaphi  = new TH2D("eRecw_Thethaphi","e' rec #theta vs #phi; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,110,170,100,-200,200);
-  TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{+} rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,100,100,0,40); //change
-  TH2* piRecw_Thetaphi  = new TH2D("piRecw_Thethaphi","#pi^{+} rec #theta vs #phi; #theta (deg); Rate/bin (Hz); P (GeV/c)",100,0,100,100,-200,200); //change
+  TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e' rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,70);
+  TH2* eRecw_Thetaphi  = new TH2D("eRecw_Thethaphi","e' rec #theta vs #phi; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,-200,200);
+  TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{+} rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,180,100,0,80); //change
+  TH2* piRecw_Thetaphi  = new TH2D("piRecw_Thethaphi","#pi^{+} rec #theta vs #phi; #theta (deg); Rate/bin (Hz); P (GeV/c)",100,0,180,100,-200,200); //change
   //TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e^{+}' rec #theta vs P; #theta (deg); P (GeV/c)",100,0,60,100,0,15);  // positron
   //TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{-} rec #theta vs P; #theta (deg); P (GeV/c)",100,130,170,100,0,10); // pion -
-  TH2* nRecw_Thetap  = new TH2D("nRecw_Thethap","n rec #theta vs P for all clusters; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,60); //change
-  TH2* nRecw_rot_Thetap  = new TH2D("nRecw_rot_Thethap","n rec #theta* vs P around p axis for all clusters ( rec #theta* < 4.0 mRad, E > 10 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0.0,4.5,100,0,60); //change
+  TH2* nRecw_Thetap  = new TH2D("nRecw_Thethap","n rec #theta vs P for all clusters; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,120); //change
+  TH2* nRecw_rot_Thetap  = new TH2D("nRecw_rot_Thethap","n rec #theta* vs P around p axis for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0.0,4.5,100,35.0,120); //change
   TH2* nRecw_Thetaphi  = new TH2D("nRecw_Thethaphi","n rec #theta vs #phi for all clusters; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,15.0,35.0,100,-200,200); 
   TH2* nRecw_rot_Thetaphi  = new TH2D("nRecw_rot_Thethaphi","n rec #theta* vs #phi* around p axis for all clusters; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,12.0,100,-200,200);
   TH2* nRecw_rot_PosXY  = new TH2D("nRecw_rot_PosXY","n X vs Y around proton axis at Z = 35 m for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); x (mm); y (mm); Rate/bin (Hz)",100,-200,200,100,-200,200);
 
 
-  TH1* nRec_en = new TH1D("nRec_en", "n rec E for all clusters ( rec #theta* < 4.0 mRad ); E (GeV); Rate (Hz)", 100, 0.0, 60); //change
+  TH1* nRec_en = new TH1D("nRec_en", "n rec E for all clusters ( rec #theta* < 4.0 mRad ); E (GeV); Rate (Hz)", 100, 0.0, 120); //change
   nRec_en->SetLineWidth(2);
   TH1* nRec_clus = new TH1D("nRec_clus", "n all clusters ( rec #theta* < 4.0 mRad )", 100, 0.0, 8.0);
   nRec_clus->SetLineWidth(2);
@@ -199,19 +208,19 @@ void pion_5on41()
   n_ThetaDiff->SetLineWidth(2);
   TH1* n_PhiDiff = new TH1D("n_PhiDiff", " #phi*_{pMiss_rec} - #phi*_{ZDC}; #phi*_{pMiss_rec} - #phi*_{ZDC}(Deg); Rate (Hz)", 100, -100, 100);
   n_PhiDiff->SetLineWidth(2);
-  TH2* n_ThetaPhiDiff = new TH2D("n_ThetaPhiDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC} vs #phi*_{pMiss_rec} - #phi*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC} (Deg); #phi*_{pMiss_rec} - #phi*_{ZDC} (Deg); Rate/bin (Hz)",100, -1.0, 1.0, 100, -75, 75);
+  TH2* n_ThetaPhiDiff = new TH2D("n_ThetaPhiDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC} vs #phi*_{pMiss_rec} - #phi*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC} (Deg); #phi*_{pMiss_rec} - #phi*_{ZDC} (Deg)",100, -1.0, 1.0, 100, -75, 75);
   TH2* pMissRecw_Thetaphi = new TH2D("pMissRecw_Thetaphi", "pMiss rec #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,15.0,35.0,100,-200,200);
   TH2* pMissRecw_rot_Thetaphi = new TH2D("pMissRecw_rot_Thetaphi", "pMiss rec  #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,15.0,100,-200,200);
   TH2* n_TruthRecw_ThetaPhiDiff = new TH2D("n_TruthRecw_ThetaPhiDiff", " #theta*_{n_MC} - #theta*_{n_rec} vs #phi*_{n_MC} - #phi*_{n_rec}; #theta*_{n_MC} - #theta*_{n_rec} (Deg); #phi*_{n_MC} - #phi*_{n_rec} (Deg); Rate/bin (Hz)",100, -0.2, 0.2, 100, -25, 25);
 
   // Absolute difference -t plots //no change
-  TH1* htw_t1 = new TH1D("htw_t1", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t1 = new TH1D("htw_t1", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{alt_truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
   htw_t1->SetLineColor(kBlue); htw_t1->SetLineWidth(2);
-  TH1* htw_t2 = new TH1D("htw_t2", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t2 = new TH1D("htw_t2", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{alt_truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
   htw_t2->SetLineColor(kRed);  htw_t2->SetLineWidth(2);
-  TH1* htw_t3 = new TH1D("htw_t3", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t3 = new TH1D("htw_t3", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{alt_truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
   htw_t3->SetLineColor(kMagenta+1); htw_t3->SetLineWidth(2);
-  TH1* htw_t4 = new TH1D("htw_t4", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t4 = new TH1D("htw_t4", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{alt_truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
   htw_t4->SetLineColor(kGreen+2); htw_t4->SetLineWidth(2);
 
   // -t reconstruction plots //no change
@@ -219,7 +228,7 @@ void pion_5on41()
   TH2* htwz_rec1 = new TH2D("htwz_rec1", "-t rec vs -t truth Distribution; -t_{rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
   TH2* htw_rec2 = new TH2D("htw_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
   TH2* htwz_rec2 = new TH2D("htwz_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
-  TH2* htw_rec3 = new TH2D("htw_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_Test_5on41_pi+_Reco_AllEvents_2_*.rootpT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
+  TH2* htw_rec3 = new TH2D("htw_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
   TH2* htwz_rec3 = new TH2D("htwz_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
   TH2* htw_rec4 = new TH2D("htw_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
   TH2* htwz_rec4 = new TH2D("htwz_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
@@ -240,7 +249,7 @@ void pion_5on41()
 
   TH1* htw_res1 = new TH1D("htw_res1", "-t Resolution Distribution (%); (t_{rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -200, 200);
   htw_res1->SetLineWidth(2);
-  TH1* htw_res2 = new TH1D("htw_res2", "-t Resolution Distribution (%); (t_{alt_rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -110, 310);
+  TH1* htw_res2 = new TH1D("htw_res2", "-t Resolution Distribution (%); (t_{alt_rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -110, 210);
   htw_res2->SetLineWidth(2);
   TH1* htw_res3 = new TH1D("htw_res3", "-t Resolution Distribution (%); (t_{rec_pT} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -110, 210);
   htw_res3->SetLineWidth(2);
@@ -252,15 +261,15 @@ void pion_5on41()
   htw_res6->SetLineWidth(2);
 
   // Effeciency plots
-  TH2* Q2_t_DetEff_Uncut = new TH2F("Q2_t_DetEff_Uncut", "Q^{2}_{truth} vs -t_{truth} for thrown events; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 25, 0, 0.5);
-  TH2* Q2_t_DetEff_Cut = new TH2F("Q2_t_DetEff_Cut", "Q^{2}_{truth} vs -t_{truth} for detected events; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 25, 0, 0.5);
-  TH2* Q2_t_DetEff = new TH2F("Q2_t_DetEff", "Q^{2}_{truth} vs -t_{truth} detected/thrown ratio; Q^{2} (GeV^{2}); -t (GeV^{2})", 40, 0, 40, 25, 0, 0.5); //20, 0, 40, 30, 0, 1.5
+  TH2* Q2_t_DetEff_Uncut = new TH2F("Q2_t_DetEff_Uncut", "Q^{2}_{truth} vs -t_{alt_truth} for thrown events; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 25, 0, 0.5);
+  TH2* Q2_t_DetEff_Cut = new TH2F("Q2_t_DetEff_Cut", "Q^{2}_{truth} vs -t_{alt_truth} for detected events; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 25, 0, 0.5);
+  TH2* Q2_t_DetEff = new TH2F("Q2_t_DetEff", "Q^{2}_{truth} vs -t_{alt_truth} detected/thrown ratio; Q^{2} (GeV^{2}); -t (GeV^{2})", 40, 0, 40, 25, 0, 0.5); //20, 0, 40, 30, 0, 1.5
 
-  TH1* eTruthw_Eta_Uncut = new TH1D("eTruthw_Eta_Uncut", "e' #eta for thrown events; #eta; Rate (Hz)",100,-3,0);
+  TH1* eTruthw_Eta_Uncut = new TH1D("eTruthw_Eta_Uncut", "e' #eta for thrown events; #eta; Rate (Hz)",100,-3,-1);
   eTruthw_Eta_Uncut->SetLineWidth(2);
-  TH1* eRecw_Eta_Cut = new TH1D("eRecw_Eta_Cut", "e' #eta for detected events; #eta; Rate (Hz)",100,-3,0);
+  TH1* eRecw_Eta_Cut = new TH1D("eRecw_Eta_Cut", "e' #eta for detected events; #eta; Rate (Hz)",100,-3,-1);
   eRecw_Eta_Cut->SetLineWidth(2);
-  TH1* eEff_Eta = new TH1D("eEff_Eta", "e' Tracking efficiency as fn of #eta; #eta; Eff", 100,-3,0);
+  TH1* eEff_Eta = new TH1D("eEff_Eta", "e' Tracking efficiency as fn of #eta; #eta; Eff", 100,-3,-1);
   eEff_Eta->SetLineWidth(2);
 
   TH1* piTruthw_Eta_Uncut = new TH1D("piTruthw_Eta_Uncut", "#pi^{+} #eta for thrown events; #eta; Rate (Hz)",100,-1,6); //change
@@ -270,28 +279,28 @@ void pion_5on41()
   TH1* piEff_Eta = new TH1D("piEff_Eta", "#pi^{+} Tracking efficiency as fn of #eta; #eta; Eff",100,-1,6); //change
   piEff_Eta->SetLineWidth(2);
 
-  TH1* eTruthw_P_Uncut = new TH1D("eTruthw_P_Uncut", "e' P for thrown events; P (GeV/c); Rate (Hz)",100,4.0,7.0);
+  TH1* eTruthw_P_Uncut = new TH1D("eTruthw_P_Uncut", "e' P for thrown events; P (GeV/c); Rate (Hz)",100,9.5,11);
   eTruthw_P_Uncut->SetLineWidth(2);
-  TH1* eRecw_P_Cut = new TH1D("eRecw_P_Cut", "e' P for detected events; P (GeV/c); Rate (Hz)",100,4.0,7.0);
+  TH1* eRecw_P_Cut = new TH1D("eRecw_P_Cut", "e' P for detected events; P (GeV/c); Rate (Hz)",100,9.5,11);
   eRecw_P_Cut->SetLineWidth(2);
-  TH1* eEff_P = new TH1D("eEff_P", "e' Tracking efficiency as fn of P; P (GeV/c); Eff", 100,4.0,7.0);
+  TH1* eEff_P = new TH1D("eEff_P", "e' Tracking efficiency as fn of P; P (GeV/c); Eff", 100,9.5,11);
   eEff_P->SetLineWidth(2);
 
-  TH1* piTruthw_P_Uncut = new TH1D("piTruthw_P_Uncut", "#pi^{+} P for thrown events; P (GeV/c); Rate (Hz)",100,0,30); //change
+  TH1* piTruthw_P_Uncut = new TH1D("piTruthw_P_Uncut", "#pi^{+} P for thrown events; P (GeV/c); Rate (Hz)",100,-1,80); //change
   piTruthw_P_Uncut->SetLineWidth(2);
-  TH1* piRecw_P_Cut = new TH1D("piRecw_P_Cut", "#pi^{+} P for detected events; P (GeV/c); Rate (Hz)",100,0,30); //change
+  TH1* piRecw_P_Cut = new TH1D("piRecw_P_Cut", "#pi^{+} P for detected events; P (GeV/c); Rate (Hz)",100,-1,80); //change
   piRecw_P_Cut->SetLineWidth(2);
-  TH1* piEff_P = new TH1D("piEff_P", "#pi^{+} Tracking efficiency as fn of P; P (GeV/c); Eff",100,0,30); //change
+  TH1* piEff_P = new TH1D("piEff_P", "#pi^{+} Tracking efficiency as fn of P; P (GeV/c); Eff",100,-1,80); //change
   piEff_P->SetLineWidth(2);
 
   // Neutrons in HCal
-  TH2* nRecw_Thetap_hcal  = new TH2D("nRecw_Thethap_hcal","n rec #theta vs P for 1 cluster events; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,40); //change
-  TH2* nRecw_rot_Thetap_hcal  = new TH2D("nRecw_rot_Thethap_hcal","n rec #theta* vs P around p axis for 1 cluster events ( rec #theta* < 4.0 mRad, E > 10 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0,4.5,100,10,40); //change
+  TH2* nRecw_Thetap_hcal  = new TH2D("nRecw_Thethap_hcal","n rec #theta vs P for 1 cluster events; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,100); //change
+  TH2* nRecw_rot_Thetap_hcal  = new TH2D("nRecw_rot_Thethap_hcal","n rec #theta* vs P around p axis for 1 cluster events ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0,4.5,100,35.0,100); //change
     
   // y plot 
-  TH1* htw_Truth_y = new TH1D("htw_Truth_y", "y truth Distribution; y; Rate (Hz) ", 100,-0.4,0.4);
+  TH1* htw_Truth_y = new TH1D("htw_Truth_y", "y truth Distribution; y; Rate (Hz) ", 100,-0.3,0.3);
   htw_Truth_y->SetLineWidth(2);
-  TH1* htw_Rec_y = new TH1D("htw_Rec_y", "y rec Distribution; y; Rate (Hz) ", 100,-0.4,0.4);
+  TH1* htw_Rec_y = new TH1D("htw_Rec_y", "y rec Distribution; y; Rate (Hz) ", 100,-0.3,0.3);
   htw_Rec_y->SetLineWidth(2);
   TH1* htw_Truth_t = new TH1D("htw_Truth_t", "-t truth Distribution; -t (GeV^{2}); Rate (Hz) ", 100,-0.1,1.4);
   htw_Truth_t->SetLineWidth(2);
@@ -331,13 +340,17 @@ void pion_5on41()
   TH2* h2Recw_t3_Q2  = new TH2D("h2Recw_t3_Q2","-t_{rec_pT} vs Q^{2} rec distribution; -t_{rec_pT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,100,0,40);
   TH2* h2Recw_t4_Q2  = new TH2D("h2Recw_t4_Q2","-t_{rec_corr} vs Q^{2} rec distribution; -t_{rec_corr} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,100,0,40);
   
+  //-t plots
+  TH1* htw_t_1 = new TH1D("htw_t_1", " -t_{alt} Distribution; -t_{alt} (GeV^{2}); Rate (Hz) ", 100, -0.1,1);
+  htw_t_1->SetLineColor(kBlack); htw_t_1->SetLineWidth(2);
+  TH1* htw_t_2 = new TH1D("htw_t_2", "-t_{alt} Distribution; -t_{alt} (GeV^{2}); Rate (Hz) ", 100, -0.1,1);
+  htw_t_2->SetLineColor(kBlue);  htw_t_2->SetLineWidth(2);
+  TH1* htw_t_3 = new TH1D("htw_t_3", "-t_{alt} Distribution; -t_{alt} (GeV^{2}); Rate (Hz) ", 100, -0.1,1);
+  htw_t_3->SetLineColor(kGreen+2);  htw_t_3->SetLineWidth(2);
+  
   //w plot
   TH1* htw_Rec_w = new TH1D("htw_Rec_w", "w rec Distribution w/ 5 < Q^{2} < 35; W (GeV)", 100,-150,100);
   htw_Rec_w->SetLineWidth(2);
-  
-  //cons check plots 
-  TH1* cons_mass = new TH1D("cons_mass", "Total missing mass distribution; m (GeV); Rate (Hz) ", 100,-10,10);
-  cons_mass->SetLineWidth(2);
  
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //Defining the four vectors
@@ -384,8 +397,6 @@ void pion_5on41()
   ROOT::Math::PxPyPzEVector neut_rec_hcal; // initialized the 4 vector for reconstructed neutorn in hcal
   ROOT::Math::PxPyPzEVector neut_rot_rec_hcal; // initialized the 4 vector for reconstructed neutron with a rotation of 25 mrad in hcal
   
-  ROOT::Math::PxPyPzEVector cons_check;
-  
   int hcal_clus_size;
   double neut_rec_p_hcal;
   
@@ -395,33 +406,33 @@ void pion_5on41()
   double Q2_rec, W_rec, y_rec, t_rec, t_altrec, t_recpT, t_reccorr; // Reconstructed kinematic variables
   double neutPosX, neutPosY; // neutron position
   double nTheta_Diff, nPhi_Diff;
-  double ThetaDiff_Cut_Low = - 0.1; // change based on the reconstructed plots of neutron theta vs phi 
-  double ThetaDiff_Cut_High = 0.2;
-  double PhiDiff_Cut = 55.0;
+  double ThetaDiff_Cut_Low = - 0.09; // change based on the reconstructed plots of neutron theta vs phi 
+  double ThetaDiff_Cut_High = 0.14;
+  double PhiDiff_Cut = 45.0;
   double Q2_low, Q2_high, Pmiss;
   double t_nbftruth, t_nbfalttruth;
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Defining initial colliding beams
   double eMass = 0.000510998950; //electron beam
-  double eEng = 5;
+  double eEng = 10;
   double e_pmag = sqrt(pow(eEng,2)-pow(eMass,2));
   double e_p1 = 0.;
   double e_p2 = 0.;
   double e_p3 = -1*e_pmag;
-  //elec_beam.SetPxPyPzE(e_p1, e_p2, e_p3, eEng); 
+  elec_beam.SetPxPyPzE(e_p1, e_p2, e_p3, eEng); 
  
               
   double pMass = 0.93827208816; // proton beam
-  double pEng = 41; //change
+  double pEng = 100; //change
   double p_pmag = sqrt(pow(pEng,2)-pow(pMass,2));
   double c_a = 0.025;
   double p_p1 = -p_pmag*sin(c_a);
   double p_p2 = 0.;
   double p_p3 = p_pmag*cos(c_a);
-  //prot_beam.SetPxPyPzE(p_p1, p_p2, p_p3, pEng);
+  prot_beam.SetPxPyPzE(p_p1, p_p2, p_p3, pEng);
   
-  // prot_nbfbeam.SetPxPyPzE(0., 0., p_pmag, pEng); // calculate -t from second vertex for nbf 
+  prot_nbfbeam.SetPxPyPzE(0., 0., p_pmag, pEng); // calculate -t from second vertex for nbf 
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   bool x,y,z; // x,y, and z are for reconstructed electron, pion, and neutron
  
@@ -431,12 +442,12 @@ void pion_5on41()
  
     std::vector<std::string> weight_value = weight_map[0];
     weight = std::stod(weight_value[0]);
+      
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
     for(unsigned int i=0; i<nbfpartGenStat.GetSize(); i++) { // Loop over thrown nbf particles
       nbfpartEng = sqrt(pow(nbfpartMomX[i],2) + pow(nbfpartMomY[i],2) + pow(nbfpartMomZ[i],2) + pow(nbfpartMass[i],2)); // Energy of all Truth nbf  Monte Carlo particles
-      if(partGenStat[i] == 4 && partPdg[i] == 2212) { prot_nbfbeam.SetPxPyPzE(nbfpartMomX[i],nbfpartMomY[i],nbfpartMomZ[i], nbfpartEng); }
-      	
+		
       if(nbfpartGenStat[i] == 1 && nbfpartPdg[i] == 11) { // Select stable thrown nbf particles and look at electron
 	elec_nbfmc.SetPxPyPzE(nbfpartMomX[i], nbfpartMomY[i], nbfpartMomZ[i], nbfpartEng);
 	enbfTruthw_Thetap -> Fill(elec_nbfmc.Theta()*TMath::RadToDeg(), elec_nbfmc.P(), weight);
@@ -458,10 +469,7 @@ void pion_5on41()
  
     for(unsigned int i=0; i<partGenStat.GetSize(); i++) { // Loop over thrown particles
       partEng = sqrt(pow(partMomX[i],2) + pow(partMomY[i],2) + pow(partMomZ[i],2) + pow(partMass[i],2)); // Energy of all Monte Carlo particles
-      
-      if(partGenStat[i] == 4 && partPdg[i] == 11) { elec_beam.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);}
-      if(partGenStat[i] == 4 && partPdg[i] == 2212) { prot_beam.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);}
-      		
+		
       if(partGenStat[i] == 1 && partPdg[i] == 11) { // Select stable thrown particles and look at electron
 	elec_mc.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);
 	eTruthw_Thetap -> Fill(elec_mc.Theta()*TMath::RadToDeg(), elec_mc.P(), weight);
@@ -491,8 +499,8 @@ void pion_5on41()
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
     for(unsigned int i=0; i<trackPdg.GetSize(); i++) { // Loop over reconstructed particles 
-      //if(trackPdg[i] == 11) { // Look at electron
-      if(trackCharge[i] == -1 && trackMomZ[i] < 0) { 
+      if(trackPdg[i] == 11) { // Look at electron
+	//if(trackCharge[i] == -1 && trackMomZ[i] < 0) { 
 	x = true;
 	elec_rec.SetPxPyPzE(trackMomX[i],trackMomY[i],trackMomZ[i], trackEng[i]);
 	eRecw_Thetap -> Fill(elec_rec.Theta()*TMath::RadToDeg(), elec_rec.P(), weight);
@@ -501,8 +509,8 @@ void pion_5on41()
 	eRecw_P_Cut -> Fill(elec_mc.P(), weight);
       }
  
-      //if(trackPdg[i] == 211) { // Look at pion
-      if(trackCharge[i] == +1 && trackMomZ[i] > 0) {
+      if(trackPdg[i] == 211) { // Look at pion
+	//if(trackCharge[i] == +1 && trackMomZ[i] > 0) {
 	y = true;
 	pi_rec.SetPxPyPzE(trackMomX[i],trackMomY[i],trackMomZ[i], trackEng[i]);
 	piRecw_Thetap -> Fill(pi_rec.Theta()*TMath::RadToDeg(), pi_rec.P(), weight);
@@ -528,7 +536,7 @@ void pion_5on41()
         nRec_clus -> Fill(neutClus[i]);
 	nRec_en -> Fill(neut_rot_rec.E(), weight);
 	
-   	if(neut_rot_rec.E()>10.0){ // neutron energy cut //change
+   	if(neut_rot_rec.E()>40.0){ // neutron energy cut //change
 	  z = true;
 	  nRecw_rot_Thetap -> Fill(neut_rot_rec.Theta()*1000., neut_rot_rec.P(), weight);
 	  
@@ -546,11 +554,11 @@ void pion_5on41()
     for(unsigned int i=0; i<neutEng.GetSize(); i++) { // Loop over zdc neutrons in HCal
  
       hcal_clus_size = neutEng_hcal.GetSize(); // ZDC HCal cluster size -> No. of clusters in ZDC
- 
+      
       if(hcal_clus_size > 0 && hcal_clus_size ==1 ){ // Selected the events correspond to one clusters
- 
 	neut_pos_hcal.SetXYZ(neutPosX_hcal[0], neutPosY_hcal[0], neutPosZ_hcal[0]);
-        //cout<<"  "<<neut_pos_hcal.R()<<endl;       
+        //cout<<"  "<<neut_pos_hcal.R()<<endl;     
+        //cout<<"clus = "<<hcal_clus_size<<", neut_x0 =  "<<neutPosX_hcal[0]<<", neut_x1 = "<<neutPosX_hcal[i]<<endl;
 	neut_rec_p_hcal = std::sqrt(pow(neutEng_hcal[0],2)- pow(neutMass,2)); // neutrons momentum
 						
 	neut_rec_hcal.SetPxPyPzE(neut_rec_p_hcal * sin(neut_pos_hcal.Theta()) * cos(neut_pos_hcal.Phi()), 
@@ -561,7 +569,7 @@ void pion_5on41()
 
 	neut_rot_rec_hcal = rot*neut_rec_hcal; // rotate w.r.t to proton axis						
  
-	if(neut_rot_rec_hcal.Theta()*1000. < 4.0 && neut_rot_rec_hcal.E()> 10.0){ //change
+	if(neut_rot_rec_hcal.Theta()*1000. < 4.0 && neut_rot_rec_hcal.E()> 40.0){ //change
 	  nRecw_rot_Thetap_hcal -> Fill(neut_rot_rec_hcal.Theta()*1000., neut_rot_rec_hcal.P(), weight);
 	}
       }
@@ -581,7 +589,6 @@ void pion_5on41()
                                  
     talttruth = (prot_beam - neut_mc); 
     t_alttruth = -1*(talttruth.mag2()); // t_alttruth is the -t from the second loop
-    htw_Truth_t -> Fill(t_alttruth, weight);
  
     /*virtphoton_nbftruth = (elec_beam - elec_nbfmc); // Turned it off as it didn't give expected results
       tnbftruth = (virtphoton_nbftruth - pi_nbfmc); 
@@ -591,11 +598,12 @@ void pion_5on41()
     tnbfalttruth = (prot_nbfbeam - neut_nbfmc); 
     t_nbfalttruth = -1*(tnbfalttruth.mag2()); // t_alttruth is the -t from the second loop for nbf
     
+    htw_Truth_t -> Fill(t_nbfalttruth, weight);
     // Efficiency plots
     if(neut_rot_mc.Theta()*1000. < 4.0){
       count2++; // truth neutrons
       if(Q2_truth > 5 && Q2_truth < 35){
-	// t_truth = t_nbfalttruth;
+        t_truth = t_nbfalttruth;
 	Q2_t_DetEff_Uncut -> Fill(Q2_truth, t_truth, weight);
 	htw_Truth_y -> Fill(y_truth, weight);
 	h2Truthw_W_Q2 -> Fill(W_truth, Q2_truth, weight); 
@@ -614,8 +622,7 @@ void pion_5on41()
       y_rec =  (prot_beam.Dot(virtphoton_rec))/(prot_beam.Dot(elec_beam)); // Energy Loss y
 
       if(Q2_rec > 5 && Q2_rec < 35){ // Q2 Cut 
-	//t_truth = t_nbfalttruth;
-	
+	t_truth = t_nbfalttruth;
 	// t-method plots
 	trec = (virtphoton_rec - pi_rec); // First method to reconstruct -t // No change in values after rotation.
 	t_rec = -1*(trec.mag2()); // t_rec is the -t from the first loop 
@@ -688,12 +695,13 @@ void pion_5on41()
 	h2Recw_t3_Q2 -> Fill(t_recpT, Q2_rec, weight);
 	h2Recw_t4_Q2 -> Fill(t_reccorr, Q2_rec, weight);
 	
+	// -t plots
+	htw_t_1->Fill(t_nbfalttruth, weight);
+        htw_t_2->Fill(t_alttruth, weight);
+	htw_t_3->Fill(t_reccorr, weight);
+	
 	//w plot
 	htw_Rec_w -> Fill(W_rec, weight);
-	
-	//four momentum check
-	cons_check = (elec_beam + prot_beam - elec_rec - pi_rec - neut_corr);
-	cons_mass -> Fill(cons_check.M(), weight);
       } //Q2 cut
       
       // Physics results
@@ -709,12 +717,12 @@ void pion_5on41()
 	}
       
 	if ( Q2_rec > Q2_low && Q2_rec < Q2_high){
-	  if((t_reccorr < 0.4) && (nTheta_Diff*TMath::RadToDeg() > ThetaDiff_Cut_Low) && (nTheta_Diff*TMath::RadToDeg() < ThetaDiff_Cut_High) && (abs(nPhi_Diff*TMath::RadToDeg())) < PhiDiff_Cut /*&& W_rec < 41.0*/){
+	  if((t_reccorr < 0.4) && (nTheta_Diff*TMath::RadToDeg() > ThetaDiff_Cut_Low) && (nTheta_Diff*TMath::RadToDeg() < ThetaDiff_Cut_High) && (abs(nPhi_Diff*TMath::RadToDeg())) < PhiDiff_Cut && W_rec < 41.0){
             htw_t_cut_result[B] -> Fill(t_reccorr, weight);
 	    htw_Q2_cut_result[B] -> Fill(Q2_rec, weight);
 	    htw_W_cut_result[B] -> Fill(W_rec, weight);
             if(B==0) { 
-	      //t_truth = t_nbfalttruth; 
+	      t_truth = t_nbfalttruth; 
             
 	      //effeciency plot
 	      Q2_t_DetEff_Cut -> Fill(Q2_truth, t_truth, weight);
@@ -748,7 +756,7 @@ void pion_5on41()
   piEff_P -> Divide(piRecw_P_Cut, piTruthw_P_Uncut, 1, 1, "b");
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-  // gStyle->SetOptStat(0);
+  gStyle->SetOptStat(0);
   // gStyle->SetOptTitle(0);
   gStyle->SetPadRightMargin(0.125); // left space on right side
   gStyle->SetPadLeftMargin(0.12); // right space on right side
@@ -988,28 +996,18 @@ void pion_5on41()
   n_TruthRecw_ThetaPhiDiff->Draw("colz");
   
   TCanvas *c17 = new TCanvas("c17"); // Absolute difference -t plots
-  c17->SetLogz();
   htw_t1->Scale(1.0/nFiles), htw_t2->Scale(1.0/nFiles), htw_t3->Scale(1.0/nFiles), htw_t4->Scale(1.0/nFiles);
-  htw_t4->SetFillColorAlpha(kGreen,0.3); htw_t3->SetFillColorAlpha(kMagenta,0.3); htw_t2->SetFillColorAlpha(kRed,0.3); htw_t1->SetFillColorAlpha(kBlue, 0.3);
-  /*htw_t4->SetFillColor(kGreen-11);
-    htw_t4->SetFillStyle(3344);
-    htw_t3->SetFillColor(kMagenta-11);
-    htw_t3->SetFillStyle(3325);
-    htw_t2->SetFillColor(kRed-11);
-    htw_t2->SetFillStyle(3352);
-    htw_t1->SetFillColor(kBlue-11);
-    htw_t1->SetFillStyle(3350);*/
   htw_t4->Draw("HIST");
   htw_t3->Draw("HIST SAME");
   htw_t2->Draw("HIST SAME");
   htw_t1->Draw("HIST SAME");
-   
+  
   TLegend *leg17 = new TLegend (0.8,0.4,0.6,0.7); //2 sapce between them,3 more on left,4 on downside 
   leg17->SetBorderSize(0);leg17->SetFillStyle(0); 
-  leg17->AddEntry(htw_t1,"t_{rec} - t_{truth}","l");
-  leg17->AddEntry(htw_t2,"t_{alt_rec} - t_{truth}","l");
-  leg17->AddEntry(htw_t3,"t_{recpT} - t_{truth}","l");
-  leg17->AddEntry(htw_t4,"t_{rec_corr} - t_{truth}","l");
+  leg17->AddEntry(htw_t1,"t_{rec} - t_{alt_truth}","l");
+  leg17->AddEntry(htw_t2,"t_{alt_rec} - t_{alt_truth}","l");
+  leg17->AddEntry(htw_t3,"t_{recpT} - t_{alt_truth}","l");
+  leg17->AddEntry(htw_t4,"t_{rec_corr} - t_{alt_truth}","l");
   leg17->Draw();
   
   TCanvas *c18 = new TCanvas("c18"); // Efficiency plots
@@ -1135,106 +1133,113 @@ void pion_5on41()
   h2Recw_t4_Q2->Scale(1.0/nFiles);
   h2Recw_t4_Q2->Draw("colz");
   
-  TCanvas *c29 = new TCanvas("c29"); 
-  c29->SetLogy();
-  htw_Rec_w->Scale(1.0/nFiles);
-  htw_Rec_w->Draw("HIST");
+  TCanvas *c29 = new TCanvas("c29");
+  htw_t_1->Scale(1.0/nFiles), htw_t_2->Scale(1.0/nFiles),  htw_t_3->Scale(1.0/nFiles);
+  htw_t_2->Draw("HIST");
+  htw_t_1->Draw("HIST SAME");
+  htw_t_3->Draw("HIST SAME");
+  TLegend *leg29 = new TLegend (0.8,0.45,0.5,0.7); //1 more on left, 2 sapce between them,3 more on rightor size, 4 on downside 
+  leg29->SetBorderSize(0);leg29->SetFillStyle(0); 
+  leg29->AddEntry(htw_t_1,"t_{alt_truth} (no beam effects)","l");
+  leg29->AddEntry(htw_t_2,"t_{alt_truth} (with beam effects)","l");
+  leg29->AddEntry(htw_t_3,"t_{rec_corr}","l");
+  leg29->Draw();
   
   TCanvas *c30a = new TCanvas("c30a"); 
   c30a->SetLogy();
-  cons_mass->Scale(1.0/nFiles);
-  cons_mass->Draw("HIST");
+  htw_Rec_w->Scale(1.0/nFiles);
+  htw_Rec_w->Draw("HIST");
   
-  c1a->Print("DEMP_reco_5on41.pdf[");
-  c1a->Print("DEMP_reco_5on41.pdf");
-  c2a->Print("DEMP_reco_5on41.pdf");
-  c3_a->Print("DEMP_reco_5on41.pdf");
-  c1->Print("DEMP_reco_5on41.pdf");
-  c2->Print("DEMP_reco_5on41.pdf");
-  c3b->Print("DEMP_reco_5on41.pdf");
-  c3->Print("DEMP_reco_5on41.pdf");
-  c3a->Print("DEMP_reco_5on41.pdf");
-  c3c->Print("DEMP_reco_5on41.pdf");
-  c4->Print("DEMP_reco_5on41.pdf");
-  c4a->Print("DEMP_reco_5on41.pdf");
-  c5->Print("DEMP_reco_5on41.pdf");
-  c5_a->Print("DEMP_reco_5on41.pdf");
-  c5a->Print("DEMP_reco_5on41.pdf");
-  c5b->Print("DEMP_reco_5on41.pdf");
-  c5c->Print("DEMP_reco_5on41.pdf");
-  c5d->Print("DEMP_reco_5on41.pdf");
-  c6b->Print("DEMP_reco_5on41.pdf");
-  c6a->Print("DEMP_reco_5on41.pdf");
-  c7->Print("DEMP_reco_5on41.pdf");
-  c7a->Print("DEMP_reco_5on41.pdf");
-  c7b->Print("DEMP_reco_5on41.pdf");
-  c8->Print("DEMP_reco_5on41.pdf");
-  c8a->Print("DEMP_reco_5on41.pdf");
-  c9->Print("DEMP_reco_5on41.pdf");
-  c9a->Print("DEMP_reco_5on41.pdf");
-  c10->Print("DEMP_reco_5on41.pdf");
-  c10a->Print("DEMP_reco_5on41.pdf");
-  c11->Print("DEMP_reco_5on41.pdf");
-  c11a->Print("DEMP_reco_5on41.pdf");
-  c12->Print("DEMP_reco_5on41.pdf");
-  c13->Print("DEMP_reco_5on41.pdf");
-  c14a->Print("DEMP_reco_5on41.pdf");
-  c14b->Print("DEMP_reco_5on41.pdf");
-  c14c->Print("DEMP_reco_5on41.pdf");
-  c14d->Print("DEMP_reco_5on41.pdf");
-  c15a->Print("DEMP_reco_5on41.pdf");
-  c15b->Print("DEMP_reco_5on41.pdf");
-  c15c->Print("DEMP_reco_5on41.pdf");
-  c15d->Print("DEMP_reco_5on41.pdf");
-  c15e->Print("DEMP_reco_5on41.pdf");
-  c15f->Print("DEMP_reco_5on41.pdf");
-  c16f->Print("DEMP_reco_5on41.pdf");
-  c16d->Print("DEMP_reco_5on41.pdf");
-  c16e->Print("DEMP_reco_5on41.pdf");
-  c16a->Print("DEMP_reco_5on41.pdf");
-  c16b->Print("DEMP_reco_5on41.pdf");
-  c16c->Print("DEMP_reco_5on41.pdf");
-  c17->Print("DEMP_reco_5on41.pdf");
-  c18b->Print("DEMP_reco_5on41.pdf");
-  c18a->Print("DEMP_reco_5on41.pdf");
-  c18->Print("DEMP_reco_5on41.pdf");
-  c19a->Print("DEMP_reco_5on41.pdf");
-  c19b->Print("DEMP_reco_5on41.pdf");
-  c19->Print("DEMP_reco_5on41.pdf");
-  c20a->Print("DEMP_reco_5on41.pdf");
-  c20b->Print("DEMP_reco_5on41.pdf");
-  c20->Print("DEMP_reco_5on41.pdf");
-  c21a->Print("DEMP_reco_5on41.pdf");
-  c21b->Print("DEMP_reco_5on41.pdf");
-  c21->Print("DEMP_reco_5on41.pdf");
-  c22a->Print("DEMP_reco_5on41.pdf");
-  c22b->Print("DEMP_reco_5on41.pdf");
-  c22->Print("DEMP_reco_5on41.pdf");
-  c23a->Print("DEMP_reco_5on41.pdf");
-  c23b->Print("DEMP_reco_5on41.pdf");
-  c23c->Print("DEMP_reco_5on41.pdf");
+  c1a->Print("sidis_reco_10on100.pdf[");
+  c1a->Print("sidis_reco_10on100.pdf");
+  c2a->Print("sidis_reco_10on100.pdf");
+  c3_a->Print("sidis_reco_10on100.pdf");
+  c1->Print("sidis_reco_10on100.pdf");
+  c2->Print("sidis_reco_10on100.pdf");
+  c3b->Print("sidis_reco_10on100.pdf");
+  c3->Print("sidis_reco_10on100.pdf");
+  c3a->Print("sidis_reco_10on100.pdf");
+  c3c->Print("sidis_reco_10on100.pdf");
+  c4->Print("sidis_reco_10on100.pdf");
+  c4a->Print("sidis_reco_10on100.pdf");
+  c5->Print("sidis_reco_10on100.pdf");
+  c5_a->Print("sidis_reco_10on100.pdf");
+  c5a->Print("sidis_reco_10on100.pdf");
+  c5b->Print("sidis_reco_10on100.pdf");
+  c5c->Print("sidis_reco_10on100.pdf");
+  c5d->Print("sidis_reco_10on100.pdf");
+  c6b->Print("sidis_reco_10on100.pdf");
+  c6a->Print("sidis_reco_10on100.pdf");
+  c7->Print("sidis_reco_10on100.pdf");
+  c7a->Print("sidis_reco_10on100.pdf");
+  c7b->Print("sidis_reco_10on100.pdf");
+  c8->Print("sidis_reco_10on100.pdf");
+  c8a->Print("sidis_reco_10on100.pdf");
+  c9->Print("sidis_reco_10on100.pdf");
+  c9a->Print("sidis_reco_10on100.pdf");
+  c10->Print("sidis_reco_10on100.pdf");
+  c10a->Print("sidis_reco_10on100.pdf");
+  c11->Print("sidis_reco_10on100.pdf");
+  c11a->Print("sidis_reco_10on100.pdf");
+  c12->Print("sidis_reco_10on100.pdf");
+  c13->Print("sidis_reco_10on100.pdf");
+  c14a->Print("sidis_reco_10on100.pdf");
+  c14b->Print("sidis_reco_10on100.pdf");
+  c14c->Print("sidis_reco_10on100.pdf");
+  c14d->Print("sidis_reco_10on100.pdf");
+  c15a->Print("sidis_reco_10on100.pdf");
+  c15b->Print("sidis_reco_10on100.pdf");
+  c15c->Print("sidis_reco_10on100.pdf");
+  c15d->Print("sidis_reco_10on100.pdf");
+  c15e->Print("sidis_reco_10on100.pdf");
+  c15f->Print("sidis_reco_10on100.pdf");
+  c16f->Print("sidis_reco_10on100.pdf");
+  c16d->Print("sidis_reco_10on100.pdf");
+  c16e->Print("sidis_reco_10on100.pdf");
+  c16a->Print("sidis_reco_10on100.pdf");
+  c16b->Print("sidis_reco_10on100.pdf");
+  c16c->Print("sidis_reco_10on100.pdf");
+  c17->Print("sidis_reco_10on100.pdf");
+  c18b->Print("sidis_reco_10on100.pdf");
+  c18a->Print("sidis_reco_10on100.pdf");
+  c18->Print("sidis_reco_10on100.pdf");
+  c19a->Print("sidis_reco_10on100.pdf");
+  c19b->Print("sidis_reco_10on100.pdf");
+  c19->Print("sidis_reco_10on100.pdf");
+  c20a->Print("sidis_reco_10on100.pdf");
+  c20b->Print("sidis_reco_10on100.pdf");
+  c20->Print("sidis_reco_10on100.pdf");
+  c21a->Print("sidis_reco_10on100.pdf");
+  c21b->Print("sidis_reco_10on100.pdf");
+  c21->Print("sidis_reco_10on100.pdf");
+  c22a->Print("sidis_reco_10on100.pdf");
+  c22b->Print("sidis_reco_10on100.pdf");
+  c22->Print("sidis_reco_10on100.pdf");
+  c23a->Print("sidis_reco_10on100.pdf");
+  c23b->Print("sidis_reco_10on100.pdf");
+  c23c->Print("sidis_reco_10on100.pdf");
   for(int D = 0; D <8; D++) { 
-    c24[D]->Print("DEMP_reco_5on41.pdf"); }
+    c24[D]->Print("sidis_reco_10on100.pdf"); }
   for(int D = 0; D <8; D++) {
-    c25[D]->Print("DEMP_reco_5on41.pdf");};
+    c25[D]->Print("sidis_reco_10on100.pdf");};
   for(int D = 0; D <8; D++) {
-    c26[D]->Print("DEMP_reco_5on41.pdf");};
-  c27a->Print("DEMP_reco_5on41.pdf");
-  c27b->Print("DEMP_reco_5on41.pdf");
-  c28a->Print("DEMP_reco_5on41.pdf");
-  c28b->Print("DEMP_reco_5on41.pdf");
-  c28c->Print("DEMP_reco_5on41.pdf");
-  c28d->Print("DEMP_reco_5on41.pdf");
-  c28e->Print("DEMP_reco_5on41.pdf");
-  c29->Print("DEMP_reco_5on41.pdf");
-  c30a->Print("DEMP_reco_5on41.pdf");
-  c1a->Print("DEMP_reco_5on41.pdf]");
+    c26[D]->Print("sidis_reco_10on100.pdf");};
+  c27a->Print("sidis_reco_10on100.pdf");
+  c27b->Print("sidis_reco_10on100.pdf");
+  c28a->Print("sidis_reco_10on100.pdf");
+  c28b->Print("sidis_reco_10on100.pdf");
+  c28c->Print("sidis_reco_10on100.pdf");
+  c28d->Print("sidis_reco_10on100.pdf");
+  c28e->Print("sidis_reco_10on100.pdf");
+  c29->Print("sidis_reco_10on100.pdf");
+  c30a->Print("sidis_reco_10on100.pdf");
+  c1a->Print("sidis_reco_10on100.pdf]");
   
   htw_Rec_w->SetOption("HIST");
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Saving the physics result parameters in the .csv file
   ofstream myfile;
-  myfile.open("parameters_5on41.csv", std::ios::trunc);
+  myfile.open("parameters_10on100.csv", std::ios::trunc);
   TString header = "nominal mean Q^2,mean Q^2,mean Q^2 error,mean W,mean W error,-t (bin center),Rate (Hz), Rate (Hz) error";
   myfile << header << "\n\n";
 
@@ -1256,7 +1261,7 @@ void pion_5on41()
     myfile << "\n";
   }
   myfile<<"truth_neutron ( #theta* < 4.0 mRad ) = "<<count2<<",";
-  myfile<<"total_files = "<<count1;
+  myfile<<"nFiles = "<<nFiles;
   myfile.close();
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   ofile->Write(); // Write histograms to file
