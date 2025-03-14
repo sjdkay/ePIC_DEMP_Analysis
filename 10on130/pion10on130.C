@@ -1,3 +1,5 @@
+#include "TString.h"
+
 void pion10on130()
 {
 
@@ -16,6 +18,10 @@ void pion10on130()
 
   TString filepath;
   TString FileNames[3]={"EICreconOut_10on130_ip6_Pi+_q2_3_10_10x100_hiacc_Combined_11_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_10_20_10x100_hiacc_Combined_11_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_20_35_10x100_hiacc_Combined_11_03_2025_Pruned.root"};
+  // Unclear which of these will actually be needed subsequently
+  Double_t WeightCorrFact[3]={1.4848,1.45369,1.38721}; // These factors are the ratio Ntired/Nphysical from the event generator
+  Double_t Ntried[3]={11000000,18000000,34000000}; // These are the number of events tried in each Q2 range
+  Double_t NTriedTot=11000000+18000000+34000000;
   unsigned int count1 = 0; // Counter for the number of files successfully added
   unsigned int count2 = 0; // Counter for neutrons within 4 mrad
   unsigned int nFiles = 3; // Total number of DEMPgen files added
@@ -55,7 +61,7 @@ void pion10on130()
   }
 
   error_file.close();  // Close the error log file 
-
+  
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Set output file for the histograms
   TFile *ofile = TFile::Open("pion_hist_10on130.root","RECREATE");
@@ -64,7 +70,8 @@ void pion10on130()
   TTreeReader tree_reader(mychain);
 
   // Get weight information
-  TTreeReaderArray<std::vector<std::string>> weight_map(tree_reader, "GPStringValues");
+  TTreeReaderArray<float> weight(tree_reader, "EventHeader.weight");
+  //TTreeReaderArray<std::vector<std::string>> weight_map(tree_reader, "GPStringValues");
 
   // Get Particle Information
   TTreeReaderArray<int>    partGenStat(tree_reader, "MCParticles.generatorStatus");
@@ -106,90 +113,89 @@ void pion10on130()
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Define Histograms
-  TH2* enbfTruthw_Thetap = new TH2D("enbfTruthw_Thethap","e' truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,135,175,100,9.5,11);
-  TH2* pinbfTruthw_Thetap = new TH2D("pinbfTruthw_Thethap","#pi^{+} truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,50,100,0,80); //change
-  TH2* nnbfTruthw_Thetap  = new TH2D("nnbfTruthw_Thethap","n truth no beam effects #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,3.5,100,20,100); //change 
+  TH2* enbfTruthw_Thetap = new TH2D("enbfTruthw_Thethap","e' truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",160,135,175,150,9.5,11);
+  TH2* pinbfTruthw_Thetap = new TH2D("pinbfTruthw_Thethap","#pi^{+} truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",200,0,50,320,0,80); //change
+  TH2* nnbfTruthw_Thetap  = new TH2D("nnbfTruthw_Thethap","n truth no beam effects #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",350,0.0,3.5,240,20,140); //change 
   
-  TH2* eTruthw_Thetap  = new TH2D("eTruthw_Thethap","e' truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,135,175,100,9.5,11);
-  TH2* piTruthw_Thetap = new TH2D("piTruthw_Thethap","#pi^{+} truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,50,100,0,80); //change
-  TH2* nTruthw_Thetap  = new TH2D("nTruthw_Thethap","n truth #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,3.5,100,20,100); //change 
-  TH2* nTruthw_Thetaphi  = new TH2D("nTruthw_Thethaphi","n truth #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,0.0,50,100,-200,200); //change
-  TH2* nTruthw_rot_Thetap  = new TH2D("nTruthw_rot_Thethap","n truth #theta* vs P around p axis; #theta* (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,1.0,100,20,100); //change
-  TH2* nTruthw_rot_Thetaphi  = new TH2D("nTruthw_rot_Thethaphi","n truth #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,15,100,-200,200); //change
+  TH2* eTruthw_Thetap  = new TH2D("eTruthw_Thethap","e' truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",160,135,175,150,9.5,11);
+  TH2* piTruthw_Thetap = new TH2D("piTruthw_Thethap","#pi^{+} truth #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",200,0,50,320,0,80); //change
+  TH2* nTruthw_Thetap  = new TH2D("nTruthw_Thethap","n truth #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",350,0.0,3.5,240,20,140); //change 
+  TH2* nTruthw_Thetaphi  = new TH2D("nTruthw_Thethaphi","n truth #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,0.0,50,400,-200,200); //change
+  TH2* nTruthw_rot_Thetap  = new TH2D("nTruthw_rot_Thethap","n truth #theta* vs P around p axis; #theta* (Deg); P (GeV/c); Rate/bin (Hz)",100,0.0,1.0,240,20,140); //change
+  TH2* nTruthw_rot_Thetaphi  = new TH2D("nTruthw_rot_Thethaphi","n truth #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",150,0.0,15,400,-200,200); //change
 
-  TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e' rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,135,175,100,7,12);
-  TH2* eRecw_Thetaphi  = new TH2D("eRecw_Thethaphi","e' rec #theta vs #phi; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,135,175,100,-200,200);
-  TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{+} rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",100,0,50,100,0,120); //change
-  TH2* piRecw_Thetaphi  = new TH2D("piRecw_Thethaphi","#pi^{+} rec #theta vs #phi; #theta (deg); Rate/bin (Hz); P (GeV/c)",100,0,50,100,-200,200); //change
+  TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e' rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",160,135,175,200,7,12);
+  TH2* eRecw_Thetaphi  = new TH2D("eRecw_Thethaphi","e' rec #theta vs #phi; #theta (deg); P (GeV/c); Rate/bin (Hz)",160,135,175,400,-200,200);
+  TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{+} rec #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",200,0,50,480,0,120); //change
+  TH2* piRecw_Thetaphi  = new TH2D("piRecw_Thethaphi","#pi^{+} rec #theta vs #phi; #theta (deg); Rate/bin (Hz); P (GeV/c)",100,0,50,400,-200,200); //change
   //TH2* eRecw_Thetap  = new TH2D("eRecw_Thethap","e^{+}' rec #theta vs P; #theta (deg); P (GeV/c)",100,0,60,100,0,15);  // positron
   //TH2* piRecw_Thetap = new TH2D("piRecw_Thethap","#pi^{-} rec #theta vs P; #theta (deg); P (GeV/c)",100,130,170,100,0,10); // pion -
-  TH2* nRecw_Thetap  = new TH2D("nRecw_Thethap","n rec #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,120); //change //for all clusters
-  TH2* nRecw_rot_Thetap  = new TH2D("nRecw_rot_Thethap","n rec #theta* vs P around p axis for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0.0,4.5,100,35.0,120); //change
-  TH2* nRecw_Thetaphi  = new TH2D("nRecw_Thethaphi","n rec #theta vs #phi for all clusters; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,15.0,35.0,100,-200,200); 
-  TH2* nRecw_rot_Thetaphi  = new TH2D("nRecw_rot_Thethaphi","n rec #theta* vs #phi* around p axis for all clusters; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,12.0,100,-200,200);
-  TH2* nRecw_rot_PosXY  = new TH2D("nRecw_rot_PosXY","n X vs Y around proton axis at Z = 35 m for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); x (mm); y (mm); Rate/bin (Hz)",100,-200,200,100,-200,200);
+  TH2* nRecw_Thetap  = new TH2D("nRecw_Thethap","n rec #theta vs P; #theta (Deg); P (GeV/c); Rate/bin (Hz)",240,0.8,2.0,280,0.0,140); //change //for all clusters
+  TH2* nRecw_rot_Thetap  = new TH2D("nRecw_rot_Thethap","n rec #theta* vs P around p axis for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",450,0.0,4.5,170,35.0,120); //change
+  TH2* nRecw_Thetaphi  = new TH2D("nRecw_Thethaphi","n rec #theta vs #phi for all clusters; #theta (mRad); #phi (deg); Rate/bin (Hz)",200,15.0,35.0,400,-200,200); 
+  TH2* nRecw_rot_Thetaphi  = new TH2D("nRecw_rot_Thethaphi","n rec #theta* vs #phi* around p axis for all clusters; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",120,0.0,12.0,400,-200,200);
+  TH2* nRecw_rot_PosXY  = new TH2D("nRecw_rot_PosXY","n X vs Y around proton axis at Z = 35 m for all clusters ( rec #theta* < 4.0 mRad, E > 40 GeV ); x (mm); y (mm); Rate/bin (Hz)",400,-200,200,400,-200,200);
 
-
-  TH1* nRec_en = new TH1D("nRec_en", "n rec E for all clusters ( rec #theta* < 4.0 mRad ); E (GeV); Rate (Hz)", 100, 0.0, 120); //change
+  TH1* nRec_en = new TH1D("nRec_en", "n rec E for all clusters ( rec #theta* < 4.0 mRad ); E (GeV); Rate (Hz)", 280, 0.0, 140); //change
   nRec_en->SetLineWidth(2);
-  TH1* nRec_clus = new TH1D("nRec_clus", "n all clusters ( rec #theta* < 4.0 mRad )", 100, 0.0, 8.0);
+  TH1* nRec_clus = new TH1D("nRec_clus", "n all clusters ( rec #theta* < 4.0 mRad )", 10, 0, 10);
   nRec_clus->SetLineWidth(2);
 
   // Neutron theta-phi plots 
-  TH1* n_ThetaDiff = new TH1D("n_ThetaDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC}(Deg); Rate (Hz)", 100, -0.3, 1.5);
+  TH1* n_ThetaDiff = new TH1D("n_ThetaDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC}(Deg); Rate (Hz)", 180, -0.3, 1.5);
   n_ThetaDiff->SetLineWidth(2);
-  TH1* n_PhiDiff = new TH1D("n_PhiDiff", " #phi*_{pMiss_rec} - #phi*_{ZDC}; #phi*_{pMiss_rec} - #phi*_{ZDC}(Deg); Rate (Hz)", 100, -100, 100);
+  TH1* n_PhiDiff = new TH1D("n_PhiDiff", " #phi*_{pMiss_rec} - #phi*_{ZDC}; #phi*_{pMiss_rec} - #phi*_{ZDC}(Deg); Rate (Hz)", 400, -100, 100);
   n_PhiDiff->SetLineWidth(2);
-  TH2* n_ThetaPhiDiff = new TH2D("n_ThetaPhiDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC} vs #phi*_{pMiss_rec} - #phi*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC} (Deg); #phi*_{pMiss_rec} - #phi*_{ZDC} (Deg); Rate/bin (Hz)",100, -1.0, 1.0, 100, -75, 75);
-  TH2* pMissRecw_Thetaphi = new TH2D("pMissRecw_Thetaphi", "pMiss rec #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",100,15.0,35.0,100,-200,200);
-  TH2* pMissRecw_rot_Thetaphi = new TH2D("pMissRecw_rot_Thetaphi", "pMiss rec  #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,15.0,100,-200,200);
-  TH2* n_TruthRecw_ThetaPhiDiff = new TH2D("n_TruthRecw_ThetaPhiDiff", " #theta*_{n_MC} - #theta*_{n_rec} vs #phi*_{n_MC} - #phi*_{n_rec}; #theta*_{n_MC} - #theta*_{n_rec} (Deg); #phi*_{n_MC} - #phi*_{n_rec} (Deg); Rate/bin (Hz)",100, -0.2, 0.2, 100, -25, 25);
+  TH2* n_ThetaPhiDiff = new TH2D("n_ThetaPhiDiff", "#theta*_{pMiss_rec} - #theta*_{ZDC} vs #phi*_{pMiss_rec} - #phi*_{ZDC}; #theta*_{pMiss_rec} - #theta*_{ZDC} (Deg); #phi*_{pMiss_rec} - #phi*_{ZDC} (Deg); Rate/bin (Hz)",200, -1.0, 1.0, 300, -75, 75);
+  TH2* pMissRecw_Thetaphi = new TH2D("pMissRecw_Thetaphi", "pMiss rec #theta vs #phi; #theta (mRad); #phi (deg); Rate/bin (Hz)",80,15.0,35.0,400,-200,200);
+  TH2* pMissRecw_rot_Thetaphi = new TH2D("pMissRecw_rot_Thetaphi", "pMiss rec  #theta* vs #phi* around p axis; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",300,0.0,15.0,400,-200,200);
+  TH2* n_TruthRecw_ThetaPhiDiff = new TH2D("n_TruthRecw_ThetaPhiDiff", " #theta*_{n_MC} - #theta*_{n_rec} vs #phi*_{n_MC} - #phi*_{n_rec}; #theta*_{n_MC} - #theta*_{n_rec} (Deg); #phi*_{n_MC} - #phi*_{n_rec} (Deg); Rate/bin (Hz)",400, -0.2, 0.2, 200, -25, 25);
 
   // Absolute difference -t plots //no change
-  TH1* htw_t1 = new TH1D("htw_t1", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t1 = new TH1D("htw_t1", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 200, -0.2,0.3);
   htw_t1->SetLineColor(kBlue); htw_t1->SetLineWidth(2);
-  TH1* htw_t2 = new TH1D("htw_t2", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t2 = new TH1D("htw_t2", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 200, -0.2,0.3);
   htw_t2->SetLineColor(kRed);  htw_t2->SetLineWidth(2);
-  TH1* htw_t3 = new TH1D("htw_t3", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t3 = new TH1D("htw_t3", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 200, -0.2,0.3);
   htw_t3->SetLineColor(kMagenta+1); htw_t3->SetLineWidth(2);
-  TH1* htw_t4 = new TH1D("htw_t4", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.2,0.3);
+  TH1* htw_t4 = new TH1D("htw_t4", "-t_{rec, alt_rec, rec_pT, rec_corr} - -t_{truth} Distribution; #Delta -t (GeV^{2}); Rate (Hz) ", 200, -0.2,0.3);
   htw_t4->SetLineColor(kGreen+2); htw_t4->SetLineWidth(2);
 
   // -t reconstruction plots //no change
-  TH2* htw_rec1 = new TH2D("htw_rec1", "-t rec vs -t truth Distribution; -t_{rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
-  TH2* htwz_rec1 = new TH2D("htwz_rec1", "-t rec vs -t truth Distribution; -t_{rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
-  TH2* htw_rec2 = new TH2D("htw_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
-  TH2* htwz_rec2 = new TH2D("htwz_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
-  TH2* htw_rec3 = new TH2D("htw_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
-  TH2* htwz_rec3 = new TH2D("htwz_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
-  TH2* htw_rec4 = new TH2D("htw_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
-  TH2* htwz_rec4 = new TH2D("htwz_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,0.2,100, 0.0,0.2); // zoomed version
+  TH2* htw_rec1 = new TH2D("htw_rec1", "-t rec vs -t truth Distribution; -t_{rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 200, 0.0,2.0,150, 0.0,1.5);
+  TH2* htwz_rec1 = new TH2D("htwz_rec1", "-t rec vs -t truth Distribution; -t_{rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 20, 0.0,0.2,20, 0.0,0.2); // zoomed version
+  TH2* htw_rec2 = new TH2D("htw_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 200, 0.0,2.0,150, 0.0,1.5);
+  TH2* htwz_rec2 = new TH2D("htwz_rec2", "-t alt_rec vs -t truth Distribution; -t_{alt_rec} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 20, 0.0,0.2,20, 0.0,0.2); // zoomed version
+  TH2* htw_rec3 = new TH2D("htw_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 200, 0.0,2.0,150, 0.0,1.5);
+  TH2* htwz_rec3 = new TH2D("htwz_rec3", "-t rec_pT vs -t truth Distribution; -t_{rec_pT} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 20, 0.0,0.2,20, 0.0,0.2); // zoomed version
+  TH2* htw_rec4 = new TH2D("htw_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 200, 0.0,2.0,150, 0.0,1.5);
+  TH2* htwz_rec4 = new TH2D("htwz_rec4", "-t rec_corr vs -t truth Distribution; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 20, 0.0,0.2,20, 0.0,0.2); // zoomed version
 
   // Resolution plots 
-  TH1* htw_res_e = new TH1D("htw_res_e", "e' Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 100, -20, 20);
+  TH1* htw_res_e = new TH1D("htw_res_e", "e' Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 80, -20, 20);
   htw_res_e->SetLineWidth(2);
-  TH1* htw_res_pi = new TH1D("htw_res_pi", "#pi^{+} Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 100, -15, 15);
+  TH1* htw_res_pi = new TH1D("htw_res_pi", "#pi^{+} Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 60, -15, 15);
   htw_res_pi->SetLineWidth(2);
-  TH1* htw_res_n1 = new TH1D("htw_res_n1", "n Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 100, -60, 60);
+  TH1* htw_res_n1 = new TH1D("htw_res_n1", "n Track Momentum Resolution Distribution (%); (P_{rec} - P_{MC})/P_{MC} (%); Rate (Hz)", 240, -60, 60);
   htw_res_n1->SetLineWidth(2);
-  TH1* htw_res_n2 = new TH1D("htw_res_n2", "n Track #theta* Resolution Distribution (%); (#theta*_{rec} - #theta*_{MC})/#theta*_{MC} (%); Rate (Hz)", 100, -50, 50);
+  TH1* htw_res_n2 = new TH1D("htw_res_n2", "n Track #theta* Resolution Distribution (%); (#theta*_{rec} - #theta*_{MC})/#theta*_{MC} (%); Rate (Hz)", 200, -50, 50);
   htw_res_n2->SetLineWidth(2);
-  TH1* htw_res_n3 = new TH1D("htw_res_n3", "n Track #phi* Resolution Distribution (%); (#phi*_{rec} - #phi*_{MC})/#phi*_{MC} (%); Rate (Hz)", 100, -50, 50);
+  TH1* htw_res_n3 = new TH1D("htw_res_n3", "n Track #phi* Resolution Distribution (%); (#phi*_{rec} - #phi*_{MC})/#phi*_{MC} (%); Rate (Hz)", 200, -50, 50);
   htw_res_n3->SetLineWidth(2);
-  TH1* htw_res_n4 = new TH1D("htw_res_n4", "n Track Momentum Resolution Distribution (%); (P_{rec_corr} - P_{MC})/P_{MC} (%); Rate (Hz)", 100, -3, 3);
+  TH1* htw_res_n4 = new TH1D("htw_res_n4", "n Track Momentum Resolution Distribution (%); (P_{rec_corr} - P_{MC})/P_{MC} (%); Rate (Hz)", 20, -5, 5);
   htw_res_n4->SetLineWidth(2);
 
-  TH1* htw_res1 = new TH1D("htw_res1", "-t Resolution Distribution (%); (t_{rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -200, 200);
+  TH1* htw_res1 = new TH1D("htw_res1", "-t Resolution Distribution (%); (t_{rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 400, -200, 200);
   htw_res1->SetLineWidth(2);
-  TH1* htw_res2 = new TH1D("htw_res2", "-t Resolution Distribution (%); (t_{alt_rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -110, 210);
+  TH1* htw_res2 = new TH1D("htw_res2", "-t Resolution Distribution (%); (t_{alt_rec} - t_{truth})/t_{truth} (%); Rate (Hz)", 320, -110, 210);
   htw_res2->SetLineWidth(2);
-  TH1* htw_res3 = new TH1D("htw_res3", "-t Resolution Distribution (%); (t_{rec_pT} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -110, 210);
+  TH1* htw_res3 = new TH1D("htw_res3", "-t Resolution Distribution (%); (t_{rec_pT} - t_{truth})/t_{truth} (%); Rate (Hz)", 320, -110, 210);
   htw_res3->SetLineWidth(2);
-  TH1* htw_res4 = new TH1D("htw_res4", "-t Resolution Distribution (%); (t_{rec_corr} - t_{truth})/t_{truth} (%); Rate (Hz)", 100, -100, 100);
+  TH1* htw_res4 = new TH1D("htw_res4", "-t Resolution Distribution (%); (t_{rec_corr} - t_{truth})/t_{truth} (%); Rate (Hz)", 200, -100, 100);
   htw_res4->SetLineWidth(2);
-  TH1* htw_res5 = new TH1D("htw_res5", "Q^{2} Resolution Distribution (%); (Q^{2}_{rec} - Q^{2}_{truth})/Q^{2}_{truth} (%); Rate (Hz)", 100, -20, 20);
+  TH1* htw_res5 = new TH1D("htw_res5", "Q^{2} Resolution Distribution (%); (Q^{2}_{rec} - Q^{2}_{truth})/Q^{2}_{truth} (%); Rate (Hz)", 40, -20, 20);
   htw_res5->SetLineWidth(2);
-  TH1* htw_res6 = new TH1D("htw_res6", "W Resolution Distribution (%); (W_{rec} - W_{truth})/W_{truth} (%); Rate (Hz)", 100, -100, 150); //change
+  TH1* htw_res6 = new TH1D("htw_res6", "W Resolution Distribution (%); (W_{rec} - W_{truth})/W_{truth} (%); Rate (Hz)", 250, -100, 150); //change
   htw_res6->SetLineWidth(2);
 
   // Effeciency plots
@@ -197,44 +203,44 @@ void pion10on130()
   TH2* Q2_t_DetEff_Cut = new TH2F("Q2_t_DetEff_Cut", "Q^{2}_{truth} vs -t_{truth} for detected events; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 25, 0, 0.5);
   TH2* Q2_t_DetEff = new TH2F("Q2_t_DetEff", "Q^{2}_{truth} vs -t_{truth} detected/thrown ratio; Q^{2} (GeV^{2}); -t (GeV^{2})", 40, 0, 40, 25, 0, 0.5); //20, 0, 40, 30, 0, 1.5
 
-  TH1* eTruthw_Eta_Uncut = new TH1D("eTruthw_Eta_Uncut", "e' #eta for thrown events; #eta; Rate (Hz)",100,-3,-1);
+  TH1* eTruthw_Eta_Uncut = new TH1D("eTruthw_Eta_Uncut", "e' #eta for thrown events; #eta; Rate (Hz)",80,-3,-1);
   eTruthw_Eta_Uncut->SetLineWidth(2);
-  TH1* eRecw_Eta_Cut = new TH1D("eRecw_Eta_Cut", "e' #eta for detected events; #eta; Rate (Hz)",100,-3,-1);
+  TH1* eRecw_Eta_Cut = new TH1D("eRecw_Eta_Cut", "e' #eta for detected events; #eta; Rate (Hz)",80,-3,-1);
   eRecw_Eta_Cut->SetLineWidth(2);
-  TH1* eEff_Eta = new TH1D("eEff_Eta", "e' Tracking efficiency as fn of #eta; #eta; Eff", 100,-3,-1);
+  TH1* eEff_Eta = new TH1D("eEff_Eta", "e' Tracking efficiency as fn of #eta; #eta; Eff", 80,-3,-1);
   eEff_Eta->SetLineWidth(2);
 
-  TH1* piTruthw_Eta_Uncut = new TH1D("piTruthw_Eta_Uncut", "#pi^{+} #eta for thrown events; #eta; Rate (Hz)",100,-1,6); //change
+  TH1* piTruthw_Eta_Uncut = new TH1D("piTruthw_Eta_Uncut", "#pi^{+} #eta for thrown events; #eta; Rate (Hz)",140,-1,6); //change
   piTruthw_Eta_Uncut->SetLineWidth(2);
-  TH1* piRecw_Eta_Cut = new TH1D("piRecw_Eta_Cut", "#pi^{+} #eta for detected events; #eta; Rate (Hz)",100,-1,6); //change
+  TH1* piRecw_Eta_Cut = new TH1D("piRecw_Eta_Cut", "#pi^{+} #eta for detected events; #eta; Rate (Hz)",140,-1,6); //change
   piRecw_Eta_Cut->SetLineWidth(2);
-  TH1* piEff_Eta = new TH1D("piEff_Eta", "#pi^{+} Tracking efficiency as fn of #eta; #eta; Eff",100,-1,6); //change
+  TH1* piEff_Eta = new TH1D("piEff_Eta", "#pi^{+} Tracking efficiency as fn of #eta; #eta; Eff",140,-1,6); //change
   piEff_Eta->SetLineWidth(2);
 
-  TH1* eTruthw_P_Uncut = new TH1D("eTruthw_P_Uncut", "e' P for thrown events; P (GeV/c); Rate (Hz)",100,9.5,11);
+  TH1* eTruthw_P_Uncut = new TH1D("eTruthw_P_Uncut", "e' P for thrown events; P (GeV/c); Rate (Hz)",150,9.5,11);
   eTruthw_P_Uncut->SetLineWidth(2);
-  TH1* eRecw_P_Cut = new TH1D("eRecw_P_Cut", "e' P for detected events; P (GeV/c); Rate (Hz)",100,9.5,11);
+  TH1* eRecw_P_Cut = new TH1D("eRecw_P_Cut", "e' P for detected events; P (GeV/c); Rate (Hz)",150,9.5,11);
   eRecw_P_Cut->SetLineWidth(2);
-  TH1* eEff_P = new TH1D("eEff_P", "e' Tracking efficiency as fn of P; P (GeV/c); Eff", 100,9.5,11);
+  TH1* eEff_P = new TH1D("eEff_P", "e' Tracking efficiency as fn of P; P (GeV/c); Eff", 150,9.5,11);
   eEff_P->SetLineWidth(2);
 
-  TH1* piTruthw_P_Uncut = new TH1D("piTruthw_P_Uncut", "#pi^{+} P for thrown events; P (GeV/c); Rate (Hz)",100,-1,80); //change
+  TH1* piTruthw_P_Uncut = new TH1D("piTruthw_P_Uncut", "#pi^{+} P for thrown events; P (GeV/c); Rate (Hz)",324,-1,80); //change
   piTruthw_P_Uncut->SetLineWidth(2);
-  TH1* piRecw_P_Cut = new TH1D("piRecw_P_Cut", "#pi^{+} P for detected events; P (GeV/c); Rate (Hz)",100,-1,80); //change
+  TH1* piRecw_P_Cut = new TH1D("piRecw_P_Cut", "#pi^{+} P for detected events; P (GeV/c); Rate (Hz)",324,-1,80); //change
   piRecw_P_Cut->SetLineWidth(2);
-  TH1* piEff_P = new TH1D("piEff_P", "#pi^{+} Tracking efficiency as fn of P; P (GeV/c); Eff",100,-1,80); //change
+  TH1* piEff_P = new TH1D("piEff_P", "#pi^{+} Tracking efficiency as fn of P; P (GeV/c); Eff",324,-1,80); //change
   piEff_P->SetLineWidth(2);
 
   // Neutrons in HCal
-  TH2* nRecw_Thetap_hcal  = new TH2D("nRecw_Thethap_hcal","n rec #theta vs P for 1 cluster events; #theta (Deg); P (GeV/c); Rate/bin (Hz)",100,0.8,2.0,100,0.0,100); //change
-  TH2* nRecw_rot_Thetap_hcal  = new TH2D("nRecw_rot_Thethap_hcal","n rec #theta* vs P around p axis for 1 cluster events ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",100,0,4.5,100,35.0,100); //change
+  TH2* nRecw_Thetap_hcal  = new TH2D("nRecw_Thethap_hcal","n rec #theta vs P for 1 cluster events; #theta (Deg); P (GeV/c); Rate/bin (Hz)",120,0.8,2.0,280,0.0,140); //change
+  TH2* nRecw_rot_Thetap_hcal  = new TH2D("nRecw_rot_Thethap_hcal","n rec #theta* vs P around p axis for 1 cluster events ( rec #theta* < 4.0 mRad, E > 40 GeV ); #theta* (mRad); P (GeV/c); Rate/bin (Hz)",450,0,4.5,240,20.0,140); //change
     
   // y plot 
-  TH1* htw_Truth_y = new TH1D("htw_Truth_y", "y truth Distribution; y; Rate (Hz) ", 100,-0.3,0.3);
+  TH1* htw_Truth_y = new TH1D("htw_Truth_y", "y truth Distribution; y; Rate (Hz) ", 60,-0.3,0.3);
   htw_Truth_y->SetLineWidth(2);
-  TH1* htw_Rec_y = new TH1D("htw_Rec_y", "y rec Distribution; y; Rate (Hz) ", 100,-0.3,0.3);
+  TH1* htw_Rec_y = new TH1D("htw_Rec_y", "y rec Distribution; y; Rate (Hz) ", 60,-0.3,0.3);
   htw_Rec_y->SetLineWidth(2);
-  TH1* htw_Truth_t = new TH1D("htw_Truth_t", "-t truth Distribution; -t (GeV^{2}); Rate (Hz) ", 100,-0.1,1.4);
+  TH1* htw_Truth_t = new TH1D("htw_Truth_t", "-t truth Distribution; -t (GeV^{2}); Rate (Hz) ", 150,-0.1,1.4);
   htw_Truth_t->SetLineWidth(2);
     
   // Physics results //no change
@@ -263,21 +269,21 @@ void pion10on130()
   }
   
   // Q2 plots
-  TH2* h2Truthw_W_Q2  = new TH2D("h2Truthw_W_Q2","W vs Q^{2} truth distribution; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,11.0,100,0,40);
-  TH2* h2Recw_W_Q2  = new TH2D("h2Recw_W_Q2","W vs Q^{2} rec distribution; W (GeV); Q^{2} (GeV^{2})",100,-100,100,100,0,40);
+  TH2* h2Truthw_W_Q2  = new TH2D("h2Truthw_W_Q2","W vs Q^{2} truth distribution; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)",110,0.0,11.0,80,0,40);
+  TH2* h2Recw_W_Q2  = new TH2D("h2Recw_W_Q2","W vs Q^{2} rec distribution; W (GeV); Q^{2} (GeV^{2})",200,-100,100,80,0,40);
   
-  TH2* h2Truthw_t_Q2  = new TH2D("h2Truthw_t_Q2","-t_{truth} vs Q^{2} truth distribution; -t_{truth} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.5,100,0,40);
-  TH2* h2Recw_t1_Q2  = new TH2D("h2Recw_t1_Q2","-t_{rec} vs Q^{2} rec distribution; -t_{rec} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,2.0,100,0,40);
-  TH2* h2Recw_t2_Q2  = new TH2D("h2Recw_t2_Q2","-t_{alt_rec} vs Q^{2} rec distribution; -t_{alt_rec} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,100,0,40);
-  TH2* h2Recw_t3_Q2  = new TH2D("h2Recw_t3_Q2","-t_{rec_pT} vs Q^{2} rec distribution; -t_{rec_pT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,100,0,40);
-  TH2* h2Recw_t4_Q2  = new TH2D("h2Recw_t4_Q2","-t_{rec_corr} vs Q^{2} rec distribution; -t_{rec_corr} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,100,0,40);
+  TH2* h2Truthw_t_Q2  = new TH2D("h2Truthw_t_Q2","-t_{truth} vs Q^{2} truth distribution; -t_{truth} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",150,0.0,1.5,80,0,40);
+  TH2* h2Recw_t1_Q2  = new TH2D("h2Recw_t1_Q2","-t_{rec} vs Q^{2} rec distribution; -t_{rec} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",200,0.0,2.0,80,0,40);
+  TH2* h2Recw_t2_Q2  = new TH2D("h2Recw_t2_Q2","-t_{alt_rec} vs Q^{2} rec distribution; -t_{alt_rec} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,80,0,40);
+  TH2* h2Recw_t3_Q2  = new TH2D("h2Recw_t3_Q2","-t_{rec_pT} vs Q^{2} rec distribution; -t_{rec_pT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,80,0,40);
+  TH2* h2Recw_t4_Q2  = new TH2D("h2Recw_t4_Q2","-t_{rec_corr} vs Q^{2} rec distribution; -t_{rec_corr} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)",100,0.0,1.0,80,0,40);
   
   //w plot
-  TH1* htw_Rec_w = new TH1D("htw_Rec_w", "w rec Distribution w/ 5 < Q^{2} < 35; W (GeV)", 100,-150,100);
+  TH1* htw_Rec_w = new TH1D("htw_Rec_w", "w rec Distribution w/ 5 < Q^{2} < 35; W (GeV)", 250,-150,100);
   htw_Rec_w->SetLineWidth(2);
   
   //cons check plots 
-  TH1* cons_mass = new TH1D("cons_mass", "Total missing mass distribution; M (GeV); Rate (Hz) ", 100,-40,40);
+  TH1* cons_mass = new TH1D("cons_mass", "Total missing mass distribution; M (GeV); Rate (Hz) ", 160,-40,40);
   cons_mass->SetLineWidth(2);
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //Defining the four vectors
@@ -330,7 +336,7 @@ void pion10on130()
   double neut_rec_p_hcal;
   
   double neutMass = 0.93965420;
-  double weight, partEng, nbfpartEng; // weight and energy of the particles
+  double weightNorm, partEng, nbfpartEng; // weight and energy of the particles
   double Q2_truth, W_truth, y_truth, t_truth, t_alttruth; // Truth kinematic variables
   double Q2_rec, W_rec, y_rec, t_rec, t_altrec, t_recpT, t_reccorr; // Reconstructed kinematic variables
   double neutPosX, neutPosY; // neutron position
@@ -352,7 +358,7 @@ void pion10on130()
   // elec_beam.SetPxPyPzE(e_p1, e_p2, e_p3, eEng); 
                
   double pMass = 0.93827208816; // proton beam
-  double pEng = 100; //change
+  double pEng = 130; //change
   double p_pmag = sqrt(pow(pEng,2)-pow(pMass,2));
   double c_a = 0.025;
   double p_p1 = -p_pmag*sin(c_a);
@@ -366,11 +372,21 @@ void pion10on130()
   
   while(tree_reader.Next()) { // Loop over events
     x = false, y = false, z = false;
+
+    //Recalculate the weight based upon a scaling of the number tried per file to the number tried total
+    if( ((TString)((mychain->GetFile())->GetName())).Contains("q2_3_10") ){
+      weightNorm = (weight[0]*Ntried[0])/NTriedTot;
+    }
+    else if ( ((TString)((mychain->GetFile())->GetName())).Contains("q2_10_20") ){
+      weightNorm = (weight[0]*Ntried[1])/NTriedTot;
+    }
+    else if (((TString)((mychain->GetFile())->GetName())).Contains("q2_20_35")){
+      weightNorm = (weight[0]*Ntried[2])/NTriedTot;      
+    }
+    else{
+      weightNorm = weight[0];
+    }
     
-    //std::vector<std::string> weight_value = weight_map[0]; // This method of accessing the weight is currently causing a seg fault, the value returned is always 1 too
-    //weight = std::stod(weight_value[0]);
-    weight = 1;
-      
     //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
  
     for(unsigned int i=0; i<nbfpartGenStat.GetSize(); i++) { // Loop over thrown nbf particles
@@ -379,17 +395,17 @@ void pion10on130()
 		
       if(nbfpartGenStat[i] == 1 && nbfpartPdg[i] == 11) { // Select stable thrown nbf particles and look at electron
 	elec_nbfmc.SetPxPyPzE(nbfpartMomX[i], nbfpartMomY[i], nbfpartMomZ[i], nbfpartEng);
-	enbfTruthw_Thetap -> Fill(elec_nbfmc.Theta()*TMath::RadToDeg(), elec_nbfmc.P(), weight);
+	enbfTruthw_Thetap -> Fill(elec_nbfmc.Theta()*TMath::RadToDeg(), elec_nbfmc.P(), weightNorm);
       }
       
       if(nbfpartGenStat[i] == 1 && nbfpartPdg[i] == 211) { // Look at pion
 	pi_nbfmc.SetPxPyPzE(nbfpartMomX[i], nbfpartMomY[i], nbfpartMomZ[i], nbfpartEng);
-	pinbfTruthw_Thetap -> Fill(pi_nbfmc.Theta()*TMath::RadToDeg(), pi_nbfmc.P(), weight);
+	pinbfTruthw_Thetap -> Fill(pi_nbfmc.Theta()*TMath::RadToDeg(), pi_nbfmc.P(), weightNorm);
       }
  
       if(nbfpartGenStat[i] == 1 && nbfpartPdg[i] == 2112) { // Look at neutron
 	neut_nbfmc.SetPxPyPzE(nbfpartMomX[i], nbfpartMomY[i], nbfpartMomZ[i], nbfpartEng);
-	nnbfTruthw_Thetap -> Fill(neut_nbfmc.Theta()*TMath::RadToDeg(), neut_nbfmc.P(), weight);
+	nnbfTruthw_Thetap -> Fill(neut_nbfmc.Theta()*TMath::RadToDeg(), neut_nbfmc.P(), weightNorm);
       }
     
     } // for over thrown nbf particles
@@ -407,26 +423,26 @@ void pion10on130()
 		
       if(partGenStat[i] == 1 && partPdg[i] == 11) { // Select stable thrown particles and look at electron
 	elec_mc.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);
-	eTruthw_Thetap -> Fill(elec_mc.Theta()*TMath::RadToDeg(), elec_mc.P(), weight);
-	eTruthw_Eta_Uncut -> Fill(elec_mc.Eta(), weight);
-	eTruthw_P_Uncut -> Fill(elec_mc.P(), weight);
+	eTruthw_Thetap -> Fill(elec_mc.Theta()*TMath::RadToDeg(), elec_mc.P(), weightNorm);
+	eTruthw_Eta_Uncut -> Fill(elec_mc.Eta(), weightNorm);
+	eTruthw_P_Uncut -> Fill(elec_mc.P(), weightNorm);
       }
  
       if(partGenStat[i] == 1 && partPdg[i] == 211) { // Look at pion
 	pi_mc.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);
-	piTruthw_Thetap -> Fill(pi_mc.Theta()*TMath::RadToDeg(), pi_mc.P(), weight);
-	piTruthw_Eta_Uncut -> Fill(pi_mc.Eta(), weight);
-	piTruthw_P_Uncut -> Fill(pi_mc.P(), weight);
+	piTruthw_Thetap -> Fill(pi_mc.Theta()*TMath::RadToDeg(), pi_mc.P(), weightNorm);
+	piTruthw_Eta_Uncut -> Fill(pi_mc.Eta(), weightNorm);
+	piTruthw_P_Uncut -> Fill(pi_mc.P(), weightNorm);
       }
  
       if(partGenStat[i] == 1 && partPdg[i] == 2112) { // Look at neutron
 	neut_mc.SetPxPyPzE(partMomX[i],partMomY[i],partMomZ[i], partEng);
-	nTruthw_Thetap -> Fill(neut_mc.Theta()*TMath::RadToDeg(), neut_mc.P(), weight);
-	nTruthw_Thetaphi -> Fill(neut_mc.Theta()*1000., neut_mc.Phi()*TMath::RadToDeg(), weight);
+	nTruthw_Thetap -> Fill(neut_mc.Theta()*TMath::RadToDeg(), neut_mc.P(), weightNorm);
+	nTruthw_Thetaphi -> Fill(neut_mc.Theta()*1000., neut_mc.Phi()*TMath::RadToDeg(), weightNorm);
  
 	neut_rot_mc = rot*neut_mc;  // rotate w.r.t to proton axis
-	nTruthw_rot_Thetap -> Fill(neut_rot_mc.Theta()*TMath::RadToDeg(), neut_rot_mc.P(), weight);
-	nTruthw_rot_Thetaphi -> Fill(neut_rot_mc.Theta()*1000., neut_rot_mc.Phi()*TMath::RadToDeg(), weight);
+	nTruthw_rot_Thetap -> Fill(neut_rot_mc.Theta()*TMath::RadToDeg(), neut_rot_mc.P(), weightNorm);
+	nTruthw_rot_Thetaphi -> Fill(neut_rot_mc.Theta()*1000., neut_rot_mc.Phi()*TMath::RadToDeg(), weightNorm);
       }			           
  
     } // for over thrown particles
@@ -438,20 +454,20 @@ void pion10on130()
       if(trackCharge[i] == -1 && trackMomZ[i] < 0) { 
 	x = true;
 	elec_rec.SetPxPyPzE(trackMomX[i],trackMomY[i],trackMomZ[i], trackEng[i]);
-	eRecw_Thetap -> Fill(elec_rec.Theta()*TMath::RadToDeg(), elec_rec.P(), weight);
-	eRecw_Thetaphi -> Fill(elec_rec.Theta()*TMath::RadToDeg(), elec_rec.Phi()*TMath::RadToDeg(), weight);
-	eRecw_Eta_Cut -> Fill(elec_mc.Eta(), weight);
-	eRecw_P_Cut -> Fill(elec_mc.P(), weight);
+	eRecw_Thetap -> Fill(elec_rec.Theta()*TMath::RadToDeg(), elec_rec.P(), weightNorm);
+	eRecw_Thetaphi -> Fill(elec_rec.Theta()*TMath::RadToDeg(), elec_rec.Phi()*TMath::RadToDeg(), weightNorm);
+	eRecw_Eta_Cut -> Fill(elec_mc.Eta(), weightNorm);
+	eRecw_P_Cut -> Fill(elec_mc.P(), weightNorm);
       }
  
       //if(trackPdg[i] == 211) { // Look at pion
       if(trackCharge[i] == +1 && trackMomZ[i] > 0) {
 	y = true;
 	pi_rec.SetPxPyPzE(trackMomX[i],trackMomY[i],trackMomZ[i], trackEng[i]);
-	piRecw_Thetap -> Fill(pi_rec.Theta()*TMath::RadToDeg(), pi_rec.P(), weight);
-	piRecw_Thetaphi ->  Fill(pi_rec.Theta()*TMath::RadToDeg(), pi_rec.Phi()*TMath::RadToDeg(), weight);
-	piRecw_Eta_Cut -> Fill(pi_mc.Eta(), weight);
-	piRecw_P_Cut -> Fill(pi_mc.P(), weight);
+	piRecw_Thetap -> Fill(pi_rec.Theta()*TMath::RadToDeg(), pi_rec.P(), weightNorm);
+	piRecw_Thetaphi ->  Fill(pi_rec.Theta()*TMath::RadToDeg(), pi_rec.Phi()*TMath::RadToDeg(), weightNorm);
+	piRecw_Eta_Cut -> Fill(pi_mc.Eta(), weightNorm);
+	piRecw_P_Cut -> Fill(pi_mc.P(), weightNorm);
       }
  
     }// for over reconstructed particles
@@ -461,23 +477,23 @@ void pion10on130()
     for(unsigned int i=0; i<neutEng.GetSize(); i++) { // Loop over zdc neutrons
  
       neut_rec.SetPxPyPzE(neutMomX[i],neutMomY[i],neutMomZ[i], neutEng[i]);
-      nRecw_Thetap -> Fill(neut_rec.Theta()*TMath::RadToDeg(), neut_rec.P(), weight);
-      nRecw_Thetaphi -> Fill(neut_rec.Theta()*1000., neut_rec.Phi()*TMath::RadToDeg(), weight);
+      nRecw_Thetap -> Fill(neut_rec.Theta()*TMath::RadToDeg(), neut_rec.P(), weightNorm);
+      nRecw_Thetaphi -> Fill(neut_rec.Theta()*1000., neut_rec.Phi()*TMath::RadToDeg(), weightNorm);
     
       neut_rot_rec = rot*neut_rec; // rotate w.r.t to proton axis
-      nRecw_rot_Thetaphi -> Fill(neut_rot_rec.Theta()*1000., neut_rot_rec.Phi()*TMath::RadToDeg(), weight);
+      nRecw_rot_Thetaphi -> Fill(neut_rot_rec.Theta()*1000., neut_rot_rec.Phi()*TMath::RadToDeg(), weightNorm);
       
       if(neut_rot_rec.Theta()*1000. < 4.0){ // acceptance of the zdc
         nRec_clus -> Fill(neutClus[i]);
-	nRec_en -> Fill(neut_rot_rec.E(), weight);
+	nRec_en -> Fill(neut_rot_rec.E(), weightNorm);
 	
    	if(neut_rot_rec.E()>40.0){ // neutron energy cut //change
 	  z = true;
-	  nRecw_rot_Thetap -> Fill(neut_rot_rec.Theta()*1000., neut_rot_rec.P(), weight);
+	  nRecw_rot_Thetap -> Fill(neut_rot_rec.Theta()*1000., neut_rot_rec.P(), weightNorm);
 	  
 	  neutPosX = 35000 * sin(neut_rot_rec.Theta()) * cos(neut_rot_rec.Phi()); // neutron position at r = z = 35 m
       	  neutPosY = 35000 * sin(neut_rot_rec.Theta()) * sin(neut_rot_rec.Phi());
-          nRecw_rot_PosXY -> Fill(neutPosX, neutPosY, weight);
+          nRecw_rot_PosXY -> Fill(neutPosX, neutPosY, weightNorm);
 	}
  
       }
@@ -500,12 +516,12 @@ void pion10on130()
 				 neut_rec_p_hcal * sin(neut_pos_hcal.Theta()) * sin(neut_pos_hcal.Phi()),   
 				 neut_rec_p_hcal * cos(neut_pos_hcal.Theta()),
 				 neutEng_hcal[0]);
-	nRecw_Thetap_hcal -> Fill(neut_rec_hcal.Theta()*TMath::RadToDeg(), neut_rec_hcal.P(), weight);					    
+	nRecw_Thetap_hcal -> Fill(neut_rec_hcal.Theta()*TMath::RadToDeg(), neut_rec_hcal.P(), weightNorm);					    
 
 	neut_rot_rec_hcal = rot*neut_rec_hcal; // rotate w.r.t to proton axis						
  
 	if(neut_rot_rec_hcal.Theta()*1000. < 4.0 && neut_rot_rec_hcal.E()> 40.0){ //change
-	  nRecw_rot_Thetap_hcal -> Fill(neut_rot_rec_hcal.Theta()*1000., neut_rot_rec_hcal.P(), weight);
+	  nRecw_rot_Thetap_hcal -> Fill(neut_rot_rec_hcal.Theta()*1000., neut_rot_rec_hcal.P(), weightNorm);
 	}
       }
  
@@ -524,12 +540,12 @@ void pion10on130()
                                  
     talttruth = (prot_beam - neut_mc); 
     t_alttruth = -1*(talttruth.mag2()); // t_alttruth is the -t from the second loop
-    htw_Truth_t -> Fill(t_alttruth, weight);
+    htw_Truth_t -> Fill(t_alttruth, weightNorm);
  
     /*virtphoton_nbftruth = (elec_beam - elec_nbfmc); // Turned it off as it didn't give expected results
       tnbftruth = (virtphoton_nbftruth - pi_nbfmc); 
       t_nbftruth = -1*(tnbftruth.mag2()); // ttruth is the -t from the first loop for nbf
-      htw_t_1->Fill(t_nbftruth, weight);*/
+      htw_t_1->Fill(t_nbftruth, weightNorm);*/
     
     tnbfalttruth = (prot_nbfbeam - neut_nbfmc); 
     t_nbfalttruth = -1*(tnbfalttruth.mag2()); // t_alttruth is the -t from the second loop for nbf
@@ -541,10 +557,10 @@ void pion10on130()
       count2++; // truth neutrons
       if(Q2_truth > 5 && Q2_truth < 35){
 	// t_truth = t_nbfalttruth;
-	Q2_t_DetEff_Uncut -> Fill(Q2_truth, t_truth, weight);
-	htw_Truth_y -> Fill(y_truth, weight);
-	h2Truthw_W_Q2 -> Fill(W_truth, Q2_truth, weight); 
-	h2Truthw_t_Q2 -> Fill(t_truth, Q2_truth, weight);
+	Q2_t_DetEff_Uncut -> Fill(Q2_truth, t_truth, weightNorm);
+	htw_Truth_y -> Fill(y_truth, weightNorm);
+	h2Truthw_W_Q2 -> Fill(W_truth, Q2_truth, weightNorm); 
+	h2Truthw_t_Q2 -> Fill(t_truth, Q2_truth, weightNorm);
       }
     }
     
@@ -564,26 +580,26 @@ void pion10on130()
 	// t-method plots
 	trec = (virtphoton_rec - pi_rec); // First method to reconstruct -t // No change in values after rotation.
 	t_rec = -1*(trec.mag2()); // t_rec is the -t from the first loop 
-	htw_rec1 -> Fill(t_rec, t_truth, weight); 
-	htwz_rec1 -> Fill(t_rec, t_truth, weight); // zoomed version
+	htw_rec1 -> Fill(t_rec, t_truth, weightNorm); 
+	htwz_rec1 -> Fill(t_rec, t_truth, weightNorm); // zoomed version
                                  
 	taltrec = (prot_beam - neut_rec); // Second method to reconstruct -t // No change in values after rotation.
 	t_altrec = -1*(taltrec.mag2()); // t_altrec is the -t from the second loop
-	htw_rec2 -> Fill(t_altrec, t_truth, weight); 
-	htwz_rec2 -> Fill(t_altrec, t_truth, weight); // zoomed version
+	htw_rec2 -> Fill(t_altrec, t_truth, weightNorm); 
+	htwz_rec2 -> Fill(t_altrec, t_truth, weightNorm); // zoomed version
  
 	trecpT = (elec_rec +  pi_rec); // Third method to reconstruct -t // Values changed after rotation.
 	trecpT_rot = rot*trecpT;
 	t_recpT = trecpT_rot.Perp2();
 	//cout<<"  "<<trecpT.Perp2()<<" "<<t_recpT<<endl;
-	htw_rec3 -> Fill(t_recpT, t_truth, weight); 
-	htwz_rec3 -> Fill(t_recpT, t_truth, weight); // zoomed version
+	htw_rec3 -> Fill(t_recpT, t_truth, weightNorm); 
+	htwz_rec3 -> Fill(t_recpT, t_truth, weightNorm); // zoomed version
  
 	p_miss_rec = (elec_beam + prot_beam) - (elec_rec + pi_rec) ; // Defined missing momentum information -> Fourth method to reconstruct -t
-	pMissRecw_Thetaphi -> Fill(p_miss_rec.Theta()*1000., p_miss_rec.Phi()*TMath::RadToDeg(), weight);
+	pMissRecw_Thetaphi -> Fill(p_miss_rec.Theta()*1000., p_miss_rec.Phi()*TMath::RadToDeg(), weightNorm);
 	
 	p_miss_rot_rec = rot*p_miss_rec; // rotate p_miss_rec w.r.t to proton axis
-	pMissRecw_rot_Thetaphi -> Fill(p_miss_rot_rec.Theta()*1000., p_miss_rot_rec.Phi()*TMath::RadToDeg(), weight);
+	pMissRecw_rot_Thetaphi -> Fill(p_miss_rot_rec.Theta()*1000., p_miss_rot_rec.Phi()*TMath::RadToDeg(), weightNorm);
 	
         neut_corr.SetCoordinates( p_miss_rec.P() * sin(neut_rec.Theta()) * cos(neut_rec.Phi()), // Corrected neutron using missing momentum and neutron angles information 
 				  p_miss_rec.P() * sin(neut_rec.Theta()) * sin(neut_rec.Phi()), 
@@ -592,8 +608,8 @@ void pion10on130()
  
 	treccorr = (prot_beam - neut_corr); // No change in values after rotation.
 	t_reccorr = -1*(treccorr.mag2());
-	htw_rec4 -> Fill(t_reccorr, t_truth, weight); 
-	htwz_rec4 -> Fill(t_reccorr, t_truth, weight); // zoomed version
+	htw_rec4 -> Fill(t_reccorr, t_truth, weightNorm); 
+	htwz_rec4 -> Fill(t_reccorr, t_truth, weightNorm); // zoomed version
  
 	/*// Absolute difference -t plots
 	  htw_t1 -> Fill(t_rec - t_truth);
@@ -604,42 +620,42 @@ void pion10on130()
 	// Neutron theta-phi plots 
 	nTheta_Diff = p_miss_rot_rec.Theta() - neut_rot_rec.Theta();
 	nPhi_Diff   = p_miss_rot_rec.Phi() - neut_rot_rec.Phi();
-	n_ThetaDiff -> Fill(nTheta_Diff*TMath::RadToDeg(), weight);
-	n_PhiDiff -> Fill(nPhi_Diff*TMath::RadToDeg(), weight);
-	n_ThetaPhiDiff -> Fill(nTheta_Diff*TMath::RadToDeg(), nPhi_Diff*TMath::RadToDeg(), weight);
-	n_TruthRecw_ThetaPhiDiff -> Fill((neut_rot_mc.Theta() - neut_rot_rec.Theta())*TMath::RadToDeg(), (neut_rot_mc.Phi() - neut_rot_rec.Phi())*TMath::RadToDeg(), weight); 
+	n_ThetaDiff -> Fill(nTheta_Diff*TMath::RadToDeg(), weightNorm);
+	n_PhiDiff -> Fill(nPhi_Diff*TMath::RadToDeg(), weightNorm);
+	n_ThetaPhiDiff -> Fill(nTheta_Diff*TMath::RadToDeg(), nPhi_Diff*TMath::RadToDeg(), weightNorm);
+	n_TruthRecw_ThetaPhiDiff -> Fill((neut_rot_mc.Theta() - neut_rot_rec.Theta())*TMath::RadToDeg(), (neut_rot_mc.Phi() - neut_rot_rec.Phi())*TMath::RadToDeg(), weightNorm); 
  
 	// Resolution plots
-	htw_res_e -> Fill((elec_rec.P() - elec_mc.P())/(elec_mc.P())*100, weight); 
-	htw_res_pi -> Fill((pi_rec.P() - pi_mc.P())/(pi_mc.P())*100, weight);
-	htw_res_n1 -> Fill((neut_rot_rec.P() - neut_rot_mc.P())/(neut_rot_mc.P())*100, weight);
-	//htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weight);
-	htw_res_n2 -> Fill((neut_rot_rec.Theta() - neut_rot_mc.Theta())/(neut_rot_mc.Theta())*100, weight);
-	htw_res_n3 -> Fill((neut_rot_rec.Phi() - neut_rot_mc.Phi())/(neut_rot_mc.Phi())*100, weight);
+	htw_res_e -> Fill((elec_rec.P() - elec_mc.P())/(elec_mc.P())*100, weightNorm); 
+	htw_res_pi -> Fill((pi_rec.P() - pi_mc.P())/(pi_mc.P())*100, weightNorm);
+	htw_res_n1 -> Fill((neut_rot_rec.P() - neut_rot_mc.P())/(neut_rot_mc.P())*100, weightNorm);
+	//htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weightNorm);
+	htw_res_n2 -> Fill((neut_rot_rec.Theta() - neut_rot_mc.Theta())/(neut_rot_mc.Theta())*100, weightNorm);
+	htw_res_n3 -> Fill((neut_rot_rec.Phi() - neut_rot_mc.Phi())/(neut_rot_mc.Phi())*100, weightNorm);
 	
-	htw_res1 -> Fill((t_rec - t_truth)/(t_truth)*100, weight); 
-	htw_res2 -> Fill((t_altrec - t_truth)/(t_truth)*100, weight);
-	htw_res3 -> Fill((t_recpT - t_truth)/(t_truth)*100, weight);
-	htw_res4 -> Fill((t_reccorr - t_truth)/(t_truth)*100, weight);
-	htw_res5 -> Fill((Q2_rec - Q2_truth)/(Q2_truth)*100, weight);
-	htw_res6 -> Fill((W_rec - W_truth)/(W_truth)*100, weight);
+	htw_res1 -> Fill((t_rec - t_truth)/(t_truth)*100, weightNorm); 
+	htw_res2 -> Fill((t_altrec - t_truth)/(t_truth)*100, weightNorm);
+	htw_res3 -> Fill((t_recpT - t_truth)/(t_truth)*100, weightNorm);
+	htw_res4 -> Fill((t_reccorr - t_truth)/(t_truth)*100, weightNorm);
+	htw_res5 -> Fill((Q2_rec - Q2_truth)/(Q2_truth)*100, weightNorm);
+	htw_res6 -> Fill((W_rec - W_truth)/(W_truth)*100, weightNorm);
  	
 	// y plots
-	htw_Rec_y -> Fill(y_rec,weight);
+	htw_Rec_y -> Fill(y_rec, weightNorm);
 	
 	// Q2 plots
-	h2Recw_W_Q2 -> Fill(W_rec, Q2_rec, weight); 
-	h2Recw_t1_Q2 -> Fill(t_rec, Q2_rec, weight);
-	h2Recw_t2_Q2 -> Fill(t_altrec, Q2_rec, weight);
-	h2Recw_t3_Q2 -> Fill(t_recpT, Q2_rec, weight);
-	h2Recw_t4_Q2 -> Fill(t_reccorr, Q2_rec, weight);
+	h2Recw_W_Q2 -> Fill(W_rec, Q2_rec, weightNorm); 
+	h2Recw_t1_Q2 -> Fill(t_rec, Q2_rec, weightNorm);
+	h2Recw_t2_Q2 -> Fill(t_altrec, Q2_rec, weightNorm);
+	h2Recw_t3_Q2 -> Fill(t_recpT, Q2_rec, weightNorm);
+	h2Recw_t4_Q2 -> Fill(t_reccorr, Q2_rec, weightNorm);
 	
 	//w plot
-	htw_Rec_w -> Fill(W_rec, weight);
+	htw_Rec_w -> Fill(W_rec, weightNorm);
 	
 	//four momentum check
 	cons_check = (elec_beam + prot_beam - elec_rec - pi_rec - neut_corr);
-	cons_mass -> Fill(cons_check.M(), weight);
+	cons_mass -> Fill(cons_check.M(), weightNorm);
 	
       } //Q2 cut
       
@@ -657,23 +673,23 @@ void pion10on130()
       
 	if ( Q2_rec > Q2_low && Q2_rec < Q2_high){
 	  if((t_reccorr < 0.4) && (nTheta_Diff*TMath::RadToDeg() > ThetaDiff_Cut_Low) && (nTheta_Diff*TMath::RadToDeg() < ThetaDiff_Cut_High) && (abs(nPhi_Diff*TMath::RadToDeg())) < PhiDiff_Cut /*&& W_rec < 41.0*/){
-            htw_t_cut_result[B] -> Fill(t_reccorr, weight);
-	    htw_Q2_cut_result[B] -> Fill(Q2_rec, weight);
-	    htw_W_cut_result[B] -> Fill(W_rec, weight);
+            htw_t_cut_result[B] -> Fill(t_reccorr, weightNorm);
+	    htw_Q2_cut_result[B] -> Fill(Q2_rec, weightNorm);
+	    htw_W_cut_result[B] -> Fill(W_rec, weightNorm);
             if(B==0) { 
 	      //t_truth = t_nbfalttruth; 
             
 	      //effeciency plot
-	      Q2_t_DetEff_Cut -> Fill(Q2_truth, t_truth, weight);
+	      Q2_t_DetEff_Cut -> Fill(Q2_truth, t_truth, weightNorm);
             
 	      // Absolute difference -t plots
-	      htw_t1 -> Fill(t_rec - t_truth, weight);
-	      htw_t2 -> Fill(t_altrec - t_truth, weight);
-	      htw_t3 -> Fill(t_recpT - t_truth, weight);
-	      htw_t4 -> Fill(t_reccorr - t_truth, weight);
+	      htw_t1 -> Fill(t_rec - t_truth, weightNorm);
+	      htw_t2 -> Fill(t_altrec - t_truth, weightNorm);
+	      htw_t3 -> Fill(t_recpT - t_truth, weightNorm);
+	      htw_t4 -> Fill(t_reccorr - t_truth, weightNorm);
 	    
 	      //neutron momemtum resolution
-	      htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weight);
+	      htw_res_n4 -> Fill((neut_corr.P() - neut_mc.P())/(neut_mc.P())*100, weightNorm);
 	  
 	    } // Efficiency plots
 	  }// if statement over all cuts
@@ -681,8 +697,6 @@ void pion10on130()
       } // for loop over B
     } // if over x,y, and z - Cut conditions being matched        
   } // End of event loop (while loop)
-
-  cout << "Finished while loop " << endl;
   
   // Efficiency plots
   Q2_t_DetEff -> Divide(Q2_t_DetEff_Cut, Q2_t_DetEff_Uncut, 1, 1, "b");
@@ -704,91 +718,91 @@ void pion10on130()
   
   TCanvas *c1a = new TCanvas("c1a"); //truth nbf information     
   c1a->SetLogz(); 
-  enbfTruthw_Thetap->Scale(1.0/nFiles); 
+  //enbfTruthw_Thetap->Scale(1.0/nFiles); 
   enbfTruthw_Thetap->Draw("colz");
   
   TCanvas *c2a = new TCanvas("c2a");
   c2a->SetLogz();
-  pinbfTruthw_Thetap->Scale(1.0/nFiles);
+  //pinbfTruthw_Thetap->Scale(1.0/nFiles);
   pinbfTruthw_Thetap->Draw("colz");
   
   TCanvas *c3_a = new TCanvas("c3_a"); 
   c3_a->SetLogz();
-  nnbfTruthw_Thetap->Scale(1.0/nFiles);
+  //nnbfTruthw_Thetap->Scale(1.0/nFiles);
   nnbfTruthw_Thetap->Draw("colz");  
   
   TCanvas *c1 = new TCanvas("c1"); //truth information     
   c1->SetLogz(); 
-  eTruthw_Thetap->Scale(1.0/nFiles); 
+  //eTruthw_Thetap->Scale(1.0/nFiles); 
   eTruthw_Thetap->Draw("colz");
   
   TCanvas *c2 = new TCanvas("c2");
   c2->SetLogz();
-  piTruthw_Thetap->Scale(1.0/nFiles);
+  //piTruthw_Thetap->Scale(1.0/nFiles);
   piTruthw_Thetap->Draw("colz");
   
   TCanvas *c3 = new TCanvas("c3");
   c3->SetLogz();
-  nTruthw_Thetaphi->Scale(1.0/nFiles);
+  //nTruthw_Thetaphi->Scale(1.0/nFiles);
   nTruthw_Thetaphi->Draw("colz");
   
   TCanvas *c3a = new TCanvas("c3a");
   c3a->SetLogz();
-  nTruthw_rot_Thetaphi->Scale(1.0/nFiles);
+  //nTruthw_rot_Thetaphi->Scale(1.0/nFiles);
   nTruthw_rot_Thetaphi->Draw("colz");
   
   TCanvas *c3b = new TCanvas("c3b"); 
   c3b->SetLogz();
-  nTruthw_Thetap->Scale(1.0/nFiles);
+  //nTruthw_Thetap->Scale(1.0/nFiles);
   nTruthw_Thetap->Draw("colz");  
   
   TCanvas *c3c = new TCanvas("c3c"); 
   c3c->SetLogz();
-  nTruthw_rot_Thetap->Scale(1.0/nFiles);
+  //nTruthw_rot_Thetap->Scale(1.0/nFiles);
   nTruthw_rot_Thetap->Draw("colz");  
   
   TCanvas *c4 = new TCanvas("c4"); //reconstructed information
   c4->SetLogz();
-  eRecw_Thetap->Scale(1.0/nFiles);
+  //eRecw_Thetap->Scale(1.0/nFiles);
   eRecw_Thetap->Draw("colz");
   
   TCanvas *c4a = new TCanvas("c4a"); 
   c4a->SetLogz();
-  eRecw_Thetaphi->Scale(1.0/nFiles);
+  //eRecw_Thetaphi->Scale(1.0/nFiles);
   eRecw_Thetaphi->Draw("colz");
   
   TCanvas *c5 = new TCanvas("c5");
   c5->SetLogz();
-  piRecw_Thetap->Scale(1.0/nFiles);
+  //piRecw_Thetap->Scale(1.0/nFiles);
   piRecw_Thetap->Draw("colz");
   
   TCanvas *c5_a = new TCanvas("c5_a");
   c5_a->SetLogz();
-  piRecw_Thetaphi->Scale(1.0/nFiles);
+  //piRecw_Thetaphi->Scale(1.0/nFiles);
   piRecw_Thetaphi->Draw("colz");
   
   TCanvas *c5a = new TCanvas("c5a"); // rec neutrons
   c5a->SetLogz();
-  nRecw_Thetap_hcal->Scale(1.0/nFiles);
+  //nRecw_Thetap_hcal->Scale(1.0/nFiles);
   nRecw_Thetap_hcal->Draw("colz");
   
   TCanvas *c5b = new TCanvas("c5b");
   c5b->SetLogz();
-  nRecw_rot_Thetap_hcal->Scale(1.0/nFiles);
+  //nRecw_rot_Thetap_hcal->Scale(1.0/nFiles);
   nRecw_rot_Thetap_hcal->Draw("colz");
   
   TCanvas *c5c = new TCanvas("c5c"); 
   c5c->SetLogz();
-  nRecw_Thetaphi->Scale(1.0/nFiles);
+  //nRecw_Thetaphi->Scale(1.0/nFiles);
   nRecw_Thetaphi->Draw("colz");
   
   TCanvas *c5d = new TCanvas("c5d");
   c5d->SetLogz();
-  nRecw_rot_Thetaphi->Scale(1.0/nFiles);
+  //nRecw_rot_Thetaphi->Scale(1.0/nFiles);
   nRecw_rot_Thetaphi->Draw("colz");
   
   TCanvas *c6a = new TCanvas("c6a");
-  nRec_en->Scale(1.0/nFiles);
+  //nRec_en->Scale(1.0/nFiles);
   nRec_en->Draw("HIST");
   
   TCanvas *c6b = new TCanvas("c6b");
@@ -796,17 +810,17 @@ void pion10on130()
   
   TCanvas *c7 = new TCanvas("c7");
   c7->SetLogz();
-  nRecw_Thetap->Scale(1.0/nFiles);
+  //nRecw_Thetap->Scale(1.0/nFiles);
   nRecw_Thetap->Draw("colz");
   
   TCanvas *c7a = new TCanvas("c7a");
   c7a->SetLogz();
-  nRecw_rot_Thetap->Scale(1.0/nFiles);
+  //nRecw_rot_Thetap->Scale(1.0/nFiles);
   nRecw_rot_Thetap->Draw("colz");
   
   TCanvas *c7b = new TCanvas("c7b");
   c7b->SetLogz();
-  nRecw_rot_PosXY->Scale(1.0/nFiles);
+  //nRecw_rot_PosXY->Scale(1.0/nFiles);
   nRecw_rot_PosXY->Draw("colz");
   
   TEllipse *ellipse = new TEllipse(0.0, 0.0, 140);
@@ -817,118 +831,118 @@ void pion10on130()
   
   TCanvas *c8 = new TCanvas("c8"); // -t reconstruction plots
   c8->SetLogz();
-  htw_rec1->Scale(1.0/nFiles);
+  //htw_rec1->Scale(1.0/nFiles);
   htw_rec1->Draw("colz");
   
   TCanvas *c8a = new TCanvas("c8a");
   c8a->SetLogz();
-  htwz_rec1->Scale(1.0/nFiles);
+  //htwz_rec1->Scale(1.0/nFiles);
   htwz_rec1->Draw("colz");
   
   TCanvas *c9 = new TCanvas("c9");
   c9->SetLogz();
-  htw_rec2->Scale(1.0/nFiles);
+  //htw_rec2->Scale(1.0/nFiles);
   htw_rec2->Draw("colz");
   
   TCanvas *c9a = new TCanvas("c9a");
   c9a->SetLogz();
-  htwz_rec2->Scale(1.0/nFiles);
+  //htwz_rec2->Scale(1.0/nFiles);
   htwz_rec2->Draw("colz");
   
   TCanvas *c10 = new TCanvas("c10");
   c10->SetLogz();
-  htw_rec3->Scale(1.0/nFiles);
+  //htw_rec3->Scale(1.0/nFiles);
   htw_rec3->Draw("colz");
   
   TCanvas *c10a = new TCanvas("c10a");
   c10a->SetLogz();
-  htwz_rec3->Scale(1.0/nFiles);
+  //htwz_rec3->Scale(1.0/nFiles);
   htwz_rec3->Draw("colz");
   
   TCanvas *c11 = new TCanvas("c11");
   c11->SetLogz();
-  htw_rec4->Scale(1.0/nFiles);
+  //htw_rec4->Scale(1.0/nFiles);
   htw_rec4->Draw("colz");
   
   TCanvas *c11a = new TCanvas("c11a");
   c11a->SetLogz();
-  htwz_rec4->Scale(1.0/nFiles);
+  //htwz_rec4->Scale(1.0/nFiles);
   htwz_rec4->Draw("colz");
   
   TCanvas *c12 = new TCanvas("c12"); // Resolution plots
-  htw_res_e->Scale(1.0/nFiles);
+  //htw_res_e->Scale(1.0/nFiles);
   htw_res_e->Draw("HIST");
   
   TCanvas *c13 = new TCanvas("c13");
-  htw_res_pi->Scale(1.0/nFiles);
+  //htw_res_pi->Scale(1.0/nFiles);
   htw_res_pi->Draw("HIST");
   
   TCanvas *c14a = new TCanvas("c14a");
-  htw_res_n1->Scale(1.0/nFiles);
+  //htw_res_n1->Scale(1.0/nFiles);
   htw_res_n1->Draw("HIST");
   
   TCanvas *c14b = new TCanvas("c14b");
-  htw_res_n2->Scale(1.0/nFiles);
+  //htw_res_n2->Scale(1.0/nFiles);
   htw_res_n2->Draw("HIST");
   
   TCanvas *c14c = new TCanvas("c14c");
-  htw_res_n3->Scale(1.0/nFiles);
+  //htw_res_n3->Scale(1.0/nFiles);
   htw_res_n3->Draw("HIST");
   
   TCanvas *c14d = new TCanvas("c14d");
-  htw_res_n4->Scale(1.0/nFiles);
+  //htw_res_n4->Scale(1.0/nFiles);
   htw_res_n4->Draw("HIST");
   
   TCanvas *c15a = new TCanvas("c15a"); //t-resoutions
-  htw_res1->Scale(1.0/nFiles);
+  //htw_res1->Scale(1.0/nFiles);
   htw_res1->Draw("HIST");
   
   TCanvas *c15b = new TCanvas("c15b");
-  htw_res2->Scale(1.0/nFiles);
+  //htw_res2->Scale(1.0/nFiles);
   htw_res2->Draw("HIST");
   
   TCanvas *c15c = new TCanvas("c15c");
-  htw_res3->Scale(1.0/nFiles);
+  //htw_res3->Scale(1.0/nFiles);
   htw_res3->Draw("HIST");
   
   TCanvas *c15d = new TCanvas("c15d");
-  htw_res4->Scale(1.0/nFiles);
+  //htw_res4->Scale(1.0/nFiles);
   htw_res4->Draw("HIST");
   
   TCanvas *c15e = new TCanvas("c15e");
-  htw_res5->Scale(1.0/nFiles);
+  //htw_res5->Scale(1.0/nFiles);
   htw_res5->Draw("HIST");
   
   TCanvas *c15f = new TCanvas("c15f");
-  htw_res6->Scale(1.0/nFiles);
+  //htw_res6->Scale(1.0/nFiles);
   htw_res6->Draw("HIST");
   
   TCanvas *c16a = new TCanvas("c16a"); // Neutron theta-phi plots
-  n_ThetaDiff->Scale(1.0/nFiles);
+  //n_ThetaDiff->Scale(1.0/nFiles);
   n_ThetaDiff->Draw("HIST");
   
   TCanvas *c16b = new TCanvas("c16b");
-  n_PhiDiff->Scale(1.0/nFiles);
+  //n_PhiDiff->Scale(1.0/nFiles);
   n_PhiDiff->Draw("HIST");
   
   TCanvas *c16c = new TCanvas("c16c");
   c16c->SetLogz();
-  n_ThetaPhiDiff->Scale(1.0/nFiles);
+  //n_ThetaPhiDiff->Scale(1.0/nFiles);
   n_ThetaPhiDiff->Draw("colz");
   
   TCanvas *c16d = new TCanvas("c16d");
   c16d->SetLogz();
-  pMissRecw_Thetaphi->Scale(1.0/nFiles);
+  //pMissRecw_Thetaphi->Scale(1.0/nFiles);
   pMissRecw_Thetaphi->Draw("colz");
   
   TCanvas *c16e = new TCanvas("c16e");
   c16e->SetLogz();
-  pMissRecw_rot_Thetaphi->Scale(1.0/nFiles);
+  //pMissRecw_rot_Thetaphi->Scale(1.0/nFiles);
   pMissRecw_rot_Thetaphi->Draw("colz");
   
   TCanvas *c16f = new TCanvas("c16f");
   c16f->SetLogz();
-  n_TruthRecw_ThetaPhiDiff->Scale(1.0/nFiles);
+  //n_TruthRecw_ThetaPhiDiff->Scale(1.0/nFiles);
   n_TruthRecw_ThetaPhiDiff->Draw("colz");
   
   TCanvas *c17 = new TCanvas("c17"); // Absolute difference -t plots
@@ -960,132 +974,132 @@ void pion10on130()
   Q2_t_DetEff->Draw("colz");
   
   TCanvas *c18a = new TCanvas("c18a"); 
-  Q2_t_DetEff_Cut->Scale(1.0/nFiles);
+  //Q2_t_DetEff_Cut->Scale(1.0/nFiles);
   Q2_t_DetEff_Cut->Draw("colz");
   
   TCanvas *c18b = new TCanvas("c18b"); 
-  Q2_t_DetEff_Uncut->Scale(1.0/nFiles);
+  //Q2_t_DetEff_Uncut->Scale(1.0/nFiles);
   Q2_t_DetEff_Uncut->Draw("colz"); 
  
   TCanvas *c19 = new TCanvas("c19"); // elec eta eff.
   eEff_Eta->Draw("HIST");
   
   TCanvas *c19a = new TCanvas("c19a"); 
-  eTruthw_Eta_Uncut->Scale(1.0/nFiles);
+  //eTruthw_Eta_Uncut->Scale(1.0/nFiles);
   eTruthw_Eta_Uncut->Draw("HIST");
   
   TCanvas *c19b = new TCanvas("c19b"); 
-  eRecw_Eta_Cut->Scale(1.0/nFiles);
+  //eRecw_Eta_Cut->Scale(1.0/nFiles);
   eRecw_Eta_Cut->Draw("HIST");
   
   TCanvas *c20 = new TCanvas("c20");  // elec mom eff.
   eEff_P->Draw("HIST");
   
   TCanvas *c20a = new TCanvas("c20a"); 
-  eTruthw_P_Uncut->Scale(1.0/nFiles);
+  //eTruthw_P_Uncut->Scale(1.0/nFiles);
   eTruthw_P_Uncut->Draw("HIST");
   
   TCanvas *c20b = new TCanvas("c20b"); 
-  eRecw_P_Cut->Scale(1.0/nFiles);
+  //eRecw_P_Cut->Scale(1.0/nFiles);
   eRecw_P_Cut->Draw("HIST");
   
   TCanvas *c21 = new TCanvas("c21"); // pi eta eff.
   piEff_Eta->Draw("HIST");
   
   TCanvas *c21a = new TCanvas("c21a"); 
-  piTruthw_Eta_Uncut->Scale(1.0/nFiles);
+  //piTruthw_Eta_Uncut->Scale(1.0/nFiles);
   piTruthw_Eta_Uncut->Draw("HIST");
   
   TCanvas *c21b = new TCanvas("c21b"); 
-  piRecw_Eta_Cut->Scale(1.0/nFiles);
+  //piRecw_Eta_Cut->Scale(1.0/nFiles);
   piRecw_Eta_Cut->Draw("HIST");
   
   TCanvas *c22 = new TCanvas("c22"); // pi mom eff.
   piEff_P->Draw("HIST");
   
   TCanvas *c22a = new TCanvas("c22a"); 
-  piTruthw_P_Uncut->Scale(1.0/nFiles);
+  //piTruthw_P_Uncut->Scale(1.0/nFiles);
   piTruthw_P_Uncut->Draw("HIST");
   
   TCanvas *c22b = new TCanvas("c22b"); 
-  piRecw_P_Cut->Scale(1.0/nFiles);
+  //piRecw_P_Cut->Scale(1.0/nFiles);
   piRecw_P_Cut->Draw("HIST");
   
   TCanvas *c23a = new TCanvas("c23a"); // y plot
-  htw_Truth_y->Scale(1.0/nFiles);
+  //htw_Truth_y->Scale(1.0/nFiles);
   htw_Truth_y->Draw("HIST");
   
   TCanvas *c23b = new TCanvas("c23b"); 
-  htw_Rec_y->Scale(1.0/nFiles);
+  //htw_Rec_y->Scale(1.0/nFiles);
   htw_Rec_y->Draw("HIST");
   
   TCanvas *c23c = new TCanvas("c23c"); // -t plot
-  htw_Truth_t->Scale(1.0/nFiles);
+  //htw_Truth_t->Scale(1.0/nFiles);
   htw_Truth_t->Draw("HIST");
   
   TCanvas *c24[8]; // tplots
   for(int C = 0; C < 8; C++) {
     c24[C] = new TCanvas(Form("c24%d", C));
-    htw_t_cut_result[C]->Scale(1.0/nFiles);
+    //htw_t_cut_result[C]->Scale(1.0/nFiles);
     htw_t_cut_result[C]->Draw();
   }
   TCanvas *c25[8]; // Q2plots
   for(int C = 0; C < 8; C++) {
     c25[C] = new TCanvas(Form("c25%d", C));
-    htw_Q2_cut_result[C]->Scale(1.0/nFiles);
+    //htw_Q2_cut_result[C]->Scale(1.0/nFiles);
     htw_Q2_cut_result[C]->Draw();
   }
 
   TCanvas *c26[8]; // Q2plots
   for(int C = 0; C < 8; C++) {
     c26[C] = new TCanvas(Form("c26%d", C));
-    htw_W_cut_result[C]->Scale(1.0/nFiles);
+    //htw_W_cut_result[C]->Scale(1.0/nFiles);
     htw_W_cut_result[C]->Draw();
   }
   
   TCanvas *c27a = new TCanvas("c27a"); 
   c27a->SetLogz();
-  h2Truthw_W_Q2->Scale(1.0/nFiles);
+  //h2Truthw_W_Q2->Scale(1.0/nFiles);
   h2Truthw_W_Q2->Draw("colz");
   
   TCanvas *c27b = new TCanvas("c27b"); 
   c27b->SetLogz();
-  h2Recw_W_Q2->Scale(1.0/nFiles);
+  //h2Recw_W_Q2->Scale(1.0/nFiles);
   h2Recw_W_Q2->Draw("colz");
   
   TCanvas *c28a = new TCanvas("c28a"); 
   c28a->SetLogz();
-  h2Truthw_t_Q2->Scale(1.0/nFiles);
+  //h2Truthw_t_Q2->Scale(1.0/nFiles);
   h2Truthw_t_Q2->Draw("colz");
   
   TCanvas *c28b = new TCanvas("c28b"); 
   c28b->SetLogz();
-  h2Recw_t1_Q2->Scale(1.0/nFiles);
+  //h2Recw_t1_Q2->Scale(1.0/nFiles);
   h2Recw_t1_Q2->Draw("colz");
   
   TCanvas *c28c = new TCanvas("c28c");
   c28c->SetLogz(); 
-  h2Recw_t2_Q2->Scale(1.0/nFiles);
+  //h2Recw_t2_Q2->Scale(1.0/nFiles);
   h2Recw_t2_Q2->Draw("colz");
   
   TCanvas *c28d = new TCanvas("c28d");
   c28d->SetLogz();
-  h2Recw_t3_Q2->Scale(1.0/nFiles);
+  //h2Recw_t3_Q2->Scale(1.0/nFiles);
   h2Recw_t3_Q2->Draw("colz");
   
   TCanvas *c28e = new TCanvas("c28e"); 
   c28e->SetLogz();
-  h2Recw_t4_Q2->Scale(1.0/nFiles);
+  //h2Recw_t4_Q2->Scale(1.0/nFiles);
   h2Recw_t4_Q2->Draw("colz");
   
   TCanvas *c29 = new TCanvas("c29"); 
   c29->SetLogy();
-  htw_Rec_w->Scale(1.0/nFiles);
+  //htw_Rec_w->Scale(1.0/nFiles);
   htw_Rec_w->Draw("HIST");
   
   TCanvas *c30a = new TCanvas("c30a"); 
   c30a->SetLogy();
-  cons_mass->Scale(1.0/nFiles);
+  //cons_mass->Scale(1.0/nFiles);
   cons_mass->Draw("HIST");
   
   c1a->Print("DEMP_reco_10on130.pdf[");
