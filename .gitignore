@@ -3,3 +3,5 @@ InputFiles/*
 #*
 *.csv
 *.pdf
+*.png
+*.root
