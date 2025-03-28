@@ -1,6 +1,6 @@
 #include "TString.h"
 
-void pion10on130()
+void pion10on130_B0()
 {
 
   gROOT->SetBatch(kTRUE);
@@ -17,7 +17,7 @@ void pion10on130()
   }
 
   TString filepath;
-  TString FileNames[3]={"EICreconOut_10on130_ip6_Pi+_q2_3_10_10x100_hiacc_Combined_26_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_10_20_10x100_hiacc_Combined_26_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_20_35_10x100_hiacc_Combined_26_03_2025_Pruned.root"};
+  TString FileNames[3]={"EICreconOut_10on130_ip6_Pi+_q2_3_10_10x100_hiacc_Combined_11_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_10_20_10x100_hiacc_Combined_11_03_2025_Pruned.root","EICreconOut_10on130_ip6_Pi+_q2_20_35_10x100_hiacc_Combined_11_03_2025_Pruned.root"};
   // Unclear which of these will actually be needed subsequently
   Double_t WeightCorrFact[3]={1.4848,1.45369,1.38721}; // These factors are the ratio Ntired/Nphysical from the event generator
   Double_t Ntried[3]={11000000,18000000,34000000}; // These are the number of events tried in each Q2 range
@@ -111,6 +111,13 @@ void pion10on130()
   TTreeReaderArray<int>    nbfpartPdg(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.PDG");
   TTreeReaderArray<double> nbfpartMass(tree_reader,"MCParticlesHeadOnFrameNoBeamFX.mass");
 
+  // B0ECalClusters
+  TTreeReaderArray<float> neutPosX_b0(tree_reader, "B0ECalClusters.position.x");
+  TTreeReaderArray<float> neutPosY_b0(tree_reader, "B0ECalClusters.position.y");
+  TTreeReaderArray<float> neutPosZ_b0(tree_reader, "B0ECalClusters.position.z");
+  TTreeReaderArray<float> neutEng_b0(tree_reader, "B0ECalClusters.energy");
+
+  
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   // Define Histograms
   TH2* enbfTruthw_Thetap = new TH2D("enbfTruthw_Thethap","e' truth no beam effects #theta vs P; #theta (deg); P (GeV/c); Rate/bin (Hz)",160,135,175,150,9.5,11);
@@ -285,6 +292,71 @@ void pion10on130()
   //cons check plots 
   TH1* cons_mass = new TH1D("cons_mass", "Total missing mass distribution; M (GeV); Rate (Hz) ", 160,-40,40);
   cons_mass->SetLineWidth(2);
+
+  // Define Histograms for B0 neutrons
+  
+  TH1* nb0_clus = new TH1D("nb0_clus", "B0 n all clusters", 100, 0.0, 10.0);
+  nb0_clus->SetLineWidth(2);
+  
+  TH2* nb0w_PosXY  = new TH2D("nb0w_PosXY","n B0 X vs Y for all clusters; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  TH2* nb0w_rot_PosXY  = new TH2D("nb0w_rot_PosXY","n B0 X* vs Y* around proton axis at Z = 6.8 m for all clusters; x (mm); y (mm); Rate/bin (Hz)",100,-200,200,100,-200,200);
+  
+  TH2* nb0_ClusE  = new TH2D("nb0_ClusE","b0 n all clusters vs Energy; No. of Clusters; E (GeV)",100,0.0,10.0,100,0.0,100.0);
+  TH2* nb0w_rot_Thetaphi  = new TH2D("nb0w_rot_Thetaphi","n B0 #theta* vs #phi* for all clusters; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,25.0,100,-200,200); 
+  
+  // 1 cluster
+  TH2* nb0w_PosXY_clus1  = new TH2D("nb0w_PosXY_clus1","n B0 X vs Y for 1 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // 2 clusters
+  TH2* nb0E_Clus2  = new TH2D("nb0E_Clus2","b0 n cluster 2 E_H vs E_L; E_H (GeV); E_L (GeV)",100,0.0,60,100,0.0,3.0);
+  TH2* nb0w_PosXY_clus2  = new TH2D("nb0w_PosXY_clus2","n B0 X vs Y for 2 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // 3 clusters
+  TH1* nb0EH_clus3 = new TH1D("nb0EH_clus3", "B0 n 3 Cluster EH", 100, 0.0, 70.0);
+  TH1* nb0EM_clus3 = new TH1D("nb0EM_clus3", "B0 n 3 Cluster EM", 100, 0.0, 7.0);
+  TH1* nb0EL_clus3 = new TH1D("nb0EL_clus3", "B0 n 3 Cluster EL", 100, 0.0, 5.0);
+  TH2* nb0w_PosXY_clus3  = new TH2D("nb0w_PosXY_clus3","n B0 X vs Y for 3 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // 4 clusters
+  TH1* nb0EH_clus4 = new TH1D("nb0EH_clus4", "B0 n 4 Cluster EH", 100, 0.0, 60.0);
+  TH1* nb0EM1_clus4 = new TH1D("nb0EM1_clus4", "B0 n 4 Cluster EM1", 100, 0.0, 5.0);
+  TH1* nb0EM2_clus4 = new TH1D("nb0EM2_clus4", "B0 n 4 Cluster EM2", 100, 0.0, 5.0);
+  TH1* nb0EL_clus4 = new TH1D("nb0EL_clus4", "B0 n 4 Cluster EL", 100, 0.0, 5.0);
+  TH2* nb0w_PosXY_clus4  = new TH2D("nb0w_PosXY_clus4","n B0 X vs Y for 4 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // 5 clusters
+  TH1* nb0EH_clus5 = new TH1D("nb0EH_clus4", "B0 n 5 Cluster EH", 100, 0.0, 40.0);
+  TH1* nb0EM1_clus5 = new TH1D("nb0EM1_clus4", "B0 n 5 Cluster EM1", 100, 0.0, 5.0);
+  TH1* nb0EM2_clus5 = new TH1D("nb0EM2_clus4", "B0 n 5 Cluster EM2", 100, 0.0, 5.0);
+  TH1* nb0EM3_clus5 = new TH1D("nb0EM3_clus4", "B0 n 5 Cluster EM3", 100, 0.0, 5.0);
+  TH1* nb0EL_clus5 = new TH1D("nb0EL_clus4", "B0 n 5 Cluster EL", 100, 0.0, 5.0);
+  TH2* nb0w_PosXY_clus5  = new TH2D("nb0w_PosXY_clus5","n B0 X vs Y for 5 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // 6 clusters
+  TH1* nb0EH_clus6 = new TH1D("nb0EH_clus6", "B0 n 6 Cluster EH", 100, 0.0, 30.0);
+  TH1* nb0EM1_clus6 = new TH1D("nb0EM1_clus6", "B0 n 6 Cluster EM1", 100, 0.0, 5.0);
+  TH1* nb0EM2_clus6 = new TH1D("nb0EM2_clus6", "B0 n 6 Cluster EM2", 100, 0.0, 5.0);
+  TH1* nb0EM3_clus6 = new TH1D("nb0EM3_clus6", "B0 n 6 Cluster EM3", 100, 0.0, 5.0);
+  TH1* nb0EM4_clus6 = new TH1D("nb0EM4_clus6", "B0 n 6 Cluster EM4", 100, 0.0, 5.0);
+  TH1* nb0EL_clus6 = new TH1D("nb0EL_clus6", "B0 n 6 Cluster EL", 100, 0.0, 5.0);
+  TH2* nb0w_PosXY_clus6  = new TH2D("nb0w_PosXY_clus6","n B0 X vs Y for 6 cluster; x (mm); y (mm); Rate/bin (Hz)",100,-350,0,100,-200,200);
+  
+  // All clusters
+  TH2* nb0w_rot_Thetaphi_clus  = new TH2D("nb0w_rot_Thetaphi_clus","n B0 #theta* vs #phi* for clusters 1 - 6; #theta* (mRad); #phi* (deg); Rate/bin (Hz)",100,0.0,25.0,100,-200,200); 
+  TH2* nb0w_rot_PosXY_clus  = new TH2D("nb0w_rot_PosXY_clus","n B0 X* vs Y* around proton axis at Z = 6.8 m for clusters 1 - 6; x (mm); y (mm); Rate/bin (Hz)",100,-200,200,100,-200,200);
+  
+  // Analysis
+  TH2* nb0w_treccorr= new TH2D("nb0w_treccorr", "B0 -t rec_corr vs -t truth Distribution w/ 5 < Q^{2} < 35, 6 < #theta* < 12 cuts; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
+  
+  TH1* nb0w_treccorrdiff = new TH1D("nb0w_treccorrdiff", "-t_{rec_corr} - -t_{alt_truth} Distribution w/ 5 < Q^{2} < 35, 6 < #theta* < 12 cuts; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.5,0.6);
+  nb0w_treccorrdiff->SetLineColor(kGreen+2); nb0w_treccorrdiff->SetLineWidth(2);
+  
+  TH2* nb0_ThetaPhiDiff = new TH2D("nb0_ThetaPhiDiff", "#theta*_{pMiss_rec} - #theta*_{B0} vs #phi*_{pMiss_rec} - #phi*_{B0} w/ 5 < Q^{2} < 35, 6 < #theta* < 12 cuts; #theta*_{pMiss_rec} - #theta*_{B0} (Deg); #phi*_{pMiss_rec} - #phi*_{B0} (Deg); Rate/bin (Hz)",100, -1.0, 1.5, 100, -75, 75);
+  
+  // Analysis -> All cuts
+  TH2* nb0wcut_treccorr= new TH2D("nb0wcut_treccorr", "B0 -t rec_corr vs -t truth Distribution w/ 5 < Q^{2} < 35, 6 < #theta* < 12, #theta_{diff} , #phi_{diff} cuts; -t_{rec_corr} (GeV^{2});-t_{truth}(GeV^{2}); Rate/bin (Hz)", 100, 0.0,2.0,100, 0.0,1.5);
+  TH1* nb0wcut_treccorrdiff = new TH1D("nb0wcut_treccorrdiff", "-t_{rec_corr} - -t_{alt_truth} Distribution w/ 5 < Q^{2} < 35, 6 < #theta* < 12, #theta_{diff} , #phi_{diff} cuts; #Delta -t (GeV^{2}); Rate (Hz) ", 100, -0.5,0.6);
+  nb0wcut_treccorrdiff->SetLineColor(kGreen+2); nb0wcut_treccorrdiff->SetLineWidth(2);
   
   //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
   //Defining the four vectors
