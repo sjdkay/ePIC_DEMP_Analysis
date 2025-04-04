@@ -5,9 +5,9 @@
 
 // Input file naming, hardcoded assuming certain convention, change as needed
 TString InFilePath = "/home/sjdkay/Work/ePIC_EIC/DEMP/Love_DEMP_Pion_Analysis/InputFiles";
+
 string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString InBeamConfig, TString InDate){
-  string FileName = Form("%s/EICreconOut_%s_ip6_%s_q2_%s_%s_Combined_%s_Pruned.root", InFilePath.Data(), InBeamE.Data(), Inpart.Data(), In_Q2.Data(), InBeamConfig.Data(), InDate.Data());
-  
+  string FileName = Form("%s/EICreconOut_%s_ip6_%s_q2_%s_%s_Combined_%s_Pruned.root", InFilePath.Data(), InBeamE.Data(), Inpart.Data(), In_Q2.Data(), InBeamConfig.Data(), InDate.Data());  
   return FileName;
 }
 
@@ -36,42 +36,20 @@ PxPyPzEVector Vec_Pi_Rec;
 PxPyPzEVector Vec_n_Rec;
 PxPyPzEVector Vec_nRot_Rec;
 PxPyPzEVector Vec_n_RecCorr;
-PxPyPzEVector Vec_nRot_RecCorr;
+PxPyPzEVector Vec_PMiss_Rec;
+PxPyPzEVector Vec_PMissRot_Rec;
+
 XYZVector Vec_n_Vertex;
 
 PxPyPzEVector Vec_Q_MC;
 PxPyPzEVector Vec_Q_MC_NoAB;
 PxPyPzEVector Vec_t_MC;
 PxPyPzEVector Vec_t_MC_NoAB;
-
-/* PxPyPzEVector virtphoton_nbftruth; // intialized the 4 vector for truth virtual photon for nbf */
-/* PxPyPzEVector tnbftruth; // intialized the 4 vector for ttruth (-t)from first loop for nbf */
-/* PxPyPzEVector tnbfalttruth; // intialized the 4 vector for ttruth (-t)from first loop for nbf */
-
-/* PxPyPzEVector elec_rec; // initialized the 4 vector for reconstructed electron */
-/* PxPyPzEVector pi_rec; // initialized the 4 vector for reconstructed pion */
-/* PxPyPzEVector neut_rec; // initialized the 4 vector for reconstructed neutron */
-/* PxPyPzEVector neut_rot_rec; // initialized the 4 vector for reconstructed neutron with a rotation of 25 mrad */
-
-/* PxPyPzEVector virtphoton_truth; // intialized the 4 vector for truth virtual photon */
-/* PxPyPzEVector ttruth; // intialized the 4 vector for ttruth (-t)from first loop */
-/* PxPyPzEVector talttruth; // intialized the 4 vector for talttruth(-t) from second loop */
-
-/* PxPyPzEVector virtphoton_rec; //intialized the 4 vector for reconstructed virtual photon */
-/* PxPyPzEVector trec; // intialized the 4 vector for trec (-t)from first loop */
-/* PxPyPzEVector taltrec; // intialized the 4 vector for taltrec(-t) from second loop */
-/* PxPyPzEVector trecpT; // intialized the 4 vector for trecpT(-t) */
-/* PxPyPzEVector trecpT_rot; // intialized the 4 vector for trecpT(-t) with a rotation of 25 mrad */
-/* PxPyPzEVector p_miss_rec;  //intialized the 4 vector for missing momentum */
-/* PxPyPzEVector p_miss_rot_rec; //intialized the 4 vector for missing momentum with a rotation of 25 mrad */
-/* PxPyPzMVector neut_corr; // intialized the 4 vector for reconstructed corrected neutron */
-/* PxPyPzEVector treccorr; // intialized the 4 vector for trecpT(-t) */
-
-/* XYZVector neut_pos_hcal; // initialized the 3 vector for zdc position */
-/* PxPyPzEVector neut_rec_hcal; // initialized the 4 vector for reconstructed neutorn in hcal */
-/* PxPyPzEVector neut_rot_rec_hcal; // initialized the 4 vector for reconstructed neutron with a rotation of 25 mrad in hcal */
-  
-PxPyPzEVector cons_check;
+PxPyPzEVector Vec_Q_Rec;
+PxPyPzEVector Vec_t_BABE;
+PxPyPzEVector Vec_t_eX;
+PxPyPzEVector Vec_t_eXPT;
+PxPyPzEVector Vec_t_eXBABE;
 
 int hcal_clus_size;
 double neut_rec_p_hcal;
@@ -84,28 +62,9 @@ int eSc_Index, pi_Index, n_Index;
 
 Double_t Q2_MC, t_MC, W_MC, y_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, eps_MC_NoAB;
-
-/* double Q2_truth, W_truth, y_truth, t_truth, t_alttruth; // Truth kinematic variables */
-/* double Q2_rec, W_rec, y_rec, t_rec, t_altrec, t_recpT, t_reccorr; // Reconstructed kinematic variables */
-/* double neutPosX, neutPosY; // neutron position */
-/* double nTheta_Diff, nPhi_Diff; */
-/* double Q2_low, Q2_high, Pmiss; */
-/* double t_nbftruth, t_nbfalttruth; */
-  
-/* //----------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
-/* // Defining initial colliding beams */
-/* double eEng = 10; */
-/* double e_pmag = sqrt(pow(eEng,2)-pow(eMass,2)); */
-/* double e_p1 = 0.; */
-/* double e_p2 = 0.; */
-/* double e_p3 = -1*e_pmag; */
-               
-/* double pEng = 130; //change */
-/* double p_pmag = sqrt(pow(pEng,2)-pow(pMass,2)); */
-/* double c_a = 0.025; */
-/* double p_p1 = -p_pmag*sin(c_a); */
-/* double p_p2 = 0.; */
-/* double p_p3 = p_pmag*cos(c_a); */
+Double_t Q2_Rec, W_Rec, y_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
+Double_t nTheta_Diff, nPhi_Diff, MMiss;
+Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 
 // Check files exist, can be opened and contain a relevant tree
 Bool_t CheckFiles(TString Files[3]){
@@ -161,6 +120,31 @@ void CalculateKinematicsMCNoAB(PxPyPzEVector eSc_MC, PxPyPzEVector pi_MC, PxPyPz
   eps_MC_NoAB = (2*(1-y_MC_NoAB))/(1+(pow(1-y_MC_NoAB,2)));
 }
 
+void CalculateBasicKinematics_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+  Vec_Q_Rec = (EBeam - eSc_Rec);
+  Q2_Rec = -1*(Vec_Q_Rec.mag2());
+  W_Rec = (Vec_Q_Rec + HBeam).mag();
+  y_Rec =(HBeam.Dot(Vec_Q_Rec))/(HBeam.Dot(EBeam));
+  eps_Rec = (2*(1-y_Rec))/(1+(pow(1-y_Rec,2)));
+}
+
+void CorrectNeutronTrack(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+  Vec_PMiss_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec);
+  Vec_PMissRot_Rec = rot*Vec_PMiss_Rec;
+  Vec_n_RecCorr.SetPxPyPzE(Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*cos(n_Rec.Phi()), Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*sin(n_Rec.Phi()), Vec_PMiss_Rec.P()*cos(n_Rec.Theta()), sqrt(pow(Vec_PMiss_Rec.P(),2)+(pow(neutMass,2))));
+}
+
+void Calculate_t_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector n_RecCorr, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+  Vec_t_BABE = (HBeam - n_Rec);
+  Vec_t_eX = ((EBeam - eSc_Rec) - pi_Rec);
+  Vec_t_eXPT = rot*(eSc_Rec + pi_Rec); // Rotate vetors prior to getting perpendicular component
+  Vec_t_eXBABE = (HBeam - n_RecCorr);
+  t_BABE = -1*(Vec_t_BABE.mag2());
+  t_eX = -1*(Vec_t_eX.mag2());
+  t_eXPT = Vec_t_eXPT.Perp2();
+  t_eXBABE = -1*(Vec_t_eXBABE.mag2());
+}
+
 // Define set of cut values, check input and return appropriate cut values
 void SetCutVals(Double_t Hadron_Beam_E){
   Double_t ExpectedVals[5]={41,100,130,250,275};
@@ -187,7 +171,7 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin = 10;
     DeltaTheta_Min = -0.1;
     DeltaTheta_Max = 0.2;
-    DeltaPhi_Min = 55;
+    DeltaPhi_Min = -55;
     DeltaPhi_Max = 55;
     MissingMass_Tol= 0;
     W_Tol = 0;
@@ -196,7 +180,7 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin =40;
     DeltaTheta_Min = -0.09;
     DeltaTheta_Max = 0.14;
-    DeltaPhi_Min = 45;
+    DeltaPhi_Min = -45;
     DeltaPhi_Max = 45;
     MissingMass_Tol=0 ;
     W_Tol = 0;
@@ -205,7 +189,7 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin =40;
     DeltaTheta_Min = -0.09;
     DeltaTheta_Max = 0.14;
-    DeltaPhi_Min = 45;
+    DeltaPhi_Min = -45;
     DeltaPhi_Max = 45;
     MissingMass_Tol=0 ;
     W_Tol = 0;
@@ -214,7 +198,7 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin = 120;
     DeltaTheta_Min = -0.07;
     DeltaTheta_Max = 0.17;
-    DeltaPhi_Min = 80;
+    DeltaPhi_Min = -80;
     DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
@@ -223,234 +207,9 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin = 120;
     DeltaTheta_Min = -0.07;
     DeltaTheta_Max = 0.17;
-    DeltaPhi_Min = 80;
+    DeltaPhi_Min = -80;
     DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
-  }
-}
-
-void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC, Bool_t B0, Bool_t Tracking, Bool_t QA, Bool_t Results){
-
-  // Fix number of energy, theta and phi bins in subsequent plots
-  Int_t NBins_Energy = 200;
-  Int_t NBins_Theta = 200;
-  Int_t NBins_Phi = 200;
-
-  Double_t ElecBeamE = ((TObjString *)((InBeamE.Tokenize("on"))->At(0)))->String().Atof();
-  Double_t HadBeamE = ((TObjString *)((InBeamE.Tokenize("on"))->At(1)))->String().Atof();
-
-  if (EventDists == kTRUE){
-    TH2D* h2_eSc_pTheta_MC_NoAB = new TH2D("h2_eSc_pTheta_MC_NoAB", "e' MC Truth, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCMatched_NoAB = new TH2D("h2_eSc_pTheta_MCMatched_NoAB", "e' MC Truth (matched track), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCAccept_NoAB = new TH2D("h2_eSc_pTheta_MCAccept_NoAB", "e' MC Truth Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCDEMPAccept_NoAB = new TH2D("h2_eSc_pTheta_MCDEMPAccept_NoAB", "e' MC Truth DEMP Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MC = new TH2D("h2_eSc_pTheta_MC", "e' MC Truth; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCMatched = new TH2D("h2_eSc_pTheta_MCMatched", "e' MC Truth (matched track); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCAccept = new TH2D("h2_eSc_pTheta_MCAccept", "e' MC Truth Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_MCDEMPAccept = new TH2D("h2_eSc_pTheta_MCDEMPAccept", "e' MC Truth DEMP Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_Reco = new TH2D("h2_eSc_pTheta_Reco", "e' Reconstructed ; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_eSc_pTheta_RecoAccept = new TH2D("h2_eSc_pTheta_RecoAccept", "e' Reconstructed Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-  
-    TH2D* h2_Pi_pTheta_MC_NoAB = new TH2D("h2_Pi_pTheta_MC_NoAB", "#pi MC Truth, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MCMatched_NoAB = new TH2D("h2_Pi_pTheta_MCMatched_NoAB", "#pi MC Truth (matched track), No Beam Effets; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MCAccept_NoAB = new TH2D("h2_Pi_pTheta_MCAccept_NoAB", "#pi MC Truth Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MC = new TH2D("h2_Pi_pTheta_MC", "#pi MC Truth; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MCMatched = new TH2D("h2_Pi_pTheta_MCMatched", "#pi MC Truth (matched track); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MCAccept = new TH2D("h2_Pi_pTheta_MCAccept", "#pi MC Truth Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MCDEMPAccept = new TH2D("h2_Pi_pTheta_MCDEMPAccept", "#pi MC Truth DEMP Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_Reco = new TH2D("h2_Pi_pTheta_Reco", "#pi Reconstructed; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_RecoAccept = new TH2D("h2_Pi_pTheta_RecoAccept", "#pi Reconstructed Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-
-    // Hard coding the +50 here is a bit odd, should maybe re-define this in terms of bin widths
-    TH2D* h2_n_pTheta_MC_NoAB = new TH2D("h2_n_pTheta_MC_NoAB", "Neutron MC Truth, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCAccept_NoAB = new TH2D("h2_n_pTheta_MCAccept_NoAB", "Neutron MC Truth Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCDEMPAccept_NoAB = new TH2D("h2_n_pTheta_MCDEMPAccept_NoAB", "Neutron MC Truth DEMP Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MC = new TH2D("h2_n_pTheta_MC", "Neutron MC Truth; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCAccept = new TH2D("h2_n_pTheta_MCAccept", "Neutron MC Truth Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCDEMPAccept = new TH2D("h2_n_pTheta_MCDEMPAccept", "Neutron MC Truth DEMP Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_Reco = new TH2D("h2_n_pTheta_Reco", "Neutron Reconstructed ; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_RecoAccept = new TH2D("h2_n_pTheta_RecoAccept", "Neutron Reconstructed Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_Reco = new TH2D("h2_nRot_pTheta_Reco", "Neutron Reconstructed (Rotated 25 mrad); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_RecoAccept = new TH2D("h2_nRot_pTheta_RecoAccept", "Neutron Reconstructed (Rotated 25 mrad) Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-  }
-  
-  if (Kinematics == kTRUE){
-    TH1D* h1_Q2_MC = new TH1D("h1_Q2_MC", "Q^{2} MC Truth; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-    TH1D* h1_t_MC = new TH1D("h1_t_MC", "-t MC Truth; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-    TH1D* h1_W_MC = new TH1D("h1_W_MC", "W MC Truth; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-    TH1D* h1_eps_MC = new TH1D("h1_eps_MC", "#epsilon MC Truth; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-    TH1D* h1_y_MC = new TH1D("h1_y_MC", "y MC Truth; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MC = new TH2D("h2_tQ2_MC", "-t vs Q^{2} MC Truth; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-    TH2D* h2_WQ2_MC = new TH2D("h2_WQ2_MC", "W vs Q^{2} MC Truth; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-    TH1D* h1_Q2_MC_NoAB = new TH1D("h1_Q2_MC_NoAB", "Q^{2} MC Truth, No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-    TH1D* h1_t_MC_NoAB = new TH1D("h1_t_MC_NoAB", "-t MC Truth, No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-    TH1D* h1_W_MC_NoAB = new TH1D("h1_W_MC_NoAB", "W MC Truth, No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-    TH1D* h1_eps_MC_NoAB = new TH1D("h1_eps_MC_NoAB", "#epsilon MC Truth, No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-    TH1D* h1_y_MC_NoAB = new TH1D("h1_y_MC_NoAB", "y MC Truth, No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ_MC_NoAB = new TH2D("h2_tQ2_MC_NoAB", "-t vs Q^{2} MC Truth, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-    TH2D* h2_WQ2_MC_NoAB = new TH2D("h2_WQ2_MC_NoAB", "W vs Q^{2} MC Truth, No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-    TH1D* h1_Q2_MCDEMPAccept = new TH1D("h1_Q2_MCDEMPAccept", "Q^{2} MC Truth DEMP Accepted; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-    TH1D* h1_t_MCDEMPAccept = new TH1D("h1_t_MCDEMPAccept", "-t MC Truth DEMP Accepted; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-    TH1D* h1_W_MCDEMPAccept = new TH1D("h1_W_MCDEMPAccept", "W MC Truth DEMP Accepted; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-    TH1D* h1_eps_MCDEMPAccept = new TH1D("h1_eps_MCDEMPAccept", "#epsilon MC Truth DEMP Accepted; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-    TH1D* h1_y_MCDEMPAccept = new TH1D("h1_y_MCDEMPAccept", "y MC Truth DEMP Accepted; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ_MCDEMPAccept = new TH2D("h2_tQ2_MCDEMPAccept", "-t vs Q^{2} MC Truth DEMP Accepted; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-    TH2D* h2_WQ2_MCDEMPAccept = new TH2D("h2_WQ2_MCDEMPAccept", "W vs Q^{2} MC Truth DEMP Accepted; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-    TH1D* h1_Q2_MCDEMPAccept_NoAB = new TH1D("h1_Q2_MCDEMPAccept_NoAB", "Q^{2} MC Truth DEMP Accepted, No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-    TH1D* h1_t_MCDEMPAccept_NoAB = new TH1D("h1_t_MCDEMPAccept_NoAB", "-t MC Truth DEMP Accepted, No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-    TH1D* h1_W_MCDEMPAccept_NoAB = new TH1D("h1_W_MCDEMPAccept_NoAB", "W MC Truth DEMP Accepted, No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-    TH1D* h1_eps_MCDEMPAccept_NoAB = new TH1D("h1_eps_MCDEMPAccept_NoAB", "#epsilon MC Truth DEMP Accepted, No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-    TH1D* h1_y_MCDEMPAccept_NoAB = new TH1D("h1_y_MCDEMPAccept_NoAB", "y MC Truth DEMP Accepted, No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ_MCDEMPAccept_NoAB = new TH2D("h2_tQ2_MCDEMPAccept_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-    TH2D* h2_WQ2_MCDEMPAccept_NoAB = new TH2D("h2_WQ2_MCDEMPAccept_NoAB", "W vs Q^{2} MC Truth DEMP Accepted, No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-    if (B0 == kTRUE){
-      TH1D* h1_Q2_MCAcceptB0 = new TH1D("h1_Q2_MCAcceptB0", "Q^{2} MC Truth Accepted (B0 events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCAcceptB0 = new TH1D("h1_t_MCAcceptB0", "-t MC Truth Accepted (B0 events only); -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCAcceptB0 = new TH1D("h1_W_MCAcceptB0", "W MC Truth Accepted (B0 events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCAcceptB0 = new TH1D("h1_eps_MCAcceptB0", "#epsilon MC Truth Accepted (B0 events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCAcceptB0 = new TH1D("h1_y_MCAcceptB0", "y MC Truth Accepted (B0 events only); y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCAcceptB0 = new TH2D("h2_tQ2_MCAcceptB0", "-t vs Q^{2} MC Truth Accepted (B0 events only); -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCAcceptB0 = new TH2D("h2_WQ2_MCAcceptB0", "W vs Q^{2} MC Truth Accepted (B0 events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCAcceptB0_NoAB = new TH1D("h1_Q2_MCAcceptB0_NoAB", "Q^{2} MC Truth Accepted (B0 events only), No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCAcceptB0_NoAB = new TH1D("h1_t_MCAcceptB0_NoAB", "-t MC Truth Accepted (B0 events only), No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCAcceptB0_NoAB = new TH1D("h1_W_MCAcceptB0_NoAB", "W MC Truth Accepted (B0 events only), No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCAcceptB0_NoAB = new TH1D("h1_eps_MCAcceptB0_NoAB", "#epsilon MC Truth Accepted (B0 events only), No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCAcceptB0_NoAB = new TH1D("h1_y_MCAcceptB0_NoAB", "y MC Truth Accepted (B0 events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCAcceptB0_NoAB = new TH2D("h2_tQ2_MCAcceptB0_NoAB", "-t vs Q^{2} MC Truth Accepted (B0 events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCAcceptB0_NoAB = new TH2D("h2_WQ2_MCAcceptB0_NoAB", "W vs Q^{2} MC Truth Accepted (B0 events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCDEMPAcceptB0 = new TH1D("h1_Q2_MCDEMPAcceptB0", "Q^{2} MC Truth DEMP Accepted (B0 events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCDEMPAcceptB0 = new TH1D("h1_t_MCDEMPAcceptB0", "-t MC Truth DEMP Accepted (B0 events only); -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCDEMPAcceptB0 = new TH1D("h1_W_MCDEMPAcceptB0", "W MC Truth DEMP Accepted (B0 events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCDEMPAcceptB0 = new TH1D("h1_eps_MCDEMPAcceptB0", "#epsilon MC Truth DEMP Accepted (B0 events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCDEMPAcceptB0 = new TH1D("h1_y_MCDEMPAcceptB0", "y MC Truth DEMP Accepted (B0 events only); y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCDEMPAcceptB0 = new TH2D("h2_tQ2_MCDEMPAcceptB0", "-t vs Q^{2} MC Truth DEMP Accepted (B0 events only); -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCDEMPAcceptB0 = new TH2D("h2_WQ2_MCDEMPAcceptB0", "W vs Q^{2} MC Truth DEMP Accepted (B0 events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCDEMPAcceptB0_NoAB = new TH1D("h1_Q2_MCDEMPAcceptB0_NoAB", "Q^{2} MC Truth DEMP Accepted (B0 events only), No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCDEMPAcceptB0_NoAB = new TH1D("h1_t_MCDEMPAcceptB0_NoAB", "-t MC Truth DEMP Accepted (B0 events only), No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCDEMPAcceptB0_NoAB = new TH1D("h1_W_MCDEMPAcceptB0_NoAB", "W MC Truth DEMP Accepted (B0 events only), No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCDEMPAcceptB0_NoAB = new TH1D("h1_eps_MCDEMPAcceptB0_NoAB", "#epsilon MC Truth DEMP Accepted (B0 events only), No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCDEMPAcceptB0_NoAB = new TH1D("h1_y_MCDEMPAcceptB0_NoAB", "y MC Truth DEMP Accepted (B0 events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCDEMPAcceptB0_NoAB = new TH2D("h2_tQ2_MCDEMPAcceptB0_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted (B0 events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCDEMPAcceptB0_NoAB = new TH2D("h2_WQ2_MCDEMPAcceptB0_NoAB", "W vs Q^{2} MC Truth DEMP Accepted (B0 events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-    }
-    
-    if (ZDC == kTRUE){
-
-      TH1D* h1_Q2_MCAcceptZDC = new TH1D("h1_Q2_MCAcceptZDC", "Q^{2} MC Truth Accepted (ZDC events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCAcceptZDC = new TH1D("h1_t_MCAcceptZDC", "-t MC Truth Accepted (ZDC events only); -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCAcceptZDC = new TH1D("h1_W_MCAcceptZDC", "W MC Truth Accepted (ZDC events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCAcceptZDC = new TH1D("h1_eps_MCAcceptZDC", "#epsilon MC Truth Accepted (ZDC events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCAcceptZDC = new TH1D("h1_y_MCAcceptZDC", "y MC Truth Accepted (ZDC events only); y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCAcceptZDC = new TH2D("h2_tQ2_MCAcceptZDC", "-t vs Q^{2} MC Truth Accepted (ZDC events only); -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCAcceptZDC = new TH2D("h2_WQ2_MCAcceptZDC", "W vs Q^{2} MC Truth Accepted (ZDC events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCAcceptZDC_NoAB = new TH1D("h1_Q2_MCAcceptZDC_NoAB", "Q^{2} MC Truth Accepted (ZDC events only), No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCAcceptZDC_NoAB = new TH1D("h1_t_MCAcceptZDC_NoAB", "-t MC Truth Accepted (ZDC events only), No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCAcceptZDC_NoAB = new TH1D("h1_W_MCAcceptZDC_NoAB", "W MC Truth Accepted (ZDC events only), No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCAcceptZDC_NoAB = new TH1D("h1_eps_MCAcceptZDC_NoAB", "#epsilon MC Truth Accepted (ZDC events only), No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCAcceptZDC_NoAB = new TH1D("h1_y_MCAcceptZDC_NoAB", "y MC Truth Accepted (ZDC events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCAcceptZDC_NoAB = new TH2D("h2_tQ2_MCAcceptZDC_NoAB", "-t vs Q^{2} MC Truth Accepted (ZDC events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCAcceptZDC_NoAB = new TH2D("h2_WQ2_MCAcceptZDC_NoAB", "W vs Q^{2} MC Truth Accepted (ZDC events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCDEMPAcceptZDC = new TH1D("h1_Q2_MCDEMPAcceptZDC", "Q^{2} MC Truth DEMP Accepted (ZDC events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCDEMPAcceptZDC = new TH1D("h1_t_MCDEMPAcceptZDC", "-t MC Truth DEMP Accepted (ZDC events only); -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCDEMPAcceptZDC = new TH1D("h1_W_MCDEMPAcceptZDC", "W MC Truth DEMP Accepted (ZDC events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCDEMPAcceptZDC = new TH1D("h1_eps_MCDEMPAcceptZDC", "#epsilon MC Truth DEMP Accepted (ZDC events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCDEMPAcceptZDC = new TH1D("h1_y_MCDEMPAcceptZDC", "y MC Truth DEMP Accepted (ZDC events only); y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCDEMPAcceptZDC = new TH2D("h2_tQ2_MCDEMPAcceptZDC", "-t vs Q^{2} MC Truth DEMP Accepted (ZDC events only); -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCDEMPAcceptZDC = new TH2D("h2_WQ2_MCDEMPAcceptZDC", "W vs Q^{2} MC Truth DEMP Accepted (ZDC events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-
-      TH1D* h1_Q2_MCDEMPAcceptZDC_NoAB = new TH1D("h1_Q2_MCDEMPAcceptZDC_NoAB", "Q^{2} MC Truth DEMP Accepted (ZDC events only), No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
-      TH1D* h1_t_MCDEMPAcceptZDC_NoAB = new TH1D("h1_t_MCDEMPAcceptZDC_NoAB", "-t MC Truth DEMP Accepted (ZDC events only), No Beam Effects; -t (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
-      TH1D* h1_W_MCDEMPAcceptZDC_NoAB = new TH1D("h1_W_MCDEMPAcceptZDC_NoAB", "W MC Truth DEMP Accepted (ZDC events only), No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
-      TH1D* h1_eps_MCDEMPAcceptZDC_NoAB = new TH1D("h1_eps_MCDEMPAcceptZDC_NoAB", "#epsilon MC Truth DEMP Accepted (ZDC events only), No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
-      TH1D* h1_y_MCDEMPAcceptZDC_NoAB = new TH1D("h1_y_MCDEMPAcceptZDC_NoAB", "y MC Truth DEMP Accepted (ZDC events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-      TH2D* h2_tQ_MCDEMPAcceptZDC_NoAB = new TH2D("h2_tQ2_MCDEMPAcceptZDC_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted (ZDC events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
-      TH2D* h2_WQ2_MCDEMPAcceptZDC_NoAB = new TH2D("h2_WQ2_MCDEMPAcceptZDC_NoAB", "W vs Q^{2} MC Truth DEMP Accepted (ZDC events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
-    }
-  }
-  
-  if (ZDC == kTRUE){
-
-    TH2D* h2_n_pTheta_MCAcceptZDC_NoAB = new TH2D("h2_n_pTheta_MCAcceptZDC_NoAB", "Neutron MC Truth Accepted (ZDC), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCAcceptZDC = new TH2D("h2_n_pTheta_MCAcceptZDC", "Neutron MC Truth Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-
-    TH2D* h2_eSc_pTheta_MCDEMPAcceptZDC_NoAB = new TH2D("h2_eSc_pTheta_MCDEMPAcceptZDC_NoAB", "e' MC Truth DEMP Accepted (ZDC), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_Pi_pTheta_MCDEMPAcceptZDC_NoAB = new TH2D("h2_Pi_pTheta_MCDEMPAcceptZDC_NoAB", "#pi MC Truth DEMP Accepted (ZDC), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_n_pTheta_MCDEMPAcceptZDC_NoAB = new TH2D("h2_n_pTheta_MCDEMPAcceptZDC_NoAB", "Neutron MC Truth DEMP Accepted (ZDC), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_eSc_pTheta_MCDEMPAcceptZDC = new TH2D("h2_eSc_pTheta_MCDEMPAcceptZDC", "e' MC Truth DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_Pi_pTheta_MCDEMPAcceptZDC = new TH2D("h2_Pi_pTheta_MCDEMPAcceptZDC", "#pi MC Truth DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_n_pTheta_MCDEMPAcceptZDC = new TH2D("h2_n_pTheta_MCDEMPAcceptZDC", "Neutron MC Truth DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
- 
-    TH2D* h2_n_XY_Reco = new TH2D("h2_n_XY_Reco", "Neutron reconstructed XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 150,-1200,-600,150,-300,300);
-    TH2D* h2_n_XY_RecoAccept = new TH2D("h2_n_XY_RecoAccept", "Neutron reconstructed XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 150,-1200,-600,150,-300,300); 
-    TH2D* h2_nRot_XY_Reco = new TH2D("h2_nRot_XY_Reco", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
-    TH2D* h2_nRot_XY_RecoAccept = new TH2D("h2_nRot_XY_RecoAccept", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
-    
-  }
-  
-  if (B0 == kTRUE){
-    TH1D* h1_B0_nClusters = new TH1D("h1_B0_nClusters", "B0 Hit Multiplicity; N_{Clus}", 30, 0, 30);
-    TH2D* h2_B0_XY_Raw = new TH2D("h2_B0_XY_Raw", "B0 XY Hit Position, raw all clusters; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_B0_XY_Raw_EWeight = new TH2D("h2_B0_XY_Raw_EWeight", "B0 XY Hit Position, raw all clusters, energy weighted; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH1D* h1_B0_nClusters_AcceptRaw = new TH1D("h1_B0_nClusters_AcceptRaw", "B0 Hit Multiplicity, number of clusters in event; N_{Clus}", 30, 0, 30);
-    TH1D* h1_B0_nClusters_Accept = new TH1D("h1_B0_nClusters_Accept", "B0 Hit Multiplicity, number of accepted cluters; N_{Clus}", 30, 0, 30);
-    TH2D* h2_B0_XY_Accept = new TH2D("h2_B0_XY_Accept", "B0 Reconstructed XY Hit Position; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_B0_XY_AcceptWeighted = new TH2D("h2_B0_XY_AcceptWeighted", "B0 Reconstructed XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_n_ETheta_RecAccept_B0 = new TH2D("h2_n_ETheta_RecAccept_B0", "B0 Reconstructed;#theta (Deg); E (GeV)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_RecAccept_B0 = new TH2D("h2_n_pTheta_RecAccept_B0", "B0 Reconstructed;#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_RecAccept_B0 = new TH2D("h2_nRot_pTheta_RecAccept_B0", "B0 Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
-    TH2D* h2_n_pTheta_MCAcceptB0 = new TH2D("h2_n_pTheta_MCAcceptB0", "Neutron MC Truth Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_MCAcceptB0_NoAB = new TH2D("h2_n_pTheta_MCAcceptB0_NoAb", "Neutron MC Truth Accepted (B0), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-
-    TH2D* h2_eSc_pTheta_MCDEMPAcceptB0_NoAB = new TH2D("h2_eSc_pTheta_MCDEMPAcceptB0_NoAB", "e' MC Truth DEMP Accepted (B0), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_Pi_pTheta_MCDEMPAcceptB0_NoAB = new TH2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoAB", "#pi MC Truth DEMP Accepted (B0), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_n_pTheta_MCDEMPAcceptB0_NoAB = new TH2D("h2_n_pTheta_MCDEMPAcceptB0_NoAB", "Neutron MC Truth DEMP Accepted (B0), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_eSc_pTheta_MCDEMPAcceptB0 = new TH2D("h2_eSc_pTheta_MCDEMPAcceptB0", "e' MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
-    TH2D* h2_Pi_pTheta_MCDEMPAcceptB0 = new TH2D("h2_Pi_pTheta_MCDEMPAcceptB0", "#pi MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_n_pTheta_MCDEMPAcceptB0 = new TH2D("h2_n_pTheta_MCDEMPAcceptB0", "Neutron MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
-    TH2D* h2_B0_XY_MCAccept = new TH2D("h2_B0_XY_MCAccept", "B0 MC Accepted XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
-        
-  }
-  if (Tracking == kTRUE){
-  }
-  if (QA == kTRUE){
-  }
-  if (Results == kTRUE){
-  }
-  
-}
-
-// Histogram filling functions, avoids needing histograms defined in main file. Additionally, makes it so the main code doesn't actually care if the histogram is defined or not. If it doesn't exist, nothing happens
-void FillHist1D(TString Histname, Double_t Value){
-  if(gDirectory->FindObject(Histname) != 0){ // Check histogram exists, if it does, fill it
-    ((TH1D*)gDirectory->FindObject(Histname))->Fill(Value);
-  }
-}
-
-void FillHist1D(TString Histname, Double_t Value, Double_t W){
-  if(gDirectory->FindObject(Histname) != 0){ // Check histogram exists, if it does, fill it
-    ((TH1D*)gDirectory->FindObject(Histname))->Fill(Value, W);
-  }
-}
-
-void FillHist2D(TString Histname, Double_t Value, Double_t Value2){
-  if(gDirectory->FindObject(Histname) != 0){ // Check histogram exists, if it does, fill it
-    ((TH2D*)gDirectory->FindObject(Histname))->Fill(Value, Value2);
-  }
-}
-void FillHist2D(TString Histname, Double_t Value, Double_t Value2, Double_t W){
-  if(gDirectory->FindObject(Histname) != 0){ // Check histogram exists, if it does, fill it
-    ((TH2D*)gDirectory->FindObject(Histname))->Fill(Value, Value2, W);
   }
 }

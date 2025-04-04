@@ -2,10 +2,295 @@
 // Stephen.Kay@york.ac.uk
 // 28/03/25
 // New DEMP Analysis script based upon Love's earlier work, segmented code out into functions and tried to make it more generic
+// Need to make sub folders for output file
+// Far too many 
 using namespace ROOT::Math;
 
 #include "TString.h"
 #include "DEMP_Analysis.h"
+#include "DEMP_Hists.h"
+
+void FillMCKin(float wgt){
+  FillHist1D("h1_Q2_MC", Q2_MC, wgt);
+  FillHist1D("h1_t_MC", t_MC, wgt);
+  FillHist1D("h1_W_MC", W_MC, wgt);
+  FillHist1D("h1_eps_MC", eps_MC, wgt);
+  FillHist1D("h1_y_MC", y_MC, wgt);
+  FillHist2D("h2_tQ2_MC", t_MC, Q2_MC, wgt);
+  FillHist2D("h2_WQ2_MC", W_MC, Q2_MC, wgt);
+
+  FillHist1D("h1_Q2_MC_NoAB", Q2_MC_NoAB, wgt);
+  FillHist1D("h1_t_MC_NoAB", t_MC_NoAB, wgt);
+  FillHist1D("h1_W_MC_NoAB", W_MC_NoAB, wgt);
+  FillHist1D("h1_eps_MC_NoAB", eps_MC_NoAB, wgt);
+  FillHist1D("h1_y_MC_NoAB", y_MC_NoAB, wgt);
+  FillHist2D("h2_tQ2_MC_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  FillHist2D("h2_WQ2_MC_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+}
+
+void FillNeutAccept(PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, XYZVector n_Vertex, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, float wgt, Bool_t ZDC, Bool_t Kin){
+  FillHist2D("h2_n_pTheta_RecoAccept", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  FillHist2D("h2_nRot_pTheta_RecoAccept", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAccept", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAccept_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAcceptZDC", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAcceptZDC_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+  if(ZDC == kTRUE){
+    FillHist2D("h2_n_XY_RecoAccept", n_Vertex.X(), n_Vertex.Y(), wgt);
+    FillHist2D("h2_n_pTheta_RecoAcceptZDC", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+    FillHist2D("h2_nRot_pTheta_RecoAcceptZDC", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+    FillHist2D("h2_nRot_XY_RecoAccept", 35000*sin(nRot_Rec.Theta())*cos(nRot_Rec.Phi()), 35000*sin(nRot_Rec.Theta())*sin(nRot_Rec.Phi()), wgt);
+    if(Kin == kTRUE){
+      FillHist1D("h1_Q2_MCAcceptZDC", Q2_MC, wgt);
+      FillHist1D("h1_t_MCAcceptZDC", t_MC, wgt);
+      FillHist1D("h1_W_MCAcceptZDC", W_MC, wgt);
+      FillHist1D("h1_eps_MCAcceptZDC", eps_MC, wgt);
+      FillHist1D("h1_y_MCAcceptZDC", y_MC, wgt);
+      FillHist2D("h2_tQ2_MCAcceptZDC", t_MC, Q2_MC, wgt);
+      FillHist2D("h2_WQ2_MCAcceptZDC", W_MC, Q2_MC, wgt);
+      FillHist1D("h1_Q2_MCAcceptZDC_NoAB", Q2_MC_NoAB, wgt);
+      FillHist1D("h1_t_MCAcceptZDC_NoAB", t_MC_NoAB, wgt);
+      FillHist1D("h1_W_MCAcceptZDC_NoAB", W_MC_NoAB, wgt);
+      FillHist1D("h1_eps_MCAcceptZDC_NoAB", eps_MC_NoAB, wgt);
+      FillHist1D("h1_y_MCAcceptZDC_NoAB", y_MC_NoAB, wgt);
+      FillHist2D("h2_tQ2_MCAcceptZDC_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+      FillHist2D("h2_WQ2_MCAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+    }	    
+  }
+}
+
+void FillB0Accept(int nClus, int nClusAccept, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, XYZVector n_Vertex, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, Double_t EB0, float wgt, Bool_t Kin){
+  FillHist1D("h1_B0_nClusters_AcceptRaw", nClus);
+  FillHist1D("h1_B0_nClusters_Accept", nClusAccept);
+  FillHist2D("h2_n_pTheta_RecoAccept", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  FillHist2D("h2_nRot_pTheta_RecoAccept", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  FillHist2D("h2_n_ETheta_RecoAcceptB0", n_Vertex.Theta()*TMath::RadToDeg(), EB0, wgt);
+  FillHist2D("h2_n_pTheta_RecoAcceptB0", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  FillHist2D("h2_nRot_pTheta_RecoAcceptB0", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAccept", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAcceptB0", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAccept_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCAcceptB0_NoAb", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+  FillHist2D("h2_B0_XY_Accept", n_Vertex.X(), n_Vertex.Y());
+  FillHist2D("h2_B0_XY_AcceptWeighted", n_Vertex.X(), n_Vertex.Y(), wgt);
+  FillHist2D("h2_B0_XY_MCAccept",6800*sin(n_MC.Theta())*cos(n_MC.Phi()), 6800*sin(n_MC.Theta())*sin(n_MC.Phi()), wgt);
+  if(Kin == kTRUE){
+    FillHist1D("h1_Q2_MCAcceptB0", Q2_MC, wgt);
+    FillHist1D("h1_t_MCAcceptB0", t_MC, wgt);
+    FillHist1D("h1_W_MCAcceptB0", W_MC, wgt);
+    FillHist1D("h1_eps_MCAcceptB0", eps_MC, wgt);
+    FillHist1D("h1_y_MCAcceptB0", y_MC, wgt);
+    FillHist2D("h2_tQ2_MCAcceptB0", t_MC, Q2_MC, wgt);
+    FillHist2D("h2_WQ2_MCAcceptB0", W_MC, Q2_MC, wgt);
+
+    FillHist1D("h1_Q2_MCAcceptB0_NoAB", Q2_MC_NoAB, wgt);
+    FillHist1D("h1_t_MCAcceptB0_NoAB", t_MC_NoAB, wgt);
+    FillHist1D("h1_W_MCAcceptB0_NoAB", W_MC_NoAB, wgt);
+    FillHist1D("h1_eps_MCAcceptB0_NoAB", eps_MC_NoAB, wgt);
+    FillHist1D("h1_y_MCAcceptB0_NoAB", y_MC_NoAB, wgt);
+    FillHist2D("h2_tQ2_MCAcceptB0_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+    FillHist2D("h2_WQ2_MCAcceptB0_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+  }	    
+}
+
+void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+  FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoCuts", eSc_MC.Theta()*TMath::RadToDeg(), eSc_MC.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts", Pi_MC.Theta()*TMath::RadToDeg(), Pi_MC.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCDEMPAccept_NoCuts", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoCuts_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCDEMPAccept_NoCuts_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);	
+  FillHist2D("h2_eSc_pTheta_RecoDEMPAccept_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_RecoDEMPAccept_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+  FillHist2D("h2_n_pTheta_RecoDEMPAccept_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  FillHist2D("h2_nRot_pTheta_RecoDEMPAccept_NoCuts", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  if(ZDC == kTRUE && nZDC == kTRUE){
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptZDC_NoCuts", eSc_MC.Theta()*TMath::RadToDeg(), eSc_MC.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptZDC_NoCuts", Pi_MC.Theta()*TMath::RadToDeg(), Pi_MC.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptZDC_NoCuts", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptZDC_NoCuts_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptZDC_NoCuts_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptZDC_NoCuts_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptZDC_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptZDC_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+    FillHist2D("h2_n_pTheta_RecoDEMPAcceptZDC_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  }
+  if(B0 == kTRUE && nB0 == kTRUE){
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptB0_NoCuts", eSc_MC.Theta()*TMath::RadToDeg(), eSc_MC.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoCuts", Pi_MC.Theta()*TMath::RadToDeg(), Pi_MC.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptB0_NoCuts", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+    FillHist2D("h2_n_pTheta_RecoDEMPAcceptB0_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  }
+}
+
+void FillDEMPAccept_Kin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+  // Fill reconstructed Q2/W/eps/y plots for DEMP events before cuts
+  /*
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist2D();
+  */
+      
+  // Fill MC DEMP accepted Q2/W/eps/y plots for DEMP events before cuts
+  FillHist1D("h1_Q2_MCDEMPAccept_NoCuts", Q2_MC, wgt);
+  FillHist1D("h1_W_MCDEMPAccept_NoCuts", W_MC, wgt);
+  FillHist1D("h1_eps_MCDEMPAccept_NoCuts", eps_MC, wgt);
+  FillHist1D("h1_y_MCDEMPAccept_NoCuts", y_MC, wgt);
+  FillHist2D("h2_WQ2_MCDEMPAccept_NoCuts", W_MC, Q2_MC, wgt);
+  FillHist1D("h1_Q2_MCDEMPAccept_NoCuts_NoAB", Q2_MC_NoAB, wgt);
+  FillHist1D("h1_W_MCDEMPAccept_NoCuts_NoAB", W_MC_NoAB, wgt);
+  FillHist1D("h1_eps_MCDEMPAccept_NoCuts_NoAB", eps_MC_NoAB, wgt);
+  FillHist1D("h1_y_MCDEMPAccept_NoCuts_NoAB", y_MC_NoAB, wgt);
+  FillHist2D("h2_WQ2_MCDEMPAccept_NoCuts_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+  if(ZDC == kTRUE && nZDC== kTRUE){
+    FillHist1D("h1_Q2_MCDEMPAcceptZDC_NoCuts", Q2_MC, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptZDC_NoCuts", W_MC, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptZDC_NoCuts", eps_MC, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptZDC_NoCuts", y_MC, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptZDC_NoCuts", W_MC, Q2_MC, wgt);
+    FillHist1D("h1_Q2_MCDEMPAcceptZDC_NoCuts_NoAB", Q2_MC_NoAB, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptZDC_NoCuts_NoAB", W_MC_NoAB, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptZDC_NoCuts_NoAB", eps_MC_NoAB, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptZDC_NoCuts_NoAB", y_MC_NoAB, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptZDC_NoCuts_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+  }
+  if(B0 == kTRUE && nB0 == kTRUE){
+    FillHist1D("h1_Q2_MCDEMPAcceptB0_NoCuts", Q2_MC, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptB0_NoCuts", W_MC, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptB0_NoCuts", eps_MC, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptB0_NoCuts", y_MC, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptB0_NoCuts", W_MC, Q2_MC, wgt);
+    FillHist1D("h1_Q2_MCDEMPAcceptB0_NoCuts_NoAB", Q2_MC_NoAB, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptB0_NoCuts_NoAB", W_MC_NoAB, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptB0_NoCuts_NoAB", eps_MC_NoAB, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptB0_NoCuts_NoAB", y_MC_NoAB, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptB0_NoCuts_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+  }
+}
+
+void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+
+  FillHist2D("h2_eSc_pTheta_MCDEMPAccept", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_MCDEMPAccept", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCDEMPAccept", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+  FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+  FillHist2D("h2_n_pTheta_MCDEMPAccept_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+  FillHist2D("h2_eSc_pTheta_RecoDEMPAccept", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+  FillHist2D("h2_Pi_pTheta_RecoDEMPAccept", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+  FillHist2D("h2_n_pTheta_RecoDEMPAccept", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  FillHist2D("h2_nRot_pTheta_RecoDEMPAccept", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  if(ZDC == kTRUE && nZDC == kTRUE){
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptZDC", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptZDC", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptZDC", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptZDC_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptZDC_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptZDC_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptZDC", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptZDC", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+    FillHist2D("h2_n_pTheta_RecoDEMPAcceptZDC", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  }
+  if(B0 == kTRUE && nB0 == kTRUE){
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptB0", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptB0", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptB0", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_MCDEMPAcceptB0_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCDEMPAcceptB0_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+    FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptB0", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
+    FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptB0", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
+    FillHist2D("h2_n_pTheta_RecoDEMPAcceptB0", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+  }  
+}
+
+void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){;
+  FillHist1D("h1_Q2_MCDEMPAccept", Q2_MC, wgt);
+  FillHist1D("h1_W_MCDEMPAccept", W_MC, wgt);
+  FillHist1D("h1_eps_MCDEMPAccept", eps_MC, wgt);
+  FillHist1D("h1_y_MCDEMPAccept", y_MC, wgt);
+  FillHist1D("h1_t_MCDEMPAccept", t_MC, wgt);
+  FillHist2D("h2_WQ2_MCDEMPAccept", W_MC, Q2_MC, wgt);
+  FillHist2D("h2_tQ2_MCDEMPAccept", t_MC, Q2_MC, wgt);
+  FillHist1D("h1_Q2_MCDEMPAccept_NoAB", Q2_MC_NoAB, wgt);
+  FillHist1D("h1_W_MCDEMPAccept_NoAB", W_MC_NoAB, wgt);
+  FillHist1D("h1_eps_MCDEMPAccept_NoAB", eps_MC_NoAB, wgt);
+  FillHist1D("h1_y_MCDEMPAccept_NoAB", y_MC_NoAB, wgt);	
+  FillHist1D("h1_t_MCDEMPAccept_NoAB", t_MC_NoAB, wgt);
+  FillHist2D("h2_WQ2_MCDEMPAccept_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+  FillHist2D("h2_tQ2_MCDEMPAccept_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  if( ZDC == kTRUE && nZDC == kTRUE ){
+    FillHist1D("h1_Q2_MCDEMPAcceptZDC", Q2_MC, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptZDC", W_MC, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptZDC", eps_MC, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptZDC", y_MC, wgt);
+    FillHist1D("h1_t_MCDEMPAcceptZDC", t_MC, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptZDC", W_MC, Q2_MC, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptZDC", t_MC, Q2_MC, wgt);
+    FillHist1D("h1_Q2_MCDEMPAcceptZDC_NoAB", Q2_MC_NoAB, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptZDC_NoAB", W_MC_NoAB, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptZDC_NoAB", eps_MC_NoAB, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptZDC_NoAB", y_MC_NoAB, wgt);	
+    FillHist1D("h1_t_MCDEMPAcceptZDC_NoAB", t_MC_NoAB, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptZDC_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  }
+  if( B0 == kTRUE && nB0 == kTRUE ){
+    FillHist1D("h1_Q2_MCDEMPAcceptB0", Q2_MC, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptB0", W_MC, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptB0", eps_MC, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptB0", y_MC, wgt);
+    FillHist1D("h1_t_MCDEMPAcceptB0", t_MC, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptB0", W_MC, Q2_MC, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptB0", t_MC, Q2_MC, wgt);
+    FillHist1D("h1_Q2_MCBDEMPAcceptB0_NoAB", Q2_MC_NoAB, wgt);
+    FillHist1D("h1_W_MCDEMPAcceptB0_NoAB", W_MC_NoAB, wgt);
+    FillHist1D("h1_eps_MCDEMPAcceptB0_NoAB", eps_MC_NoAB, wgt);
+    FillHist1D("h1_y_MCDEMPAcceptB0_NoAB", y_MC_NoAB, wgt);
+    FillHist1D("h1_t_MCDEMPAcceptB0_NoAB", t_MC_NoAB, wgt);
+    FillHist2D("h2_WQ2_MCDEMPAcceptB0_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptB0_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  }
+}
+
+void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+  
+  // Fill reconstructed t, Theta/phi diff and Emiss distributions for DEMP events before cuts
+  /*
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist1D();
+    FillHist2D();
+    FillHist2D();
+  */
+  // Fill truth t distributions for DEMP events before cuts
+  FillHist1D("h1_t_MCDEMPAccept_NoCuts", t_MC, wgt);
+  FillHist2D("h2_tQ2_MCDEMPAccept_NoCuts", t_MC, Q2_MC, wgt);
+  FillHist1D("h1_t_MCDEMPAccept_NoCuts_NoAB", t_MC_NoAB, wgt);
+  FillHist2D("h2_tQ2_MCDEMPAccept_NoCuts_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  if(ZDC == kTRUE && nZDC == kTRUE){
+    FillHist1D("h1_t_MCDEMPAcceptZDC_NoCuts", t_MC, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptZDC_NoCuts", t_MC, Q2_MC, wgt);
+    FillHist1D("h1_t_MCDEMPAcceptZDC_NoCuts_NoAB", t_MC_NoAB, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptZDC_NoCuts_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);}
+  if(B0 == kTRUE && nB0 == kTRUE){
+    FillHist1D("h1_t_MCDEMPAcceptB0_NoCuts", t_MC, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptB0_NoCuts", t_MC, Q2_MC, wgt);
+    FillHist1D("h1_t_MCDEMPAcceptB0_NoCuts_NoAB", t_MC_NoAB, wgt);
+    FillHist2D("h2_tQ2_MCDEMPAcceptB0_NoCuts_NoAB", t_MC_NoAB, Q2_MC_NoAB, wgt);
+  }
+}
 
 void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
   
@@ -162,21 +447,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     
     // Fill kinematics plots with MC truth info
     if(KinPlots == kTRUE){
-      FillHist1D("h1_Q2_MC", Q2_MC, weight[0]);
-      FillHist1D("h1_t_MC", t_MC, weight[0]);
-      FillHist1D("h1_W_MC", W_MC, weight[0]);
-      FillHist1D("h1_eps_MC", eps_MC, weight[0]);
-      FillHist1D("h1_y_MC", y_MC, weight[0]);
-      FillHist2D("h2_tQ2_MC", t_MC, Q2_MC, weight[0]);
-      FillHist2D("h2_WQ2_MC", W_MC, Q2_MC, weight[0]);
-
-      FillHist1D("h1_Q2_MC_NoAB", Q2_MC_NoAB, weight[0]);
-      FillHist1D("h1_t_MC_NoAB", t_MC_NoAB, weight[0]);
-      FillHist1D("h1_W_MC_NoAB", W_MC_NoAB, weight[0]);
-      FillHist1D("h1_eps_MC_NoAB", eps_MC_NoAB, weight[0]);
-      FillHist1D("h1_y_MC_NoAB", y_MC_NoAB, weight[0]);
-      FillHist2D("h2_tQ2_MC_NoAB", t_MC_NoAB, Q2_MC_NoAB, weight[0]);
-      FillHist2D("h2_WQ2_MC_NoAB", W_MC_NoAB, Q2_MC_NoAB, weight[0]);
+      FillMCKin(weight[0]);
     }
 
     // Loop over reconstructed particles, looking for associations
@@ -221,33 +492,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       if(Vec_nRot_Rec.Theta()*1000 < ThetaStar_Max && Vec_nRot_Rec.E() > n_Emin){
 	Good_nRec = kTRUE;
 	nZDCHit = kTRUE; 
-	FillHist2D("h2_n_pTheta_RecoAccept", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
-	FillHist2D("h2_nRot_pTheta_RecoAccept", Vec_nRot_Rec.Theta()*TMath::RadToDeg(), Vec_nRot_Rec.P(), weight[0]);
-	FillHist2D("h2_n_pTheta_MCAccept", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P(), weight[0]);
-	FillHist2D("h2_n_pTheta_MCAccept_NoAB", Vec_n_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_n_MC_NoAB.P(), weight[0]);
-	FillHist2D("h2_n_pTheta_MCAcceptZDC", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P(), weight[0]);
-	FillHist2D("h2_n_pTheta_MCAcceptZDC_NoAB", Vec_n_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_n_MC_NoAB.P(), weight[0]);
-	if(ZDCPlots == kTRUE){
-	  FillHist2D("h2_n_XY_RecoAccept", Vec_n_Vertex.X(), Vec_n_Vertex.Y(), weight[0]);
-	  FillHist2D("h2_nRot_XY_RecoAccept", 35000*sin(Vec_nRot_Rec.Theta())*cos(Vec_nRot_Rec.Phi()), 35000*sin(Vec_nRot_Rec.Theta())*sin(Vec_nRot_Rec.Phi()), weight[0]);
-	  if(KinPlots == kTRUE){
-	    FillHist1D("h1_Q_MCAcceptZDC", Q2_MC, weight[0]);
-	    FillHist1D("h1_t_MCAcceptZDC", t_MC, weight[0]);
-	    FillHist1D("h1_W_MCAcceptZDC", W_MC, weight[0]);
-	    FillHist1D("h1_eps_MCAcceptZDC", eps_MC, weight[0]);
-	    FillHist1D("h1_y_MCAcceptZDC", y_MC, weight[0]);
-	    FillHist2D("h2_tQ2_MCAcceptZDC", t_MC, Q2_MC, weight[0]);
-	    FillHist2D("h2_WQ2_MCAcceptZDC", W_MC, Q2_MC, weight[0]);
-
-	    FillHist1D("h1_Q_MCAcceptZDC_NoAB", Q2_MC_NoAB, weight[0]);
-	    FillHist1D("h1_t_MCAcceptZDC_NoAB", t_MC_NoAB, weight[0]);
-	    FillHist1D("h1_W_MCAcceptZDC_NoAB", W_MC_NoAB, weight[0]);
-	    FillHist1D("h1_eps_MCAcceptZDC_NoAB", eps_MC_NoAB, weight[0]);
-	    FillHist1D("h1_y_MCAcceptZDC_NoAB", y_MC_NoAB, weight[0]);
-	    FillHist2D("h2_tQ2_MCAcceptZDC_NoAB", t_MC_NoAB, Q2_MC_NoAB, weight[0]);
-	    FillHist2D("h2_WQ2_MCAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, weight[0]);
-	  }	    
-	}
+	FillNeutAccept(Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, weight[0], ZDCPlots, KinPlots);
       }
     }// End loop over ZDC info
     
@@ -278,47 +523,63 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	      tmpB0PosZ+=(E_B0[i]*PosZ_B0[i]);
 	    }
 	  }
+	  Vec_n_Rec.SetPxPyPzE((sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*cos(Vec_n_Vertex.Phi()), (sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*sin(Vec_n_Vertex.Phi()),(sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*cos(Vec_n_Vertex.Theta()), ESum_B0);
+	  FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
 	  if(ESum_B0 > 10*B0_ECut){ // Ignore low energy junk events, assign vectors, fill histograms
 	    Good_nRec = kTRUE;
 	    nB0Hit = kTRUE;
 	    Vec_n_Vertex.SetXYZ(tmpB0PosX/ESum_B0, tmpB0PosY/ESum_B0, tmpB0PosZ/ESum_B0);
-	    Vec_n_Rec.SetPxPyPzE((sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*cos(Vec_n_Vertex.Phi()), (sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*sin(Vec_n_Vertex.Phi()),(sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*cos(Vec_n_Vertex.Theta()), ESum_B0);
 	    Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
-	    FillHist1D("h1_B0_nClusters_AcceptRaw", E_B0.GetSize());
-	    FillHist1D("h1_B0_nClusters_Accept", B0_ClusAccept);
-	    FillHist2D("h2_n_ETheta_RecAccept_B0", Vec_n_Vertex.Theta()*TMath::RadToDeg(), ESum_B0, weight[0]);
-	    FillHist2D("h2_n_pTheta_RecAccept_B0", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
-	    FillHist2D("h2_nRot_pTheta_RecAccept_B0", Vec_nRot_Rec.Theta()*TMath::RadToDeg(), Vec_nRot_Rec.P(), weight[0]);
-	    FillHist2D("h2_n_pTheta_MCAccept", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P(), weight[0]);
-	    FillHist2D("h2_n_pTheta_MCAcceptB0", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P(), weight[0]);
-	    FillHist2D("h2_n_pTheta_MCAccept_NoAB", Vec_n_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_n_MC_NoAB.P(), weight[0]);
-	    FillHist2D("h2_n_pTheta_MCAcceptB0_NoAb", Vec_n_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_n_MC_NoAB.P(), weight[0]);
-	    FillHist2D("h2_B0_XY_Accept", Vec_n_Vertex.X(), Vec_n_Vertex.Y());
-	    FillHist2D("h2_B0_XY_AcceptWeighted", Vec_n_Vertex.X(), Vec_n_Vertex.Y(), weight[0]);
-	    FillHist2D("h2_B0_XY_MCAccept",6800*sin(Vec_n_MC.Theta())*cos(Vec_n_MC.Phi()), 6800*sin(Vec_n_MC.Theta())*sin(Vec_n_MC.Phi()), weight[0]);
-	    if(KinPlots == kTRUE){
-	      FillHist1D("h1_Q_MCAcceptZDC", Q2_MC, weight[0]);
-	      FillHist1D("h1_t_MCAcceptZDC", t_MC, weight[0]);
-	      FillHist1D("h1_W_MCAcceptZDC", W_MC, weight[0]);
-	      FillHist1D("h1_eps_MCAcceptZDC", eps_MC, weight[0]);
-	      FillHist1D("h1_y_MCAcceptZDC", y_MC, weight[0]);
-	      FillHist2D("h2_tQ2_MCAcceptZDC", t_MC, Q2_MC, weight[0]);
-	      FillHist2D("h2_WQ2_MCAcceptZDC", W_MC, Q2_MC, weight[0]);
-
-	      FillHist1D("h1_Q_MCAcceptZDC_NoAB", Q2_MC_NoAB, weight[0]);
-	      FillHist1D("h1_t_MCAcceptZDC_NoAB", t_MC_NoAB, weight[0]);
-	      FillHist1D("h1_W_MCAcceptZDC_NoAB", W_MC_NoAB, weight[0]);
-	      FillHist1D("h1_eps_MCAcceptZDC_NoAB", eps_MC_NoAB, weight[0]);
-	      FillHist1D("h1_y_MCAcceptZDC_NoAB", y_MC_NoAB, weight[0]);
-	      FillHist2D("h2_tQ2_MCAcceptZDC_NoAB", t_MC_NoAB, Q2_MC_NoAB, weight[0]);
-	      FillHist2D("h2_WQ2_MCAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, weight[0]);
-	    }	    
+	    FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
 	  }
 	}
       }
     } // End loop over B0 info
-    // Now, check for coin events and fill relevant histogram
-    
+    // Now, check for coin events, calculate quantities and fill relevant histograms
+    if ( Good_eSc_Track == kTRUE && Good_Pi_Track == kTRUE && Good_nRec == kTRUE){
+      CalculateBasicKinematics_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_e_beam, Vec_p_beam); // Calculate Q2/W/eps/y for reconstructed DEMP events. Calculate some quantities multiple ways
+      
+      if(EventDistPlots == kTRUE){
+	FillDEMPAccept_EventDists_NoCuts(Vec_eSc_MC, Vec_eSc_MC_NoAB, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_MC_NoAB, Vec_Pi_Rec, Vec_n_MC, Vec_n_MC_NoAB, Vec_n_Rec, Vec_nRot_Rec, weight[0], ZDCPlots, B0Plots, nZDCHit, nB0Hit);
+      }
+      
+      if(KinPlots == kTRUE){
+	FillDEMPAccept_Kin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+      }
+      
+      if (Q2_Rec > 5 && Q2_Rec < 35){ //Cut on reconstructed Q2
+	CorrectNeutronTrack(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_e_beam, Vec_p_beam); // Calculate the corrected neutron track, also sets PMiss/PMissRot
+	Calculate_t_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_n_RecCorr, Vec_e_beam, Vec_p_beam); // Calculate -t
+	nTheta_Diff = (Vec_PMiss_Rec.Theta() - Vec_n_Rec.Theta())*TMath::RadToDeg();
+	nPhi_Diff = (Vec_PMiss_Rec.Phi() - Vec_n_Rec.Phi())*TMath::RadToDeg();
+	MMiss = Vec_PMiss_Rec.M();
+
+	if(KinPlots == kTRUE){
+	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	}
+
+	if( t_eXBABE > 0 && t_eXBABE < 1.4 && nTheta_Diff > DeltaTheta_Min && nTheta_Diff < DeltaTheta_Max && nPhi_Diff > DeltaPhi_Min && nPhi_Diff < DeltaPhi_Max){
+
+	  if(EventDistPlots == kTRUE){
+	    FillDEMPAccept_EventDists(Vec_eSc_MC, Vec_eSc_MC_NoAB, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_MC_NoAB, Vec_Pi_Rec, Vec_n_MC, Vec_n_MC_NoAB, Vec_n_Rec, Vec_nRot_Rec, weight[0], ZDCPlots, B0Plots, nZDCHit, nB0Hit);
+	  }
+	  
+	  // Fill lots of plots and fill histograms
+	  if(KinPlots == kTRUE){
+	    FillDEMPAccept_Kin(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	  } // End conditional filling of kinematics plots
+	  
+	// Fill result plots binned in Q2
+	  if( ResultsPlots == kTRUE) {
+	    for(Int_t i = 0; i < 7; i++){
+	      if( Q2_Rec > Q2Vals[i] && Q2_Rec < Q2Vals[i+1]){
+		// Fill result histograms
+	      }
+	    } // End loop over Q2 values
+	  }// End result filling loop
+	} // End main cut loop
+      } //end Q2 cut loop
+    } // End of loop over DEMP events
   } // End of event while loop
 
   ofile->Write(); // Write histograms to file
@@ -327,6 +588,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   // Function to draw plots and make pdf
   //WritePDF(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, TrackingPlots, QAPlots, ResultsPlots);
   // Function to write rates to csv file, enale/disable as needed
-  //WriteCSV();
+  //if ( ResultsPlots == kTRUE){
+    //WriteCSV();
+    //}
   
 }
