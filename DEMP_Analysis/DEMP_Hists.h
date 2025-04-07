@@ -3,7 +3,7 @@
 // 28/03/25
 // Header file for new DEMP Analysis script, this contains histogram definitions and filling functions
 
-void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC, Bool_t B0, Bool_t Tracking, Bool_t QA, Bool_t Results){
+void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
 
   // Fix number of energy, theta and phi bins in subsequent plots
   Int_t NBins_Energy = 200;
@@ -69,7 +69,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MC = new TH1D("h1_W_MC", "W MC Truth; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MC = new TH1D("h1_eps_MC", "#epsilon MC Truth; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MC = new TH1D("h1_y_MC", "y MC Truth; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MC = new TH2D("h2_tQ2_MC", "-t vs Q^{2} MC Truth; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MC = new TH2D("h2_tQ2_MC", "-t vs Q^{2} MC Truth; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MC = new TH2D("h2_WQ2_MC", "W vs Q^{2} MC Truth; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
 
     TH1D* h1_Q2_MC_NoAB = new TH1D("h1_Q2_MC_NoAB", "Q^{2} MC Truth, No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -77,7 +77,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MC_NoAB = new TH1D("h1_W_MC_NoAB", "W MC Truth, No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MC_NoAB = new TH1D("h1_eps_MC_NoAB", "#epsilon MC Truth, No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MC_NoAB = new TH1D("h1_y_MC_NoAB", "y MC Truth, No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MC_NoAB = new TH2D("h2_tQ2_MC_NoAB", "-t vs Q^{2} MC Truth, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MC_NoAB = new TH2D("h2_tQ2_MC_NoAB", "-t vs Q^{2} MC Truth, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MC_NoAB = new TH2D("h2_WQ2_MC_NoAB", "W vs Q^{2} MC Truth, No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
 
     TH1D* h1_Q2_MCDEMPAccept_NoCuts = new TH1D("h1_Q2_MCDEMPAccept_NoCuts", "Q^{2} MC Truth DEMP Accepted, No Cuts; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -85,7 +85,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MCDEMPAccept_NoCuts = new TH1D("h1_W_MCDEMPAccept_NoCuts", "W MC Truth DEMP Accepted, No Cuts; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MCDEMPAccept_NoCuts = new TH1D("h1_eps_MCDEMPAccept_NoCuts", "#epsilon MC Truth DEMP Accepted, No Cuts; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MCDEMPAccept_NoCuts = new TH1D("h1_y_MCDEMPAccept_NoCuts", "y MC Truth DEMP Accepted, No Cuts; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MCDEMPAccept_NoCuts = new TH2D("h2_tQ2_MCDEMPAccept_NoCuts", "-t vs Q^{2} MC Truth DEMP Accepted, Q^{2} Cut Only; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MCDEMPAccept_NoCuts = new TH2D("h2_tQ2_MCDEMPAccept_NoCuts", "-t vs Q^{2} MC Truth DEMP Accepted, Q^{2} Cut Only; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MCDEMPAccept_NoCuts = new TH2D("h2_WQ2_MCDEMPAccept_NoCuts", "W vs Q^{2} MC Truth DEMP Accepted, No Cuts; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
 
     TH1D* h1_Q2_MCDEMPAccept_NoCuts_NoAB = new TH1D("h1_Q2_MCDEMPAccept_NoCuts_NoAB", "Q^{2} MC Truth DEMP Accepted, No Cuts, No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -93,7 +93,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MCDEMPAccept_NoCuts_NoAB = new TH1D("h1_W_MCDEMPAccept_NoCuts_NoAB", "W MC Truth DEMP Accepted, No Cuts, No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MCDEMPAccept_NoCuts_NoAB = new TH1D("h1_eps_MCDEMPAccept_NoCuts_NoAB", "#epsilon MC Truth DEMP Accepted, No Cuts, No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MCDEMPAccept_NoCuts_NoAB = new TH1D("h1_y_MCDEMPAccept_NoCuts_NoAB", "y MC Truth DEMP Accepted, No Cuts, No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MCDEMPAccept_NoCuts_NoAB = new TH2D("h2_tQ2_MCDEMPAccept_NoCuts_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted, Q^{2} Cut Only, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MCDEMPAccept_NoCuts_NoAB = new TH2D("h2_tQ2_MCDEMPAccept_NoCuts_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted, Q^{2} Cut Only, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MCDEMPAccept_NoCuts_NoAB = new TH2D("h2_WQ2_MCDEMPAccept_NoCuts_NoAB", "W vs Q^{2} MC Truth DEMP Accepted, No Cuts, No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
 
     TH1D* h1_Q2_MCDEMPAccept = new TH1D("h1_Q2_MCDEMPAccept", "Q^{2} MC Truth DEMP Accepted; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -101,7 +101,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MCDEMPAccept = new TH1D("h1_W_MCDEMPAccept", "W MC Truth DEMP Accepted; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MCDEMPAccept = new TH1D("h1_eps_MCDEMPAccept", "#epsilon MC Truth DEMP Accepted; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MCDEMPAccept = new TH1D("h1_y_MCDEMPAccept", "y MC Truth DEMP Accepted; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MCDEMPAccept = new TH2D("h2_tQ2_MCDEMPAccept", "-t vs Q^{2} MC Truth DEMP Accepted; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MCDEMPAccept = new TH2D("h2_tQ2_MCDEMPAccept", "-t vs Q^{2} MC Truth DEMP Accepted; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MCDEMPAccept = new TH2D("h2_WQ2_MCDEMPAccept", "W vs Q^{2} MC Truth DEMP Accepted; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
 
     TH1D* h1_Q2_MCDEMPAccept_NoAB = new TH1D("h1_Q2_MCDEMPAccept_NoAB", "Q^{2} MC Truth DEMP Accepted, No Beam Effects; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -109,8 +109,42 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_W_MCDEMPAccept_NoAB = new TH1D("h1_W_MCDEMPAccept_NoAB", "W MC Truth DEMP Accepted, No Beam Effects; W (GeV); Rate/bin (Hz)", 150, -50, 100);
     TH1D* h1_eps_MCDEMPAccept_NoAB = new TH1D("h1_eps_MCDEMPAccept_NoAB", "#epsilon MC Truth DEMP Accepted, No Beam Effects; #epsilon; Rate/bin (Hz)", 100, 0, 1);
     TH1D* h1_y_MCDEMPAccept_NoAB = new TH1D("h1_y_MCDEMPAccept_NoAB", "y MC Truth DEMP Accepted, No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
-    TH2D* h2_tQ2_MCDEMPAccept_NoAB = new TH2D("h2_tQ2_MCDEMPAccept_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
+    TH2D* h2_tQ2_MCDEMPAccept_NoAB = new TH2D("h2_tQ2_MCDEMPAccept_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted, No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
     TH2D* h2_WQ2_MCDEMPAccept_NoAB = new TH2D("h2_WQ2_MCDEMPAccept_NoAB", "W vs Q^{2} MC Truth DEMP Accepted, No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+    
+    TH1D* h1_Q2_Reco_NoCuts = new TH1D("h1_Q2_Reco_NoCuts", "Q^{2} Reconstructed (No Cuts); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+    TH1D* h1_tBABE_Reco_NoCuts = new TH1D("h1_tBABE_Reco_NoCuts", "-t_{BABE} Reconstructed (Q^{2} Cut Only); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teX_Reco_NoCuts = new TH1D("h1_teX_Reco_NoCuts", "-t_{eX} Reconstructed (Q^{2} Cut Only); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teXPT_Reco_NoCuts = new TH1D("h1_teXPT_Reco_NoCuts", "-t_{eXPT} Reconstructed (Q^{2} Cut Only); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teXBABE_Reco_NoCuts = new TH1D("h1_teXBABE_Reco_NoCuts", "-t_{eXBABE} Reconstructed (Q^{2} Cut Only); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_W_Reco_NoCuts = new TH1D("h1_W_Reco_NoCuts", "W Reconstructed (No Cuts); W (GeV); Rate/bin (Hz)", 150, -50, 100);
+    TH1D* h1_eps_Reco_NoCuts = new TH1D("h1_eps_Reco_NoCuts", "#epsilon Reconstructed (No Cuts); #epsilon; Rate/bin (Hz)", 100, 0, 1);
+    TH1D* h1_y_Reco_NoCuts = new TH1D("h1_y_Reco_NoCuts", "y Reconstructed (No Cuts); y; Rate/bin (Hz)", 120, -0.2, 1);
+    TH1D* h1_DeltaTheta_Reco_NoCuts = new TH1D("h1_DeltaTheta_Reco_NoCuts", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC/B0}) Reconstructed (Q^{2} Cut Only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+    TH1D* h1_DeltaPhi_Reco_NoCuts = new TH1D("h1_DeltaPhi_Reco_NoCuts", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed (Q^{2} Cut Only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+    TH2D* h2_tBABEQ2_Reco_NoCuts = new TH2D("h2_tBABEQ2_Reco_NoCuts", "-t_{BABE} vs Q^{2} Reconstructed (Q^{2} Cut Only); -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXQ2_Reco_NoCuts = new TH2D("h2_teXQ2_Reco_NoCuts", "-t_{eX} vs Q^{2} Reconstructed (Q^{2} Cut Only); -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXPTQ2_Reco_NoCuts = new TH2D("h2_teXPTQ2_Reco_NoCuts", "-t_{eXPT} vs Q^{2} Reconstructed (Q^{2} Cut Only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXBAEQ2_Reco_NoCuts = new TH2D("h2_teXBABEQ2_Reco_NoCuts", "-t_{eXBABE} vs Q^{2} Reconstructed (Q^{2} Cut Only); -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_WQ2_Reco_NoCuts = new TH2D("h2_WQ2_Reco_NoCuts", "W vs Q^{2} Reconstructed (No Cuts); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+    TH2D* h2_DeltaThetaPhi_Reco_NoCuts = new TH2D("h2_DeltaThetaPhi_Reco_NoCuts", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC/B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed (Q^{2} Cuts only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
+    
+    TH1D* h1_Q2_Reco = new TH1D("h1_Q2_Reco", "Q^{2} Reconstructed; Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+    TH1D* h1_tBABE_Reco = new TH1D("h1_tBABE_Reco", "-t_{BABE} Reconstructed; -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teX_Reco = new TH1D("h1_teX_Reco", "-t_{eX} Reconstructed; -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teXPT_Reco = new TH1D("h1_teXPT_Reco", "-t_{eXPT} Reconstructed; -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_teXBABE_Reco = new TH1D("h1_teXBABE_Reco", "-t_{eXBABE} Reconstructed; -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+    TH1D* h1_W_Reco = new TH1D("h1_W_Reco", "W Reconstructed; W (GeV); Rate/bin (Hz)", 150, -50, 100);
+    TH1D* h1_eps_Reco = new TH1D("h1_eps_Reco", "#epsilon Reconstructed; #epsilon; Rate/bin (Hz)", 100, 0, 1);
+    TH1D* h1_y_Reco = new TH1D("h1_y_Reco", "y Reconstructed; y; Rate/bin (Hz)", 120, -0.2, 1);
+    TH1D* h1_DeltaTheta_Reco = new TH1D("h1_DeltaTheta_Reco", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC/B0}) Reconstructed; #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+    TH1D* h1_DeltaPhi_Reco = new TH1D("h1_DeltaPhi_Reco", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed; #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+    TH2D* h2_tBABEQ2_Reco = new TH2D("h2_tBABEQ2_Reco", "-t_{BABE} vs Q^{2} Reconstructed; -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXQ2_Reco = new TH2D("h2_teXQ2_Reco", "-t_{eX} vs Q^{2} Reconstructed; -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXPTQ2_Reco = new TH2D("h2_teXPTQ2_Reco", "-t_{eXPT} vs Q^{2} Reconstructed; -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_teXBAEQ2_Reco = new TH2D("h2_teXBABEQ2_Reco", "-t_{eXBABE} vs Q^{2} Reconstructed; -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_WQ2_Reco = new TH2D("h2_WQ2_Reco", "W vs Q^{2} Reconstructed; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+    TH2D* h2_DeltaThetaPhi_Reco = new TH2D("h2_DeltaThetaPhi_Reco", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC/B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Recostructed; #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
     
     if (B0 == kTRUE){
       TH1D* h1_Q2_MCAcceptB0 = new TH1D("h1_Q2_MCAcceptB0", "Q^{2} MC Truth Accepted (B0 events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
@@ -160,6 +194,40 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       TH1D* h1_y_MCDEMPAcceptB0_NoAB = new TH1D("h1_y_MCDEMPAcceptB0_NoAB", "y MC Truth DEMP Accepted (B0 events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
       TH2D* h2_tQ2_MCDEMPAcceptB0_NoAB = new TH2D("h2_tQ2_MCDEMPAcceptB0_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted (B0 events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
       TH2D* h2_WQ2_MCDEMPAcceptB0_NoAB = new TH2D("h2_WQ2_MCDEMPAcceptB0_NoAB", "W vs Q^{2} MC Truth DEMP Accepted (B0 events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+
+      TH1D* h1_Q2_B0Reco_NoCuts = new TH1D("h1_Q2_B0Reco_NoCuts", "Q^{2} Reconstructed (No Cuts, B0 n events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+      TH1D* h1_tBABE_B0Reco_NoCuts = new TH1D("h1_tBABE_B0Reco_NoCuts", "-t_{BABE} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teX_B0Reco_NoCuts = new TH1D("h1_teX_B0Reco_NoCuts", "-t_{eX} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXPT_B0Reco_NoCuts = new TH1D("h1_teXPT_B0Reco_NoCuts", "-t_{eXPT} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXBABE_B0Reco_NoCuts = new TH1D("h1_teXBABE_B0Reco_NoCuts", "-t_{eXBABE} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_W_B0Reco_NoCuts = new TH1D("h1_W_B0Reco_NoCuts", "W Reconstructed (No Cuts, B0 n events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
+      TH1D* h1_eps_B0Reco_NoCuts = new TH1D("h1_eps_B0Reco_NoCuts", "#epsilon Reconstructed (No Cuts, B0 n events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
+      TH1D* h1_y_B0Reco_NoCuts = new TH1D("h1_y_B0Reco_NoCuts", "y Reconstructed (No Cuts, B0 n events only); y; Rate/bin (Hz)", 120, -0.2, 1);
+      TH1D* h1_DeltaTheta_B0Reco_NoCuts = new TH1D("h1_DeltaTheta_B0Reco_NoCuts", "#Delta#theta (#theta_{pMiss} - #theta_{B0}) Reconstructed (Q^{2} Cuts Only, B0 n events only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+      TH1D* h1_DeltaPhi_B0Reco_NoCuts = new TH1D("h1_DeltaPhi_B0Reco_NoCuts", "#Delta#phi (#phi_{pMiss} - #phi_{B0}) Reconstructed (Q^{2} Cuts Only, B0 n events only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+      TH2D* h2_tBABEQ2_B0Reco_NoCuts = new TH2D("h2_tBABEQ2_B0Reco_NoCuts", "-t_{BABE} vs Q^{2} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXQ2_B0Reco_NoCuts = new TH2D("h2_teXQ2_B0Reco_NoCuts", "-t_{eX} vs Q^{2} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXPTQ2_B0Reco_NoCuts = new TH2D("h2_teXPTQ2_B0Reco_NoCuts", "-t_{eXPT} vs Q^{2} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXBAEQ2_B0Reco_NoCuts = new TH2D("h2_teXBABEQ2_B0Reco_NoCuts", "-t_{eXBABE} vs Q^{2} Reconstructed (Q^{2} Cuts Only, B0 n events only); -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_WQ2_B0Reco_NoCuts = new TH2D("h2_WQ2_B0Reco_NoCuts", "W vs Q^{2} Reconstructed (No Cuts, B0 n events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+      TH2D* h2_DeltaThetaPhi_B0Reco_NoCuts = new TH2D("h2_DeltaThetaPhi_B0Reco_NoCuts", "#Delta#theta  (#theta_{pMiss} - #theta_{B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{B0}) Reconstructed (Q^{2} Cuts only, B0 n events only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
+
+      TH1D* h1_Q2_B0Reco = new TH1D("h1_Q2_B0Reco", "Q^{2} Reconstructed (B0 n events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+      TH1D* h1_tBABE_B0Reco = new TH1D("h1_tBABE_B0Reco", "-t_{BABE} Reconstructed (B0 n events only); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teX_B0Reco = new TH1D("h1_teX_B0Reco", "-t_{eX} Reconstructed (B0 n events only); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXPT_B0Reco = new TH1D("h1_teXPT_B0Reco", "-t_{eXPT} Reconstructed (B0 n events only); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXBABE_B0Reco = new TH1D("h1_teXBABE_B0Reco", "-t_{eXBABE} Reconstructed (B0 n events only); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_W_B0Reco = new TH1D("h1_W_B0Reco", "W Reconstructed (B0 n events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
+      TH1D* h1_eps_B0Reco = new TH1D("h1_eps_B0Reco", "#epsilon Reconstructed (B0 n events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
+      TH1D* h1_y_B0Reco = new TH1D("h1_y_B0Reco", "y Reconstructed (B0 n events only); y; Rate/bin (Hz)", 120, -0.2, 1);
+      TH1D* h1_DeltaTheta_B0Reco = new TH1D("h1_DeltaTheta_B0Reco", "#Delta#theta (#theta_{pMiss} - #theta_{B0}) Reconstructed (B0 n events only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+      TH1D* h1_DeltaPhi_B0Reco = new TH1D("h1_DeltaPhi_B0Reco", "#Delta#phi (#phi_{pMiss} - #phi_{B0}) Reconstructed (B0 n events only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+      TH2D* h2_tBABEQ2_B0Reco = new TH2D("h2_tBABEQ2_B0Reco", "-t_{BABE} vs Q^{2} Reconstructed (B0 n events only); -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXQ2_B0Reco = new TH2D("h2_teXQ2_B0Reco", "-t_{eX} vs Q^{2} Reconstructed (B0 n events only); -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXPTQ2_B0Reco = new TH2D("h2_teXPTQ2_B0Reco", "-t_{eXPT} vs Q^{2} Reconstructed (B0 n events only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXBAEQ2_B0Reco = new TH2D("h2_teXBABEQ2_B0Reco", "-t_{eXBABE} vs Q^{2} Reconstructed (B0 n events only); -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_WQ2_B0Reco = new TH2D("h2_WQ2_B0Reco", "W vs Q^{2} Reconstructed (B0 n events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+      TH2D* h2_DeltaThetaPhi_B0Reco = new TH2D("h2_DeltaThetaPhi_B0Reco", "#Delta#theta  (#theta_{pMiss} - #theta_{B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{B0}) Reconstruted (B0, n events only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
     }
     
     if (ZDC == kTRUE){
@@ -210,6 +278,40 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       TH1D* h1_y_MCDEMPAcceptZDC_NoAB = new TH1D("h1_y_MCDEMPAcceptZDC_NoAB", "y MC Truth DEMP Accepted (ZDC events only), No Beam Effects; y; Rate/bin (Hz)", 120, -0.2, 1);
       TH2D* h2_tQ2_MCDEMPAcceptZDC_NoAB = new TH2D("h2_tQ2_MCDEMPAcceptZDC_NoAB", "-t vs Q^{2} MC Truth DEMP Accepted (ZDC events only), No Beam Effects; -t (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.4, 40, 0, 40);
       TH2D* h2_WQ2_MCDEMPAcceptZDC_NoAB = new TH2D("h2_WQ2_MCDEMPAcceptZDC_NoAB", "W vs Q^{2} MC Truth DEMP Accepted (ZDC events only), No Beam Effects; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+
+      TH1D* h1_Q2_ZDCReco_NoCuts = new TH1D("h1_Q2_ZDCReco_NoCuts", "Q^{2} Reconstructed (No Cuts, ZDC n events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+      TH1D* h1_tBABE_ZDCReco_NoCuts = new TH1D("h1_tBABE_ZDCReco_NoCuts", "-t_{BABE} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teX_ZDCReco_NoCuts = new TH1D("h1_teX_ZDCReco_NoCuts", "-t_{eX} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXPT_ZDCReco_NoCuts = new TH1D("h1_teXPT_ZDCReco_NoCuts", "-t_{eXPT} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXBABE_ZDCReco_NoCuts = new TH1D("h1_teXBABE_ZDCReco_NoCuts", "-t_{eXBABE} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_W_ZDCReco_NoCuts = new TH1D("h1_W_ZDCReco_NoCuts", "W Reconstructed (No Cuts, ZDC n events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
+      TH1D* h1_eps_ZDCReco_NoCuts = new TH1D("h1_eps_ZDCReco_NoCuts", "#epsilon Reconstructed (No Cuts, ZDC n events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
+      TH1D* h1_y_ZDCReco_NoCuts = new TH1D("h1_y_ZDCReco_NoCuts", "y Reconstructed (No Cuts, ZDC n events only); y; Rate/bin (Hz)", 120, -0.2, 1);
+      TH1D* h1_DeltaTheta_ZDCReco_NoCuts = new TH1D("h1_DeltaTheta_ZDCReco_NoCuts", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC}) Reconstructed (Q^{2} Cuts Only, ZDC n events only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+      TH1D* h1_DeltaPhi_ZDCReco_NoCuts = new TH1D("h1_DeltaPhi_ZDCReco_NoCuts", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC}) Reconstructed (Q^{2} Cuts Only, ZDC n events only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+      TH2D* h2_tBABEQ2_ZDCReco_NoCuts = new TH2D("h2_tBABEQ2_ZDCReco_NoCuts", "-t_{BABE} vs Q^{2} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXQ2_ZDCReco_NoCuts = new TH2D("h2_teXQ2_ZDCReco_NoCuts", "-t_{eX} vs Q^{2} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXPTQ2_ZDCReco_NoCuts = new TH2D("h2_teXPTQ2_ZDCReco_NoCuts", "-t_{eXPT} vs Q^{2} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXBAEQ2_ZDCReco_NoCuts = new TH2D("h2_teXBABEQ2_ZDCReco_NoCuts", "-t_{eXBABE} vs Q^{2} Reconstructed (Q^{2} Cuts Only, ZDC n events only); -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_WQ2_ZDCReco_NoCuts = new TH2D("h2_WQ2_ZDCReco_NoCuts", "W vs Q^{2} Reconstructed (No Cuts, ZDC n events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+      TH2D* h2_DeltaThetaPhi_ZDCReco_NoCuts = new TH2D("h2_DeltaThetaPhi_ZDCReco_NoCuts", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC}) Reconstructed (Q^{2} Cuts only, ZDC n events only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
+
+      TH1D* h1_Q2_ZDCReco = new TH1D("h1_Q2_ZDCReco", "Q^{2} Reconstructed (ZDC n events only); Q^{2} (GeV^{2}); Rate/bin (Hz)", 160, 0, 40);
+      TH1D* h1_tBABE_ZDCReco = new TH1D("h1_tBABE_ZDCReco", "-t_{BABE} Reconstructed (ZDC n events only); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teX_ZDCReco = new TH1D("h1_teX_ZDCReco", "-t_{eX} Reconstructed (ZDC n events only); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXPT_ZDCReco = new TH1D("h1_teXPT_ZDCReco", "-t_{eXPT} Reconstructed (ZDC n events only); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_teXBABE_ZDCReco = new TH1D("h1_teXBABE_ZDCReco", "-t_{eXBABE} Reconstructed (ZDC n events only); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 150, 0, 1.5);
+      TH1D* h1_W_ZDCReco = new TH1D("h1_W_ZDCReco", "W Reconstructed (ZDC n events only); W (GeV); Rate/bin (Hz)", 150, -50, 100);
+      TH1D* h1_eps_ZDCReco = new TH1D("h1_eps_ZDCReco", "#epsilon Reconstructed (ZDC n events only); #epsilon; Rate/bin (Hz)", 100, 0, 1);
+      TH1D* h1_y_ZDCReco = new TH1D("h1_y_ZDCReco", "y Reconstructed (ZDC n events only); y; Rate/bin (Hz)", 120, -0.2, 1);
+      TH1D* h1_DeltaTheta_ZDCReco = new TH1D("h1_DeltaTheta_ZDCReco", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC}) Reconstructed (ZDC n events only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
+      TH1D* h1_DeltaPhi_ZDCReco = new TH1D("h1_DeltaPhi_ZDCReco", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC}) Reconstructed (ZDC n events only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
+      TH2D* h2_tBABEQ2_ZDCReco = new TH2D("h2_tBABEQ2_ZDCReco", "-t_{BABE} vs Q^{2} Reconstructed (ZDC n events only); -t_{BABE} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXQ2_ZDCReco = new TH2D("h2_teXQ2_ZDCReco", "-t_{eX} vs Q^{2} Reconstructed (ZDC n events only); -t_{eX} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXPTQ2_ZDCReco = new TH2D("h2_teXPTQ2_ZDCReco", "-t_{eXPT} vs Q^{2} Reconstructed (ZDC n events only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_teXBAEQ2_ZDCReco = new TH2D("h2_teXBABEQ2_ZDCReco", "-t_{eXBABE} vs Q^{2} Reconstructed (ZDC n events only); -t _{eXBABE}(GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+      TH2D* h2_WQ2_ZDCReco = new TH2D("h2_WQ2_ZDCReco", "W vs Q^{2} Reconstructed (ZDC n events only); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
+      TH2D* h2_DeltaThetaPhi_ZDCReco = new TH2D("h2_DeltaThetaPhi_ZDCReco", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC}) Reconstruted (ZDC, n events only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
     }
   }
   
@@ -286,8 +388,6 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     
     TH2D* h2_B0_XY_MCAccept = new TH2D("h2_B0_XY_MCAccept", "B0 MC Accepted XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
         
-  }
-  if (Tracking == kTRUE){
   }
   if (QA == kTRUE){
   }
