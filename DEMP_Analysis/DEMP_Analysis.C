@@ -33,6 +33,8 @@ void FillNeutAccept(PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, XYZVector n_Ver
   gDirectory->cd("EventDists/Reco");
   FillHist2D("h2_n_pTheta_RecoAccept", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
   FillHist2D("h2_nRot_pTheta_RecoAccept", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  gDirectory->cd("../../");
+  gDirectory->cd("EventDists/MC");
   FillHist2D("h2_n_pTheta_MCAccept", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
   FillHist2D("h2_n_pTheta_MCAccept_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
   FillHist2D("h2_n_pTheta_MCAcceptZDC", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);

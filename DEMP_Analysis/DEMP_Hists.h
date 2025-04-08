@@ -130,7 +130,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_DeltaPhi_Reco_NoCuts = new TH1D("h1_DeltaPhi_Reco_NoCuts", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed (Q^{2} Cut Only); #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
     TH2D* h2_Q2tBABE_Reco_NoCuts = new TH2D("h2_Q2tBABE_Reco_NoCuts", "Q^{2} vs -t_{BABE} Reconstructed (Q^{2} Cut Only); Q^{2} (GeV^{2}); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teX_Reco_NoCuts = new TH2D("h2_Q2teX_Reco_NoCuts", "Q^{2} vs -t_{eX} Reconstructed (Q^{2} Cut Only); Q^{2} (GeV^{2}); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
-    TH2D* h2_Q2teXPT_Reco_NoCuts = new TH2D("h2_Q2teXPT_Reco_NoCuts", "Q^{2} vs -t_{eXPT} Reconstructed (Q^{2} Cut Only); -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_Q2teXPT_Reco_NoCuts = new TH2D("h2_Q2teXPT_Reco_NoCuts", "Q^{2} vs -t_{eXPT} Reconstructed (Q^{2} Cut Only); Q^{2} (GeV^{2}); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teXBABE_Reco_NoCuts = new TH2D("h2_teXBABEQ2_Reco_NoCuts", "Q^{2} vs -t_{eXBABE} Reconstructed (Q^{2} Cut Only);  Q^{2} (GeV^{2}); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_WQ2_Reco_NoCuts = new TH2D("h2_WQ2_Reco_NoCuts", "W vs Q^{2} Reconstructed (No Cuts); W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
     TH2D* h2_DeltaThetaPhi_Reco_NoCuts = new TH2D("h2_DeltaThetaPhi_Reco_NoCuts", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC/B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed (Q^{2} Cuts only); #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
@@ -147,7 +147,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_DeltaPhi_Reco = new TH1D("h1_DeltaPhi_Reco", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed; #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
     TH2D* h2_Q2tBABE_Reco = new TH2D("h2_Q2tBABE_Reco", "Q^{2} vs -t_{BABE} Reconstructed; Q^{2} (GeV^{2}); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teX_Reco = new TH2D("h2_Q2teX_Reco", "Q^{2} vs -t_{eX} Reconstructed; Q^{2} (GeV^{2}); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
-    TH2D* h2_Q2teXPT_Reco = new TH2D("h2_Q2teXPT_Reco", "Q^{2} vs -t_{eXPT} Reconstructed; -t_{eXPT} (GeV^{2}); Q^{2} (GeV^{2}); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 40);
+    TH2D* h2_Q2teXPT_Reco = new TH2D("h2_Q2teXPT_Reco", "Q^{2} vs -t_{eXPT} Reconstructed; Q^{2} (GeV^{2}); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teXBABE_Reco = new TH2D("h2_Q2teXBABE_Reco", "Q^{2} vs -t_{eXBABE} Reconstructed;  Q^{2} (GeV^{2}); -t_{eXBABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_WQ2_Reco = new TH2D("h2_WQ2_Reco", "W vs Q^{2} Reconstructed; W (GeV); Q^{2} (GeV^{2}); Rate/bin (Hz)", 150, -50, 100, 40, 0, 40);
     TH2D* h2_DeltaThetaPhi_Reco = new TH2D("h2_DeltaThetaPhi_Reco", "#Delta#theta  (#theta_{pMiss} - #theta_{ZDC/B0}) vs #Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Recostructed; #Delta#theta (Deg); #Delta#phi (Deg); Rate/bin (Hz)", 200, -1, 1, 200, -100, 100);
@@ -398,7 +398,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_n_pTheta_MCDEMPAcceptB0 = new TH2D("h2_n_pTheta_MCDEMPAcceptB0", "Neutron MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     gDirectory->cd("../../");
 
-    gDirectory->cd("B0Dists/MC");
+    gDirectory->cd("B0Dists/Reco");
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts", "e' Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts", "#pi Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_n_pTheta_RecoDEMPAcceptB0_NoCuts", "Neutron Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
