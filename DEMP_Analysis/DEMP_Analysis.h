@@ -11,8 +11,8 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
   return FileName;
 }
 
-Bool_t Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit;
-Double_t ThetaStar_Max, n_Emin, DeltaTheta_Min, DeltaTheta_Max, DeltaPhi_Min, DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol;
+Bool_t Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
+Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol;
 
 //Defining the four vectors
 PxPyPzEVector Vec_eSc_MC;
@@ -169,47 +169,104 @@ void SetCutVals(Double_t Hadron_Beam_E){
   
   if(Hadron_Beam_E == 41){
     n_Emin = 10;
-    DeltaTheta_Min = -0.1;
-    DeltaTheta_Max = 0.2;
-    DeltaPhi_Min = -55;
-    DeltaPhi_Max = 55;
+    ZDCDeltaTheta_Min = -0.1;
+    ZDCDeltaTheta_Max = 0.2;
+    ZDCDeltaPhi_Min = -55;
+    ZDCDeltaPhi_Max = 55;
+    B0DeltaTheta_Min = -0.2;
+    B0DeltaTheta_Max = 0.2;
+    B0DeltaPhi_Min = -50;
+    B0DeltaPhi_Max = 50;
     MissingMass_Tol= 0;
     W_Tol = 0;
   }
   else if(Hadron_Beam_E == 100){
     n_Emin =40;
-    DeltaTheta_Min = -0.09;
-    DeltaTheta_Max = 0.14;
-    DeltaPhi_Min = -45;
-    DeltaPhi_Max = 45;
+    ZDCDeltaTheta_Min = -0.09;
+    ZDCDeltaTheta_Max = 0.14;
+    ZDCDeltaPhi_Min = -45;
+    ZDCDeltaPhi_Max = 45;
+    B0DeltaTheta_Min = -0.8;
+    B0DeltaTheta_Max = 0.7;
+    B0DeltaPhi_Min = -30;
+    B0DeltaPhi_Max = 30;
     MissingMass_Tol=0 ;
     W_Tol = 0;
   }
   else if(Hadron_Beam_E == 130){
     n_Emin =40;
-    DeltaTheta_Min = -0.09;
-    DeltaTheta_Max = 0.14;
-    DeltaPhi_Min = -45;
-    DeltaPhi_Max = 45;
+    ZDCDeltaTheta_Min = -0.09;
+    ZDCDeltaTheta_Max = 0.14;
+    ZDCDeltaPhi_Min = -45;
+    ZDCDeltaPhi_Max = 45;
+    B0DeltaTheta_Min = -0.8;
+    B0DeltaTheta_Max = 0.7;
+    B0DeltaPhi_Min = -30;
+    B0DeltaPhi_Max = 30;
     MissingMass_Tol=0 ;
     W_Tol = 0;
   }
   else if(Hadron_Beam_E == 250){
     n_Emin = 120;
-    DeltaTheta_Min = -0.07;
-    DeltaTheta_Max = 0.17;
-    DeltaPhi_Min = -80;
-    DeltaPhi_Max = 80;
+    ZDCDeltaTheta_Min = -0.07;
+    ZDCDeltaTheta_Max = 0.17;
+    ZDCDeltaPhi_Min = -80;
+    ZDCDeltaPhi_Max = 80;
+    B0DeltaTheta_Min = -0.07;
+    B0DeltaTheta_Max = 0.17;
+    B0DeltaPhi_Min = -80;
+    B0DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
   }
   else if(Hadron_Beam_E == 275){
     n_Emin = 120;
-    DeltaTheta_Min = -0.07;
-    DeltaTheta_Max = 0.17;
-    DeltaPhi_Min = -80;
-    DeltaPhi_Max = 80;
+    ZDCDeltaTheta_Min = -0.07;
+    ZDCDeltaTheta_Max = 0.17;
+    ZDCDeltaPhi_Min = -80;
+    ZDCDeltaPhi_Max = 80;
+    B0DeltaTheta_Min = -0.07;
+    B0DeltaTheta_Max = 0.17;
+    B0DeltaPhi_Min = -80;
+    B0DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
+  }
+}
+
+void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
+  if(EventDist == kTRUE){
+    gDirectory->mkdir("EventDists");
+    gDirectory->mkdir("EventDists/MC");
+    gDirectory->mkdir("EventDists/Reco");
+  }
+  if(Kin == kTRUE){
+    gDirectory->mkdir("KinematicDists");
+    gDirectory->mkdir("KinematicDists/MC");
+    gDirectory->mkdir("KinematicDists/Reco");
+    if(ZDC == kTRUE){
+      gDirectory->mkdir("KinematicDists/MC/ZDC");
+      gDirectory->mkdir("KinematicDists/Reco/ZDC");
+    }
+    if(B0 == kTRUE){
+      gDirectory->mkdir("KinematicDists/MC/B0");
+      gDirectory->mkdir("KinematicDists/Reco/B0");
+    }
+  }
+  if(ZDC == kTRUE){
+    gDirectory->mkdir("ZDCDists");
+    gDirectory->mkdir("ZDCDists/MC");
+    gDirectory->mkdir("ZDCDists/Reco");
+  }
+  if(B0 == kTRUE){
+    gDirectory->mkdir("B0Dists");
+    gDirectory->mkdir("B0Dists/MC");
+    gDirectory->mkdir("B0Dists/Reco");
+  }
+  if(QA == kTRUE){
+    gDirectory->mkdir("QADists");
+  }
+  if(Results == kTRUE){
+    gDirectory->mkdir("ResultsDists");
   }
 }
