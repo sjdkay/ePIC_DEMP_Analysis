@@ -37,10 +37,12 @@ void FillNeutAccept(PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, XYZVector n_Ver
   gDirectory->cd("EventDists/MC");
   FillHist2D("h2_n_pTheta_MCAccept", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
   FillHist2D("h2_n_pTheta_MCAccept_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
-  FillHist2D("h2_n_pTheta_MCAcceptZDC", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
-  FillHist2D("h2_n_pTheta_MCAcceptZDC_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
   gDirectory->cd("../../");
   if(ZDC == kTRUE){
+    gDirectory->cd("ZDCDists/MC");
+    FillHist2D("h2_n_pTheta_MCAcceptZDC", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
+    FillHist2D("h2_n_pTheta_MCAcceptZDC_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
+    gDirectory->cd("../../");
     gDirectory->cd("ZDCDists/Reco");
     FillHist2D("h2_n_XY_RecoAccept", n_Vertex.X(), n_Vertex.Y(), wgt);
     FillHist2D("h2_n_pTheta_RecoAcceptZDC", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);

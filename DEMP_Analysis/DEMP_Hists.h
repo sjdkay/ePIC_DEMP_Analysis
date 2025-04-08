@@ -357,7 +357,6 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptZDC = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptZDC", "e' Reconstructed DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptZDC = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptZDC", "#pi Reconstructed DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptZDC = new TH2D("h2_n_pTheta_RecoDEMPAcceptZDC", "Neutron Reconstructed DEMP Accepted (ZDC); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
     TH2D* h2_n_XY_Reco = new TH2D("h2_n_XY_Reco", "Neutron reconstructed XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 150,-1200,-600,150,-300,300);
     TH2D* h2_n_XY_RecoAccept = new TH2D("h2_n_XY_RecoAccept", "Neutron reconstructed XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 150,-1200,-600,150,-300,300); 
     TH2D* h2_nRot_XY_Reco = new TH2D("h2_nRot_XY_Reco", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
@@ -369,20 +368,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
   
   if (B0 == kTRUE){
     gDirectory->cd("B0Dists/MC");
-    TH1D* h1_B0_nClusters = new TH1D("h1_B0_nClusters", "B0 Hit Multiplicity; N_{Clus}", 30, 0, 30);
-    TH2D* h2_B0_XY_Raw = new TH2D("h2_B0_XY_Raw", "B0 XY Hit Position, raw all clusters; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_B0_XY_Raw_EWeight = new TH2D("h2_B0_XY_Raw_EWeight", "B0 XY Hit Position, raw all clusters, energy weighted; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH1D* h1_B0_nClusters_AcceptRaw = new TH1D("h1_B0_nClusters_AcceptRaw", "B0 Hit Multiplicity, number of clusters in event; N_{Clus}", 30, 0, 30);
-    TH1D* h1_B0_nClusters_Accept = new TH1D("h1_B0_nClusters_Accept", "B0 Hit Multiplicity, number of accepted cluters; N_{Clus}", 30, 0, 30);
-    TH2D* h2_B0_XY_Accept = new TH2D("h2_B0_XY_Accept", "B0 Reconstructed XY Hit Position; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_B0_XY_AcceptWeighted = new TH2D("h2_B0_XY_AcceptWeighted", "B0 Reconstructed XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
-    TH2D* h2_n_ETheta_RecoAccept_B0 = new TH2D("h2_n_ETheta_RecoAccept_B0", "B0 Reconstructed;#theta (Deg); E (GeV)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_RecoAcceptB0 = new TH2D("h2_n_pTheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_RecoAcceptB0 = new TH2D("h2_nRot_pTheta_RecoAcceptB0", "B0 Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
     TH2D* h2_n_pTheta_MCAcceptB0 = new TH2D("h2_n_pTheta_MCAcceptB0", "Neutron MC Truth Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_n_pTheta_MCAcceptB0_NoAB = new TH2D("h2_n_pTheta_MCAcceptB0_NoAb", "Neutron MC Truth Accepted (B0), No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
     TH2D* h2_eSc_pTheta_MCDEMPAcceptB0_NoCuts_NoAB = new TH2D("h2_eSc_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", "e' MC Truth DEMP Accepted (B0), No Cuts, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_MCDEMPAcceptB0_NoCuts_NoAB = new TH2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", "#pi MC Truth DEMP Accepted (B0), No Cuts, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_MCDEMPAcceptB0_NoCuts_NoAB = new TH2D("h2_n_pTheta_MCDEMPAcceptB0_NoCuts_NoAB", "Neutron MC Truth DEMP Accepted (B0), No Cuts, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
@@ -396,17 +383,26 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_eSc_pTheta_MCDEMPAcceptB0 = new TH2D("h2_eSc_pTheta_MCDEMPAcceptB0", "e' MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_MCDEMPAcceptB0 = new TH2D("h2_Pi_pTheta_MCDEMPAcceptB0", "#pi MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_MCDEMPAcceptB0 = new TH2D("h2_n_pTheta_MCDEMPAcceptB0", "Neutron MC Truth DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_B0_XY_MCAccept = new TH2D("h2_B0_XY_MCAccept", "B0 MC Accepted XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
     gDirectory->cd("../../");
 
     gDirectory->cd("B0Dists/Reco");
+    TH1D* h1_B0_nClusters = new TH1D("h1_B0_nClusters", "B0 Hit Multiplicity; N_{Clus}", 30, 0, 30);
+    TH2D* h2_B0_XY_Raw = new TH2D("h2_B0_XY_Raw", "B0 XY Hit Position, raw all clusters; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
+    TH2D* h2_B0_XY_Raw_EWeight = new TH2D("h2_B0_XY_Raw_EWeight", "B0 XY Hit Position, raw all clusters, energy weighted; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
+    TH1D* h1_B0_nClusters_AcceptRaw = new TH1D("h1_B0_nClusters_AcceptRaw", "B0 Hit Multiplicity, number of clusters in event; N_{Clus}", 30, 0, 30);
+    TH1D* h1_B0_nClusters_Accept = new TH1D("h1_B0_nClusters_Accept", "B0 Hit Multiplicity, number of accepted cluters; N_{Clus}", 30, 0, 30);
+    TH2D* h2_B0_XY_Accept = new TH2D("h2_B0_XY_Accept", "B0 Reconstructed XY Hit Position; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
+    TH2D* h2_B0_XY_AcceptWeighted = new TH2D("h2_B0_XY_AcceptWeighted", "B0 Reconstructed XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
+    TH2D* h2_n_ETheta_RecoAcceptB0 = new TH2D("h2_n_ETheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); E (GeV)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_n_pTheta_RecoAcceptB0 = new TH2D("h2_n_pTheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_nRot_pTheta_RecoAcceptB0 = new TH2D("h2_nRot_pTheta_RecoAcceptB0", "B0 Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts", "e' Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts", "#pi Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_n_pTheta_RecoDEMPAcceptB0_NoCuts", "Neutron Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptB0", "e' Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptB0", "#pi Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_n_pTheta_RecoDEMPAcceptB0", "Neutron Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    
-    TH2D* h2_B0_XY_MCAccept = new TH2D("h2_B0_XY_MCAccept", "B0 MC Accepted XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
     gDirectory->cd("../../");     
   }
   
