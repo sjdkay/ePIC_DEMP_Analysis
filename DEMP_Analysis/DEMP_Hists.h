@@ -408,9 +408,31 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
   
   if (QA == kTRUE){
     gDirectory->cd("QADists");
+    TH1D* h1_tBABE_Res_QA = new TH1D("h1_tBABE_Res_QA", "-t_{BABE} Resolution (%); (t_{BABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    TH1D* h1_teX_Res_QA = new TH1D("h1_teX_Res_QA", "-t_{eX} Resolution (%); (t_{eX} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    TH1D* h1_teXPT_Res_QA = new TH1D("h1_teXPT_Res_QA", "-t_{eXPT} Resolution (%); (t_{eXPT} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    TH1D* h1_teXBABE_Res_QA = new TH1D("h1_teXBABE_Res_QA", "-t_{eXBABE} Resolution (%); (t_{eXBABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    TH1D* h1_Q2_Res_QA = new TH1D("h1_Q2_Res_QA", "Q^{2} Resolution (%); (Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%); Rate/1% bin (Hz)", 60, -30, 30);
+    TH1D* h1_W_Res_QA = new TH1D("h1_W_Res_QA", "W Resolution (%); (W - W_{MC})/W_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    if (ZDC == kTRUE){
+      TH1D* h1_tBABE_Res_QA_ZDC = new TH1D("h1_tBABE_Res_QA_ZDC", "-t_{BABE} Resolution (%), n ZDC Hits Only; (t_{BABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teX_Res_QA_ZDC = new TH1D("h1_teX_Res_QA_ZDC", "-t_{eX} Resolution (%), n ZDC Hits Only; (t_{eX} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teXPT_Res_QA_ZDC = new TH1D("h1_teXPT_Res_QA_ZDC", "-t_{eXPT} Resolution (%), n ZDC Hits Only; (t_{eXPT} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teXBABE_Res_QA_ZDC = new TH1D("h1_teXBABE_Res_QA_ZDC", "-t_{eXBABE} Resolution (%), n ZDC Hits Only; (t_{eXBABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_Q2_Res_QA_ZDC = new TH1D("h1_Q2_Res_QA_ZDC", "Q^{2} Resolution (%), n ZDC Hits Only; (Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%); Rate/1% bin (Hz)", 60, -30, 30);
+      TH1D* h1_W_Res_QA_ZDC = new TH1D("h1_W_Res_QA_ZDC", "W Resolution (%), n ZDC Hits Only; (W - W_{MC})/W_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    }
+    if (B0 == kTRUE){
+      TH1D* h1_tBABE_Res_QA_B0 = new TH1D("h1_tBABE_Res_QA_B0", "-t_{BABE} Resolution (%), n B0 Hits Only; (t_{BABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teX_Res_QA_B0 = new TH1D("h1_teX_Res_QA_B0", "-t_{eX} Resolution (%), n B0 Hits Only; (t_{eX} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teXPT_Res_QA_B0 = new TH1D("h1_teXPT_Res_QA_B0", "-t_{eXPT} Resolution (%), n B0 Hits Only; (t_{eXPT} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_teXBABE_Res_QA_B0 = new TH1D("h1_teXBABE_Res_QA_B0", "-t_{eXBABE} Resolution (%), n B0 Hits Only; (t_{eXBABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+      TH1D* h1_Q2_Res_QA_B0 = new TH1D("h1_Q2_Res_QA_B0", "Q^{2} Resolution (%), n B0 Hits Only; (Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%); Rate/1% bin (Hz)", 600, -30, 30);
+      TH1D* h1_W_Res_QA_B0 = new TH1D("h1_W_Res_QA_B0", "W Resolution (%), n B0 Hits Only; (W - W_{MC})/W_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
+    }
     gDirectory->cd("../");
   }
-
+  
   if (Results == kTRUE){
     gDirectory->cd("ResultsDists");
     TH1D* h1_tResult[8];

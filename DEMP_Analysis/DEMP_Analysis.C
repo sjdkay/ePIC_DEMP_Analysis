@@ -485,6 +485,33 @@ void FillDEMP_Results(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt)
   gDirectory->cd("../../");
 }
 
+void FillDEMP_QA(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+  gDirectory->cd("QADists");
+  FillHist1D("h1_tBABE_Res_QA", ((t_BABE - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_teX_Res_QA", ((t_eX - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_teXPT_Res_QA", ((t_eXPT - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_teXBABE_Res_QA", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_Q2_Res_QA", ((Q2_Rec - Q2_MC)/Q2_MC)*100, wgt);
+  FillHist1D("h1_W_Res_QA", ((W_Rec - W_MC)/W_MC)*100, wgt);
+  if ( nZDC == kTRUE && ZDC == kTRUE){
+    FillHist1D("h1_tBABE_Res_QA_ZDC", ((t_BABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teX_Res_QA_ZDC", ((t_eX - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXPT_Res_QA_ZDC", ((t_eXPT - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXBABE_Res_QA_ZDC", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_Q2_Res_QA_ZDC", ((Q2_Rec - Q2_MC)/Q2_MC)*100, wgt);
+    FillHist1D("h1_W_Res_QA_ZDC", ((W_Rec - W_MC)/W_MC)*100, wgt);
+  }
+  if ( nB0 == kTRUE && B0 == kTRUE){
+    FillHist1D("h1_tBABE_Res_QA_B0", ((t_BABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teX_Res_QA_B0", ((t_eX - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXPT_Res_QA_B0", ((t_eXPT - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXBABE_Res_QA_B0", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_Q2_Res_QA_B0", ((Q2_Rec - Q2_MC)/Q2_MC)*100, wgt);
+    FillHist1D("h1_W_Res_QA_B0", ((W_Rec - W_MC)/W_MC)*100, wgt);
+  }
+  gDirectory->cd("../../");
+}
+
 void WriteCSV(TString BeamEn, TString InDate, TString BeamConf, TString Particle, Bool_t ZDC, Bool_t B0){
   ofstream csvfile;
   gDirectory->cd("ResultsDists");
@@ -832,25 +859,23 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	 }
 
 	if(DEMP_PassCuts == kTRUE){
+	  // Fill lots of plots and fill histograms
 	  if(EventDistPlots == kTRUE){
 	    FillDEMPAccept_EventDists(Vec_eSc_MC, Vec_eSc_MC_NoAB, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_MC_NoAB, Vec_Pi_Rec, Vec_n_MC, Vec_n_MC_NoAB, Vec_n_Rec, Vec_nRot_Rec, weight[0], ZDCPlots, B0Plots, nZDCHit, nB0Hit);
 	  }
-	  
-	  // Fill lots of plots and fill histograms
 	  if(KinPlots == kTRUE){
 	    FillDEMPAccept_Kin(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	  }
-
 	  if(QAPlots == kTRUE){
-	    //FillDEMP_QA();
+	    FillDEMPAccept_Kin(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	  }
-	  
 	  // Fill result plots binned in Q2
 	  if( ResultsPlots == kTRUE) {
 	    // Fill result histograms
-	    FillDEMP_Results(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
-	  }// End result filling loop
+	    FillDEMP_QA(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	  }
 	} // End main cut loop
+	
       } //end Q2 cut loop
     } // End of loop over DEMP events
   } // End of event while loop
