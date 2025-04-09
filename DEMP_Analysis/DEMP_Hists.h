@@ -407,7 +407,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
   }
   
   if (QA == kTRUE){
-    gDirectory->cd("QADists");
+    gDirectory->cd("QADists/Kin");
     TH1D* h1_tBABE_Res_QA = new TH1D("h1_tBABE_Res_QA", "-t_{BABE} Resolution (%); (t_{BABE} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
     TH1D* h1_teX_Res_QA = new TH1D("h1_teX_Res_QA", "-t_{eX} Resolution (%); (t_{eX} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
     TH1D* h1_teXPT_Res_QA = new TH1D("h1_teXPT_Res_QA", "-t_{eXPT} Resolution (%); (t_{eXPT} - t_{MC})/t_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
@@ -430,7 +430,28 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       TH1D* h1_Q2_Res_QA_B0 = new TH1D("h1_Q2_Res_QA_B0", "Q^{2} Resolution (%), n B0 Hits Only; (Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%); Rate/1% bin (Hz)", 600, -30, 30);
       TH1D* h1_W_Res_QA_B0 = new TH1D("h1_W_Res_QA_B0", "W Resolution (%), n B0 Hits Only; (W - W_{MC})/W_{MC} (%); Rate/1% bin (Hz)", 400, -200, 200);
     }
-    gDirectory->cd("../");
+    gDirectory->cd("../../");
+    gDirectory->cd("QADists/PartRes");
+    TH1D* h1_eSc_p_Res_QA = new TH1D("h1_eSc_p_Res_QA", "e' Track Momentum Resolution (%); (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    TH1D* h1_Pi_p_Res_QA = new TH1D("h1_Pi_p_Res_QA", "#pi Track Momentum Resolution (%); (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    TH1D* h1_n_p_Res_QA = new TH1D("h1_n_p_Res_QA", "n Track Momentum Resolution (%); (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    TH1D* h1_n_Theta_Res_QA = new TH1D("h1_n_Theta_Res_QA", "n #theta Resolution (%); (#theta_{Rec} - #theta_{MC})/#theta_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    TH1D* h1_n_Phi_Res_QA = new TH1D("h1_n_Phi_Res_QA", "n #phi Resolution (%); (#phi_{Rec} - #phi_{MC})/#phi_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    if (ZDC == kTRUE){
+      TH1D* h1_eSc_p_Res_QA_ZDC = new TH1D("h1_eSc_p_Res_QA_ZDC", "e' Track Momentum Resolution, ZDC n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_Pi_p_Res_QA_ZDC = new TH1D("h1_Pi_p_Res_QA_ZDC", "#pi Track Momentum Resolution, ZDC n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_p_Res_QA_ZDC = new TH1D("h1_n_p_Res_QA_ZDC", "n Track Momentum Resolution, ZDC n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_Theta_Res_QA_ZDC = new TH1D("h1_n_Theta_Res_QA_ZDC", "n #theta Resolution, ZDC n Hits Only (%), (#theta_{Rec} - #theta_{MC})/#theta_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_Phi_Res_QA_ZDC = new TH1D("h1_n_Phi_Res_QA_ZDC", "n #phi Resolution, ZDC n Hits Only (%), (#phi_{Rec} - #phi_{MC})/#phi_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    }
+    if (B0 == kTRUE){
+      TH1D* h1_eSc_p_Res_QA_B0 = new TH1D("h1_eSc_p_Res_QA_B0", "e' Track Momentum Resolution, B0 n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_Pi_p_Res_QA_B0 = new TH1D("h1_Pi_p_Res_QA_B0", "#pi Track Momentum Resolution, B0 n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_p_Res_QA_B0 = new TH1D("h1_n_p_Res_QA_B0", "n Track Momentum Resolution, B0 n Hits Only (%), (P_{Rec} - P_{MC})/P_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_Theta_Res_QA_B0 = new TH1D("h1_n_Theta_Res_QA_B0", "n #theta Resolution, B0 n Hits Only (%), (#theta_{Rec} - #theta_{MC})/#theta_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+      TH1D* h1_n_Phi_Res_QA_B0 = new TH1D("h1_n_Phi_Res_QA_B0", "n #phi Resolution, B0 n Hits Only (%), (#phi_{Rec} - #phi_{MC})/#phi_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
+    }
+    gDirectory->cd("../../");
   }
   
   if (Results == kTRUE){

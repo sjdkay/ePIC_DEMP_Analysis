@@ -265,6 +265,8 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
   }
   if(QA == kTRUE){
     gDirectory->mkdir("QADists");
+    gDirectory->mkdir("QADists/Kin");
+    gDirectory->mkdir("QADists/PartRes");
   }
   if(Results == kTRUE){
     gDirectory->mkdir("ResultsDists");
