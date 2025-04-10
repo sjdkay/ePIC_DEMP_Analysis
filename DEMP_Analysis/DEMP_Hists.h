@@ -452,8 +452,115 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       TH1D* h1_n_Phi_Res_QA_B0 = new TH1D("h1_n_Phi_Res_QA_B0", "n #phi Resolution, B0 n Hits Only (%), (#phi_{Rec} - #phi_{MC})/#phi_{MC} (%); Rate/1% Bin (Hz)", 100, -50, 50);
     }
     gDirectory->cd("../../");
+    gDirectory->cd("QADists/Efficiencies");
+    TH1D* h1_eSc_eta_eff_Raw = new TH1D("h1_eSc_eta_eff_Raw", "e' #eta, Raw; #eta; Rate/0.05 bin (Hz)", 80, -4, 0);
+    TH1D* h1_eSc_eta_eff_Accept = new TH1D("h1_eSc_eta_eff_Accept", "e' #eta, Accepted; #eta; Rate/0.05 bin (Hz)", 80, -4, 0);
+    TH1D* h1_eSc_eta_eff_DEMPAccept = new TH1D("h1_eSc_eta_eff_DEMPAccept", "e' #eta, DEMP Accepted; #eta; Rate/0.05 bin (Hz)", 80, -4, 0);
+    TH1D* h1_eSc_eta_eff_DEMPCut = new TH1D("h1_eSc_eta_eff_DEMPCut", "e' #eta, DEMP Cut Accepted; #eta; Rate/0.05 bin (Hz)", 80, -4, 0);
+    TH1D* h1_eSc_eta_eff = new TH1D("h1_eSc_eta_eff", "e' #eta Detction Efficiency; #eta; Efficiency", 80, -4, 0);
+    TH1D* h1_eSc_eta_effDEMP = new TH1D("h1_eSc_eta_effDEMP", "e' #eta Detection Efficiency, DEMP Accepted; #eta; Efficiency", 80, -4, 0);
+    TH1D* h1_eSc_eta_effDEMPCut = new TH1D("h1_eSc_eta_effDEMPCut", "e' #eta Detection, DEMP Cut Accepted; #eta; Efficiency", 80, -4, 0);
+    TH1D* h1_eSc_p_eff_Raw = new TH1D("h1_eSc_p_eff_Raw", "e' P, Raw; P (GeV/C); Rate/bin (Hz)", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_eff_Accept = new TH1D("h1_eSc_p_eff_Accept", "e' P, Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_eff_DEMPAccept = new TH1D("h1_eSc_p_eff_DEMPAccept", "e' P, DEMP Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_eff_DEMPCut = new TH1D("h1_eSc_p_eff_DEMPCut", "e' P, DEMP Cut Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_eff = new TH1D("h1_eSc_p_eff", "e' P Detction Efficiency; P (GeV/C); Efficiency", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_effDEMP = new TH1D("h1_eSc_p_effDEMP", "e' P Detection Efficiency, DEMP Accepted; P (GeV/C); Efficiency", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+    TH1D* h1_eSc_p_effDEMPCut = new TH1D("h1_eSc_p_effDEMPCut", "e' P Detection, DEMP Cut Accepted; P (GeV/C); Efficiency", NBins_Energy, ElecBeamE-1, ElecBeamE+2);
+
+    TH1D* h1_Pi_eta_eff_Raw = new TH1D("h1_Pi_eta_eff_Raw", "#pi #eta, Raw; #eta; Rate/0.05 bin (Hz)", 120, -1, 5);
+    TH1D* h1_Pi_eta_eff_Accept = new TH1D("h1_Pi_eta_eff_Accept", "#pi #eta, Accepted; #eta; Rate/0.05 bin (Hz)", 120, -1, 5);
+    TH1D* h1_Pi_eta_eff_DEMPAccept = new TH1D("h1_Pi_eta_eff_DEMPAccept", "#pi #eta, DEMP Accepted; #eta; Rate/0.05 bin (Hz)", 120, -1, 5);
+    TH1D* h1_Pi_eta_eff_DEMPCut = new TH1D("h1_Pi_eta_eff_DEMPCut", "#pi #eta, DEMP Cut Accepted; #eta; Rate/0.05 bin (Hz)", 120, -1, 5);
+    TH1D* h1_Pi_eta_eff = new TH1D("h1_Pi_eta_eff", "#pi #eta Detction Efficiency; #eta; Efficiency", 120, -1, 5);
+    TH1D* h1_Pi_eta_effDEMP = new TH1D("h1_Pi_eta_effDEMP", "#pi #eta Detection Efficiency, DEMP Accepted; #eta; Efficiency", 120, -1, 5);
+    TH1D* h1_Pi_eta_effDEMPCut = new TH1D("h1_Pi_eta_effDEMPCut", "#pi #eta Detection, DEMP Cut Accepted; #eta; Efficiency", 120, -1, 5);
+    TH1D* h1_Pi_p_eff_Raw = new TH1D("h1_Pi_p_eff_Raw", "#pi P, Raw; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_eff_Accept = new TH1D("h1_Pi_p_eff_Accept", "#pi P, Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_eff_DEMPAccept = new TH1D("h1_Pi_p_eff_DEMPAccept", "#pi P, DEMP Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_eff_DEMPCut = new TH1D("h1_Pi_p_eff_DEMPCut", "#pi P, DEMP Cut Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_eff = new TH1D("h1_Pi_p_eff", "#pi P Detction Efficiency; P (GeV/C); Efficiency", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_effDEMP = new TH1D("h1_Pi_p_effDEMP", "#pi P Detection Efficiency, DEMP Accepted; P (GeV/C); Efficiency", NBins_Energy, 0, 100);
+    TH1D* h1_Pi_p_effDEMPCut = new TH1D("h1_Pi_p_effDEMPCut", "#pi P Detection, DEMP Cut Accepted; P (GeV/C); Efficiency", NBins_Energy, 0, 100);
+    
+    TH1D* h1_n_eta_eff_Raw = new TH1D("h1_n_eta_eff_Raw", "n #eta, Raw; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+    TH1D* h1_n_eta_eff_Accept = new TH1D("h1_n_eta_eff_Accept", "n #eta, Accepted; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+    TH1D* h1_n_eta_eff_DEMPAccept = new TH1D("h1_n_eta_eff_DEMPAccept", "n #eta, DEMP Accepted; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+    TH1D* h1_n_eta_eff_DEMPCut = new TH1D("h1_n_eta_eff_DEMPCut", "n #eta, DEMP Cut Accepted; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+    TH1D* h1_n_eta_eff = new TH1D("h1_n_eta_eff", "n #eta Detction Efficiency; #eta; Efficiency", 60, 3, 6);
+    TH1D* h1_n_eta_effDEMP = new TH1D("h1_n_eta_effDEMP", "n #eta Detection Efficiency, DEMP Accepted; #eta; Efficiency", 60, 3, 6);
+    TH1D* h1_n_eta_effDEMPCut = new TH1D("h1_n_eta_effDEMPCut", "n #eta Detection, DEMP Cut Accepted; #eta; Efficiency", 60, 3, 6);
+    TH1D* h1_n_p_eff_Raw = new TH1D("h1_n_p_eff_Raw", "n P, Raw; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_eff_Accept = new TH1D("h1_n_p_eff_Accept", "n P, Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_eff_DEMPAccept = new TH1D("h1_n_p_eff_DEMPAccept", "n P, DEMP Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_eff_DEMPCut = new TH1D("h1_n_p_eff_DEMPCut", "n P, DEMP Cut Accepted; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_eff = new TH1D("h1_n_p_eff", "n P Detction Efficiency; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_effDEMP = new TH1D("h1_n_p_effDEMP", "n P Detection Efficiency, DEMP Accepted; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH1D* h1_n_p_effDEMPCut = new TH1D("h1_n_p_effDEMPCut", "n P Detection, DEMP Cut Accepted; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+
+    TH2D* h2_Q2t_eff_Raw = new TH2D("h2_Q2t_eff_Raw", "Q^{2} vs -t, Raw; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+    TH2D* h2_Q2t_eff_DEMPAccept = new TH2D("h2_Q2t_eff_DEMPAccept", "Q^{2} vs -t, DEMP Accepted; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+    TH2D* h2_Q2t_eff_DEMPCut = new TH2D("h2_Q2t_eff_DEMPCut", "Q^{2} vs -t, DEMP Cut; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+    TH2D* h2_Q2t_effDEMP = new TH2D("h2_Q2t_effDEMP", "Q^{2} vs -t Efficiency, DEMP Accpeted; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+    TH2D* h2_Q2t_effDEMPCut = new TH2D("h2_Q2t_effDEMPCut", "Q^{2} vs -t Efficiency, DEMP Cut; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+
+    if (ZDC == kTRUE){
+      TH1D* h1_n_eta_eff_AcceptZDC = new TH1D("h1_n_eta_eff_AcceptZDC", "n #eta, Accepted, n in ZDC; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_DEMPAcceptZDC = new TH1D("h1_n_eta_eff_DEMPAcceptZDC", "n #eta, DEMP Accepted, n in ZDC; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_DEMPCutZDC = new TH1D("h1_n_eta_eff_DEMPCutZDC", "n #eta, DEMP Cut Accepted, n in ZDC; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_ZDC = new TH1D("h1_n_eta_eff_ZDC", "n #eta Detction Efficiency, n in ZDC; #eta; Efficiency", 60, 3, 6);
+      TH1D* h1_n_eta_effDEMP_ZDC = new TH1D("h1_n_eta_effDEMP_ZDC", "n #eta Detection Efficiency, n in ZDC, DEMP Accepted; #eta; Efficiency", 60, 3, 6);
+      TH1D* h1_n_eta_effDEMPCut_ZDC = new TH1D("h1_n_eta_effDEMPCut_ZDC", "n #eta Detection, DEMP Cut Accepted, n in ZDC; #eta; Efficiency", 60, 3, 6);
+      TH1D* h1_n_p_eff_AcceptZDC = new TH1D("h1_n_p_eff_AcceptZDC", "n P, Accepted, n in ZDC; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_DEMPAcceptZDC = new TH1D("h1_n_p_eff_DEMPAcceptZDC", "n P, DEMP Accepted, n in ZDC; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_DEMPCutZDC = new TH1D("h1_n_p_eff_DEMPCutZDC", "n P, DEMP Cut Accepted, n in ZDC; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_ZDC = new TH1D("h1_n_p_eff_ZDC", "n P Detction Efficiency, n in ZDC; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_effDEMP_ZDC = new TH1D("h1_n_p_effDEMP_ZDC", "n P Detection Efficiency, DEMP Accepted, n in ZDC; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_effDEMPCut_ZDC = new TH1D("h1_n_p_effDEMPCut_ZDC", "n P Detection, DEMP Cut Accepted, n in ZDC; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH2D* h2_Q2t_eff_DEMPAcceptZDC = new TH2D("h2_Q2t_eff_DEMPAcceptZDC", "Q^{2} vs -t, DEMP Accepted, n in ZDC; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_eff_DEMPCutZDC = new TH2D("h2_Q2t_eff_DEMPCutZDC", "Q^{2} vs -t, DEMP Cut,  n in ZDC; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_effDEMP_ZDC = new TH2D("h2_Q2t_effDEMP_ZDC", "Q^{2} vs -t Efficiency, DEMP Accpeted,  n in ZDC; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_effDEMPCut_ZDC = new TH2D("h2_Q2t_effDEMPCut_ZDC", "Q^{2} vs -t Efficiency, DEMP Cut,  n in ZDC; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+    }
+    if (B0 == kTRUE){
+      TH1D* h1_n_eta_eff_AcceptB0 = new TH1D("h1_n_eta_eff_AcceptB0", "n #eta, Accepted, n in B0; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_DEMPAcceptB0 = new TH1D("h1_n_eta_eff_DEMPAcceptB0", "n #eta, DEMP Accepted, n in B0; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_DEMPCutB0 = new TH1D("h1_n_eta_eff_DEMPCutB0", "n #eta, DEMP Cut Accepted, n in B0; #eta; Rate/0.05 bin (Hz)", 60, 3, 6);
+      TH1D* h1_n_eta_eff_B0 = new TH1D("h1_n_eta_eff_B0", "n #eta Detction Efficiency, n in B0; #eta; Efficiency", 60, 3, 6);
+      TH1D* h1_n_eta_effDEMP_B0 = new TH1D("h1_n_eta_effDEMP_B0", "n #eta Detection Efficiency, n in B0, DEMP Accepted; #eta; Efficiency", 60, 3, 6);
+      TH1D* h1_n_eta_effDEMPCut_B0 = new TH1D("h1_n_eta_effDEMPCut_B0", "n #eta Detection, DEMP Cut Accepted, n in B0; #eta; Efficiency", 60, 3, 6  );
+      TH1D* h1_n_p_eff_AcceptB0 = new TH1D("h1_n_p_eff_AcceptB0", "n P, Accepted, n in B0; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_DEMPAcceptB0 = new TH1D("h1_n_p_eff_DEMPAcceptB0", "n P, DEMP Accepted, n in B0; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_DEMPCutB0 = new TH1D("h1_n_p_eff_DEMPCutB0", "n P, DEMP Cut Accepted, n in B0; P (GeV/C); Rate/bin (Hz)", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_eff_B0 = new TH1D("h1_n_p_eff_B0", "n P Detction Efficiency, n in B0; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_effDEMP_B0 = new TH1D("h1_n_p_effDEMP_B0", "n P Detection Efficiency, DEMP Accepted, n in B0; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH1D* h1_n_p_effDEMPCut_B0 = new TH1D("h1_n_p_effDEMPCut_B0", "n P Detection, DEMP Cut Accepted, n in B0; P (GeV/C); Efficiency", NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+      TH2D* h2_Q2t_eff_DEMPAcceptB0 = new TH2D("h2_Q2t_eff_DEMPAcceptB0", "Q^{2} vs -t, DEMP Accepted, n in B0; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_eff_DEMPCutB0 = new TH2D("h2_Q2t_eff_DEMPCutB0", "Q^{2} vs -t, DEMP Cut,  n in B0; Q^{2} (GeV^{2}); -t (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_effDEMP_B0 = new TH2D("h2_Q2t_effDEMP_B0", "Q^{2} vs -t Efficiency, DEMP Accpeted,  n in B0; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+      TH2D* h2_Q2t_effDEMPCut_B0 = new TH2D("h2_Q2t_effDEMPCut_B0", "Q^{2} vs -t Efficiency, DEMP Cut,  n in B0; Q^{2} (GeV^{2}); -t (GeV^{2}); Efficiency", 40, 0, 40, 40, 0, 1.6);
+
+    }   
+    gDirectory->cd("../../");
+    gDirectory->cd("QADists/tComp");
+    TH2D* h2_tBABEComp = new TH2D("h2_tBABEComp", "-t_{BABE} vs -t_{MC}; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    TH2D* h2_teXComp = new TH2D("h2_teXComp", "-t_{eX} vs -t_{MC}; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    TH2D* h2_teXPTComp = new TH2D("h2_teXPTComp", "-t_{eXPT} vs -t_{MC}; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    TH2D* h2_teXBABEComp = new TH2D("h2_teXBABEComp", "-t_{eXBABE} vs -t_{MC}; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    if(ZDC == kTRUE){
+      TH2D* h2_tBABEComp_ZDC = new TH2D("h2_tBABEComp_ZDC", "-t_{BABE} vs -t_{MC}, n ZDC Hits; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXComp_ZDC = new TH2D("h2_teXComp_ZDC", "-t_{eX} vs -t_{MC}, n ZDC Hits; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXPTComp_ZDC = new TH2D("h2_teXPTComp_ZDC", "-t_{eXPT} vs -t_{MC}, n ZDC Hits; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXBABEComp_ZDC = new TH2D("h2_teXBABEComp_ZDC", "-t_{eXBABE} vs -t_{MC}, n ZDC Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    }
+    if(B0 == kTRUE){
+      TH2D* h2_tBABEComp_B0 = new TH2D("h2_tBABEComp_B0", "-t_{BABE} vs -t_{MC}, n B0 Hits; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXComp_B0 = new TH2D("h2_teXComp_B0", "-t_{eX} vs -t_{MC}, n B0 Hits; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXPTComp_B0 = new TH2D("h2_teXPTComp_B0", "-t_{eXPT} vs -t_{MC}, n B0 Hits; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXBABEComp_B0 = new TH2D("h2_teXBABEComp_B0", "-t_{eXBABE} vs -t_{MC}, n B0 Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    }
+    gDirectory->cd("../../");
   }
-  
   if (Results == kTRUE){
     gDirectory->cd("ResultsDists");
     TH1D* h1_tResult[8];
@@ -521,5 +628,21 @@ void FillHist2D(TString Histname, Double_t Value, Double_t Value2){
 void FillHist2D(TString Histname, Double_t Value, Double_t Value2, Double_t W){
   if(gDirectory->FindObject(Histname) != 0){ // Check histogram exists, if it does, fill it
     ((TH2D*)gDirectory->FindObject(Histname))->Fill(Value, Value2, W);
+  }
+}
+void DivideHists1D(TString ResHistname, TString Histname1, TString Histname2){
+  if(gDirectory->FindObject(ResHistname) != 0 && gDirectory->FindObject(Histname1) != 0 && gDirectory->FindObject(Histname2) != 0){ // Check histograms exist, if they do, do our division
+    ((TH1D*)gDirectory->FindObject(ResHistname))->Divide(((TH1D*)gDirectory->FindObject(Histname1)), ((TH1D*)gDirectory->FindObject(Histname2)), 1, 1, "b");
+  }
+  else{
+    cerr << "Warning, tried to divide " << Histname1 << " by " << Histname2 << " to make " << ResHistname << " ,but one of these doesn't exist, check input histogram name strings or directory" << endl;
+  }
+}
+void DivideHists2D(TString ResHistname, TString Histname1, TString Histname2){
+  if(gDirectory->FindObject(ResHistname) != 0 && gDirectory->FindObject(Histname1) != 0 && gDirectory->FindObject(Histname2) != 0){ // Check histograms exist, if they do, do our division
+    ((TH2D*)gDirectory->FindObject(ResHistname))->Divide(((TH2D*)gDirectory->FindObject(Histname1)), ((TH2D*)gDirectory->FindObject(Histname2)), 1, 1, "b");
+  }
+  else{
+    cerr << "Warning, tried to divide " << Histname1 << " by " << Histname2 << " to make " << ResHistname << " ,but one of these doesn't exist, check input histogram name strings or directory" << endl;
   }
 }

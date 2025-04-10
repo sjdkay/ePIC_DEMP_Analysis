@@ -267,8 +267,230 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
     gDirectory->mkdir("QADists");
     gDirectory->mkdir("QADists/Kin");
     gDirectory->mkdir("QADists/PartRes");
+    gDirectory->mkdir("QADists/Efficiencies");
+    gDirectory->mkdir("QADists/tComp");
   }
   if(Results == kTRUE){
     gDirectory->mkdir("ResultsDists");
   }
+}
+
+
+void WritePDF(TString InBeamE, TString InDate,  TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
+}
+
+void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
+
+  TH1D* tmpHist1D;
+  TH2D* tmpHist2D;
+  auto OutDir = Form("%s_%s_%s_%s_Results", Inpart.Data(), InBeamE.Data(), InDate.Data(), InBeamConfig.Data());
+  if(gSystem->AccessPathName(OutDir) == kTRUE){
+    gSystem->mkdir(OutDir);
+  }
+
+  if(EventDists == kTRUE){
+    gDirectory->cd("EventDists/MC");
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_eSc_pTheta_MC"));
+    TCanvas* c_eSc_pTheta_MC = new TCanvas("c_eSc_pTheta_MC", "e' p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_eSc_pTheta_MC->SetLogz();
+    c_eSc_pTheta_MC->Print(Form("%s/%s_eSc_Truth_pTheta.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_Pi_pTheta_MC"));
+    TCanvas* c_Pi_pTheta_MC = new TCanvas("c_Pi_pTheta_MC", "e' p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_Pi_pTheta_MC->SetLogz();
+    c_Pi_pTheta_MC->Print(Form("%s/%s_Pi_Truth_pTheta.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_n_pTheta_MC"));
+    TCanvas* c_n_pTheta_MC = new TCanvas("c_n_pTheta_MC", "e' p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_n_pTheta_MC->SetLogz();
+    c_n_pTheta_MC->Print(Form("%s/%s_n_Truth_pTheta.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+    gDirectory->cd("EventDists/Reco");
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_eSc_pTheta_RecoAccept"));
+    TCanvas* c_eSc_pTheta_RecoAccept = new TCanvas("c_eSc_pTheta_RecoAccept", "e' p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_eSc_pTheta_RecoAccept->SetLogz();
+    c_eSc_pTheta_RecoAccept->Print(Form("%s/%s_eSc_Rec_pTheta.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_Pi_pTheta_RecoAccept"));
+    TCanvas* c_Pi_pTheta_RecoAccept = new TCanvas("c_Pi_pTheta_RecoAccept", "e' p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_Pi_pTheta_RecoAccept->SetLogz();
+    c_Pi_pTheta_RecoAccept->Print(Form("%s/%s_Pi_Rec_pTheta.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+  }
+  if(Kin == kTRUE){
+    if(ZDC == kTRUE){
+      gDirectory->cd("KinematicDists/Reco/ZDC");
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaThetaPhi_ZDCReco_NoCuts"));
+      TCanvas* c_ZDC_DeltaThetaDeltaPhi = new TCanvas("c_ZDC_DeltaThetaDeltaPhi", "ZDC #Delta#theta vs #Delta#phi", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_ZDC_DeltaThetaDeltaPhi->SetLogz();
+      c_ZDC_DeltaThetaDeltaPhi->Print(Form("%s/%s_ZDC_DeltaThetaDeltaPhi.png", OutDir, InBeamE.Data()));
+      gDirectory->cd("../../../");
+    }
+    if(B0 == kTRUE){
+      gDirectory->cd("KinematicDists/Reco/B0");
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaThetaPhi_B0Reco_NoCuts"));
+      TCanvas* c_B0_DeltaThetaDeltaPhi = new TCanvas("c_B0_DeltaThetaDeltaPhi", "B0 #Delta#theta vs #Delta#phi", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_B0_DeltaThetaDeltaPhi->SetLogz();
+      c_B0_DeltaThetaDeltaPhi->Print(Form("%s/%s_B0_DeltaThetaDeltaPhi.png", OutDir, InBeamE.Data()));
+      gDirectory->cd("../../../");
+    }
+  }
+  if(ZDC == kTRUE){
+    gDirectory->cd("ZDCDists/Reco");
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_n_XY_Reco"));
+    TCanvas* c_ZDC_XY = new TCanvas("c_ZDC_XY", "ZDC X vs Y Accepted", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_ZDC_XY->SetLogz();
+    c_ZDC_XY->Print(Form("%s/%s_ZDC_XY.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+  }
+  if(B0 == kTRUE){
+    gDirectory->cd("B0Dists/Reco");
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_B0_XY_AcceptWeighted"));
+    TCanvas* c_B0_XY = new TCanvas("c_B0_XY", "B0 X vs Y Accepted", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_B0_XY->SetLogz();
+    c_B0_XY->Print(Form("%s/%s_B0_XY.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+  }
+  if(QA == kTRUE){
+    gDirectory->cd("QADists/Efficiencies");
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_Q2t_effDEMPCut_ZDC"));
+    TCanvas* c_Q2t_effDEMPCut_ZDC = new TCanvas("c_Q2t_effDEMPCut_ZDC", "Q^{2} vs -t Efficiency", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_Q2t_effDEMPCut_ZDC->Print(Form("%s/%s_Q2t_DetEff.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+    gDirectory->cd("QADists/Kin");
+    TLegend* Leg_tComp = new TLegend (0.8,0.4,0.6,0.7); //2 sapce between them,3 more on left,4 on downside 
+    Leg_tComp->SetBorderSize(0);Leg_tComp->SetFillStyle(0); 
+    TCanvas* c_tComp = new TCanvas("c_tComp", "-t Reconsturction method comparison", 100, 0, 2560, 1920);
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBABE_Res_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kGreen, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("HIST");
+    Leg_tComp->AddEntry(tmpHist1D, "t_{eXBABE}");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kMagenta, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp->AddEntry(tmpHist1D, "t_{eXPT}");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teX_Res_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kBlue, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp->AddEntry(tmpHist1D, "t_{eX}");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tBABE_Res_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kRed, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp->AddEntry(tmpHist1D, "t_{BABE}");
+    Leg_tComp->Draw("SAME");
+    c_tComp->Print(Form("%s/%s_tComp.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+    gDirectory->cd("QADists/tComp");
+    if(ZDC == kTRUE){
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_ZDC"));
+      TCanvas* c_teXBABEComp_ZDC = new TCanvas("c_teXBABEComp_ZDC", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_teXBABEComp_ZDC->SetLogz();
+      c_teXBABEComp_ZDC->Print(Form("%s/%s_tComp_ZDC.png", OutDir, InBeamE.Data()));      
+    }
+    if(B0 == kTRUE){
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_B0"));
+      TCanvas* c_teXBABEComp_B0 = new TCanvas("c_teXBABEComp_B0", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_teXBABEComp_B0->SetLogz();
+      c_teXBABEComp_B0->Print(Form("%s/%s_tComp_B0.png", OutDir, InBeamE.Data()));      
+    }
+    gDirectory->cd("../../");
+  }
+  if(Results == kTRUE){
+    gDirectory->cd("ResultsDists/");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
+    TCanvas* c_tResult_ZDC_1 = new TCanvas("c_tResult_ZDC_1", "-t, 5 < Q^{2} < 7.5", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("histerr");
+    c_tResult_ZDC_1->Print(Form("%s/%s_tResult_Q2_5_7p5.png", OutDir, InBeamE.Data()));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
+    TCanvas* c_tResult_ZDC_4 = new TCanvas("c_tResult_ZDC_4", "-t, 15 < Q^{2} < 20", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("histerr");
+    c_tResult_ZDC_4->Print(Form("%s/%s_tResult_Q2_15_20.png", OutDir, InBeamE.Data()));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
+    TCanvas* c_tResult_ZDC_7 = new TCanvas("c_tResult_ZDC_7", "-t, 30 < Q^{2} < 35", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("histerr");
+    c_tResult_ZDC_7->Print(Form("%s/%s_tResult_Q2_30_35.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../");
+  }
+}
+
+// // Print Canvases for presentation plots as pngs
+  // c11->Print("10x130_trec_ttruth.png"); // t truth vs reco
+  // c30a->Print("10x130_DEMP_MissingMass.png");
+
+void WriteCSV(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t ZDC, Bool_t B0){
+  auto OutDir = Form("%s_%s_%s_%s_Results", Inpart.Data(), InBeamE.Data(), InDate.Data(), InBeamConfig.Data());
+  if(gSystem->AccessPathName(OutDir) == kTRUE){
+    gSystem->mkdir(OutDir);
+  }
+  ofstream csvfile;
+  gDirectory->cd("ResultsDists");
+  csvfile.open(Form("%s/%s_%s_%s_%s_Rates.csv", OutDir, Inpart.Data(), InBeamE.Data(), InBeamConfig.Data(), InDate.Data()), std::ios::trunc);
+  TString CSV_Header = "Nominal mean Q^2,Mean Q^2,Mean Q^2 error,Mean W,Mean W error,-t (bin centre),Rate (Hz), Rate (Hz) error";
+  csvfile << CSV_Header << "\n\n";
+  // If B0 enabled, use ZDC (if they exist), if not, use default
+  for (int i = 0; i < 7; i++) {
+    for (int j = 0; j < 10; j++) {
+      if (j == 0) {
+	// If B0 enabled, use ZDC (if they exist), if not, use default
+	if( B0 == kTRUE && ZDC == kTRUE){
+	  csvfile << (Q2Vals[i] + Q2Vals[i+1])/2 << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_Q2Result_ZDC_%i", i+1)))->GetMean() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_Q2Result_ZDC_%i", i+1)))->GetMeanError() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_WResult_ZDC_%i", i+1)))->GetMean() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_WResult_ZDC_%i", i+1)))->GetMeanError() << ",";
+	}
+	else{
+	  csvfile << (Q2Vals[i] + Q2Vals[i+1])/2 << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_Q2Result_%i", i+1)))->GetMean() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_Q2Result_%i", i+1)))->GetMeanError() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_WResult_%i", i+1)))->GetMean() << ",";
+	  csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_WResult_%i", i+1)))->GetMeanError() << ",";
+	}
+      }
+      else {
+	csvfile << ",,,,,";
+      }
+      if( B0 == kTRUE && ZDC == kTRUE){
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n";
+      }
+      else{
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n";
+      }
+    } // End loop over bins (j)
+    csvfile << "\n";
+  } // End loop over Q2 ranges/plots (i)
+  csvfile.close();
+  gDirectory->cd("../");
 }
