@@ -427,12 +427,12 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_1->Print(Form("%s/%s_tResult_Q2_5_7p5.png", OutDir, InBeamE.Data()));
-    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_4"));
     TCanvas* c_tResult_ZDC_4 = new TCanvas("c_tResult_ZDC_4", "-t, 15 < Q^{2} < 20", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_4->Print(Form("%s/%s_tResult_Q2_15_20.png", OutDir, InBeamE.Data()));
-    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_7"));
     TCanvas* c_tResult_ZDC_7 = new TCanvas("c_tResult_ZDC_7", "-t, 30 < Q^{2} < 35", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("histerr");
