@@ -14,6 +14,9 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
 Bool_t Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
 Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol;
 
+int nEntries = 0;
+int EventCounter = 0;
+
 //Defining the four vectors
 PxPyPzEVector Vec_eSc_MC;
 PxPyPzEVector Vec_eSc_MC_NoAB;
@@ -84,6 +87,7 @@ Bool_t CheckFiles(TString Files[3]){
 	  cout << "Tree 'events' not found in file: " << Files[i] << endl;
 	  FileCheck = kFALSE;
 	}
+	nEntries+=tmptree->GetEntries();
 	tmpfile->Close();  // Close the file
 	delete tmpfile;    // Delete the file pointer
       }

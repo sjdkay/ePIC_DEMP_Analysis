@@ -719,7 +719,6 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   if(CheckFiles(InputFiles) == kFALSE){ // Check files exist, can be opened and contain tree with fn
     exit(1);
   }
-
   TChain *AnalysisChain = new TChain("events");
   for (Int_t i = 0; i <3; i++){
     AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
@@ -792,9 +791,11 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
   // Int_t EscapeEvent = 1000;
-  // Int_t EventCounter = 0;
   while(tree_reader.Next()) { // Loop over all events
-    //EventCounter++;
+    EventCounter++;
+    if ( EventCounter % ( nEntries / 10 ) == 0 ) {
+      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
+    }
     // if (EventCounter > EscapeEvent){
     //   continue;
     // }
