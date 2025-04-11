@@ -597,17 +597,20 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   FillHist2D("h2_teXComp", t_eX, t_MC, wgt);
   FillHist2D("h2_teXPTComp", t_eXPT, t_MC, wgt);
   FillHist2D("h2_teXBABEComp", t_eXBABE, t_MC, wgt);
+  FillHist2D("h2_teXBABECompAlt", t_eXBABE, t_MC, wgt);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist2D("h2_tBABEComp_ZDC", t_BABE, t_MC, wgt);
     FillHist2D("h2_teXComp_ZDC", t_eX, t_MC, wgt);
     FillHist2D("h2_teXPTComp_ZDC", t_eXPT, t_MC, wgt);
     FillHist2D("h2_teXBABEComp_ZDC", t_eXBABE, t_MC, wgt);
+    FillHist2D("h2_teXBABECompAlt_ZDC", t_eXBABE, t_MC, wgt);
   }
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist2D("h2_tBABEComp_B0", t_BABE, t_MC, wgt);
     FillHist2D("h2_teXComp_B0", t_eX, t_MC, wgt);
     FillHist2D("h2_teXPTComp_B0", t_eXPT, t_MC, wgt);
     FillHist2D("h2_teXBABEComp_B0", t_eXBABE, t_MC, wgt);
+    FillHist2D("h2_teXBABECompAlt_B0", t_eXBABE, t_MC, wgt);
   }
   gDirectory->cd("../../");
 }
@@ -721,7 +724,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   for (Int_t i = 0; i <3; i++){
     AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
   }
-	
+
+  // Note, from April 2025 onwards, MCParticles and EventHeader are no longer floats, they are doubles, change if needed
   // Initialize reader
   TTreeReader tree_reader(AnalysisChain);
   // Get weight information
@@ -958,11 +962,13 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
 	  gDirectory->cd("../../");
 	  if(ESum_B0 > 10*B0_ECut){ // Ignore low energy junk events, assign vectors, fill histograms
-	    Good_nRec = kTRUE;
-	    nB0Hit = kTRUE;
 	    Vec_n_Vertex.SetXYZ(tmpB0PosX/ESum_B0, tmpB0PosY/ESum_B0, tmpB0PosZ/ESum_B0);
-	    Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
-	    FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
+	    if ( sqrt(pow((Vec_n_Vertex.X())+180,2) + pow(Vec_n_Vertex.Y() ,2)) > 55){ // Exclude the central region of the B0, addition of 180 is to remove x axis offset of the ZDC
+		Good_nRec = kTRUE;
+		nB0Hit = kTRUE;
+		Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
+		FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
+	    }
 	  }
 	}
       }

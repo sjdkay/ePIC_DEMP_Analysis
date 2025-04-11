@@ -361,8 +361,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_n_XY_RecoAccept = new TH2D("h2_n_XY_RecoAccept", "Neutron reconstructed XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 150,-1200,-600,150,-300,300); 
     TH2D* h2_nRot_XY_Reco = new TH2D("h2_nRot_XY_Reco", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
     TH2D* h2_nRot_XY_RecoAccept = new TH2D("h2_nRot_XY_RecoAccept", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
-    TH2D* h2_n_pTheta_RecoAcceptZDC = new TH2D("h2_n_pTheta_RecoAcceptZDC", "ZDC Reconstructed;#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_RecoAcceptoZDC = new TH2D("h2_nRot_pTheta_RecoAcceptZDC", "ZDC Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_n_pTheta_RecoAcceptZDC = new TH2D("h2_n_pTheta_RecoAcceptZDC", "ZDC Reconstructed;#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_nRot_pTheta_RecoAcceptoZDC = new TH2D("h2_nRot_pTheta_RecoAcceptZDC", "ZDC Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     gDirectory->cd("../../");
   }
   
@@ -395,8 +395,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_B0_XY_Accept = new TH2D("h2_B0_XY_Accept", "B0 Reconstructed XY Hit Position; x (mm); y(mm)", 75, -325, -25, 75, -150, 150);
     TH2D* h2_B0_XY_AcceptWeighted = new TH2D("h2_B0_XY_AcceptWeighted", "B0 Reconstructed XY Hit Position; x (mm); y(mm); Rate/bin (Hz)", 75, -325, -25, 75, -150, 150);
     TH2D* h2_n_ETheta_RecoAcceptB0 = new TH2D("h2_n_ETheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); E (GeV)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_pTheta_RecoAcceptB0 = new TH2D("h2_n_pTheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_nRot_pTheta_RecoAcceptB0 = new TH2D("h2_nRot_pTheta_RecoAcceptB0", "B0 Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_n_pTheta_RecoAcceptB0 = new TH2D("h2_n_pTheta_RecoAcceptB0", "B0 Reconstructed;#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
+    TH2D* h2_nRot_pTheta_RecoAcceptB0 = new TH2D("h2_nRot_pTheta_RecoAcceptB0", "B0 Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts", "e' Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts", "#pi Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_n_pTheta_RecoDEMPAcceptB0_NoCuts", "Neutron Reconstructed DEMP Accepted (B0), No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
@@ -546,18 +546,20 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_tBABEComp = new TH2D("h2_tBABEComp", "-t_{BABE} vs -t_{MC}; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
     TH2D* h2_teXComp = new TH2D("h2_teXComp", "-t_{eX} vs -t_{MC}; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
     TH2D* h2_teXPTComp = new TH2D("h2_teXPTComp", "-t_{eXPT} vs -t_{MC}; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
-    TH2D* h2_teXBABEComp = new TH2D("h2_teXBABEComp", "-t_{eXBABE} vs -t_{MC}; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+    TH2D* h2_teXBABECompAlt = new TH2D("h2_teXBABECompAlt", "-t_{eXBABE} vs -t_{MC}; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 50, 0, 0.5, 50, 0, 0.5);
     if(ZDC == kTRUE){
       TH2D* h2_tBABEComp_ZDC = new TH2D("h2_tBABEComp_ZDC", "-t_{BABE} vs -t_{MC}, n ZDC Hits; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXComp_ZDC = new TH2D("h2_teXComp_ZDC", "-t_{eX} vs -t_{MC}, n ZDC Hits; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXPTComp_ZDC = new TH2D("h2_teXPTComp_ZDC", "-t_{eXPT} vs -t_{MC}, n ZDC Hits; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXBABEComp_ZDC = new TH2D("h2_teXBABEComp_ZDC", "-t_{eXBABE} vs -t_{MC}, n ZDC Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXBABECompAlt_ZDC = new TH2D("h2_teXBABECompAlt_ZDC", "-t_{eXBABE} vs -t_{MC}, n ZDC Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 50, 0, 0.5, 50, 0, 0.5);
     }
     if(B0 == kTRUE){
       TH2D* h2_tBABEComp_B0 = new TH2D("h2_tBABEComp_B0", "-t_{BABE} vs -t_{MC}, n B0 Hits; -t_{BABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXComp_B0 = new TH2D("h2_teXComp_B0", "-t_{eX} vs -t_{MC}, n B0 Hits; -t_{eX} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXPTComp_B0 = new TH2D("h2_teXPTComp_B0", "-t_{eXPT} vs -t_{MC}, n B0 Hits; -t_{eXPT} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
       TH2D* h2_teXBABEComp_B0 = new TH2D("h2_teXBABEComp_B0", "-t_{eXBABE} vs -t_{MC}, n B0 Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 40, 0, 1.6, 40, 0, 1.6);
+      TH2D* h2_teXBABECompAlt_B0 = new TH2D("h2_teXBABECompAlt_B0", "-t_{eXBABE} vs -t_{MC}, n B0 Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 50, 0, 0.5, 50, 0, 0.5);
     }
     gDirectory->cd("../../");
   }

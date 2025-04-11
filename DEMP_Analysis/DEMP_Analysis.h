@@ -354,6 +354,12 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     tmpHist2D->Draw("colz");
     c_ZDC_XY->SetLogz();
     c_ZDC_XY->Print(Form("%s/%s_ZDC_XY.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_n_pTheta_RecoAcceptZDC"));
+    TCanvas* c_n_pTheta_RecoAcceptZDC = new TCanvas("c_n_pTheta_RecoAcceptZDC", "n p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_n_pTheta_RecoAcceptZDC->SetLogz();
+    c_n_pTheta_RecoAcceptZDC->Print(Form("%s/%s_n_Rec_pThetaZDC.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
   }
   if(B0 == kTRUE){
@@ -364,6 +370,12 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     tmpHist2D->Draw("colz");
     c_B0_XY->SetLogz();
     c_B0_XY->Print(Form("%s/%s_B0_XY.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_n_pTheta_RecoAcceptB0"));
+    TCanvas* c_n_pTheta_RecoAcceptB0 = new TCanvas("c_n_pTheta_RecoAcceptB0", "n p vs #theta", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_n_pTheta_RecoAcceptB0->SetLogz();
+    c_n_pTheta_RecoAcceptB0->Print(Form("%s/%s_n_Rec_pThetaB0.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
   }
   if(QA == kTRUE){
@@ -409,6 +421,12 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
       tmpHist2D->Draw("colz");
       c_teXBABEComp_ZDC->SetLogz();
       c_teXBABEComp_ZDC->Print(Form("%s/%s_tComp_ZDC.png", OutDir, InBeamE.Data()));      
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABECompAlt_ZDC"));
+      TCanvas* c_teXBABECompAlt_ZDC = new TCanvas("c_teXBABECompAlt_ZDC", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_teXBABECompAlt_ZDC->SetLogz();
+      c_teXBABECompAlt_ZDC->Print(Form("%s/%s_tCompAlt_ZDC.png", OutDir, InBeamE.Data()));      
     }
     if(B0 == kTRUE){
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_B0"));
@@ -416,7 +434,13 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
       tmpHist2D->SetTitle("");
       tmpHist2D->Draw("colz");
       c_teXBABEComp_B0->SetLogz();
-      c_teXBABEComp_B0->Print(Form("%s/%s_tComp_B0.png", OutDir, InBeamE.Data()));      
+      c_teXBABEComp_B0->Print(Form("%s/%s_tComp_B0.png", OutDir, InBeamE.Data()));
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABECompAlt_B0"));
+      TCanvas* c_teXBABECompAlt_B0 = new TCanvas("c_teXBABECompAlt_B0", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_teXBABECompAlt_B0->SetLogz();
+      c_teXBABECompAlt_B0->Print(Form("%s/%s_tCompAlt_B0.png", OutDir, InBeamE.Data()));      
     }
     gDirectory->cd("../../");
   }
