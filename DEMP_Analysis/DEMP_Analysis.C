@@ -366,12 +366,14 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
   FillHist1D("h1_y_Reco", y_Rec, wgt);
   FillHist1D("h1_DeltaTheta_Reco", nTheta_Diff, wgt);
   FillHist1D("h1_DeltaPhi_Reco", nPhi_Diff, wgt);
+  FillHist1D("h1_MissMass", MMiss, wgt);
   FillHist2D("h2_Q2tBABE_Reco", Q2_Rec, t_BABE, wgt);
   FillHist2D("h2_Q2teX_Reco", Q2_Rec, t_eX, wgt);
   FillHist2D("h2_Q2teXPT_Reco", Q2_Rec, t_eXPT, wgt);
   FillHist2D("h2_Q2teXBABE_Reco", Q2_Rec, t_eXBABE, wgt);
   FillHist2D("h2_WQ2_Reco", W_Rec, Q2_Rec, wgt);
   FillHist2D("h2_DeltaThetaPhi_Reco", nTheta_Diff, nPhi_Diff, wgt);
+  FillHist2D("h2_DeltaRotThetaRotPhi_Reco", nRotTheta_Diff, nRotPhi_Diff, wgt);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   FillHist1D("h1_Q2_MCDEMPAccept", Q2_MC, wgt);
@@ -401,12 +403,14 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_y_ZDCReco", y_Rec, wgt);
     FillHist1D("h1_DeltaTheta_ZDCReco", nTheta_Diff, wgt);
     FillHist1D("h1_DeltaPhi_ZDCReco", nPhi_Diff, wgt);
+    FillHist1D("h1_MissMass_ZDCReco", MMiss, wgt);
     FillHist2D("h2_Q2tBABE_ZDCReco",Q2_Rec, t_BABE, wgt);
     FillHist2D("h2_Q2teX_ZDCReco",Q2_Rec, t_eX, wgt);
     FillHist2D("h2_Q2teXPT_ZDCReco", Q2_Rec, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_ZDCReco", Q2_Rec, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_ZDCReco", W_Rec, Q2_Rec, wgt);
     FillHist2D("h2_DeltaThetaPhi_ZDCReco", nTheta_Diff, nPhi_Diff, wgt);
+    FillHist2D("h2_DeltaRotThetaRotPhi_ZDCReco", nRotTheta_Diff, nRotPhi_Diff, wgt);
     gDirectory->cd("../../../");
     gDirectory->cd("KinematicDists/MC/ZDC");
     FillHist1D("h1_Q2_MCDEMPAcceptZDC", Q2_MC, wgt);
@@ -437,12 +441,14 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_y_B0Reco", y_Rec, wgt);
     FillHist1D("h1_DeltaTheta_B0Reco", nTheta_Diff, wgt);
     FillHist1D("h1_DeltaPhi_B0Reco", nPhi_Diff, wgt);
+    FillHist1D("h1_MissMass_B0Reco", MMiss, wgt);
     FillHist2D("h2_Q2tBABE_B0Reco",Q2_Rec, t_BABE, wgt);
     FillHist2D("h2_Q2teX_B0Reco",Q2_Rec, t_eX, wgt);
     FillHist2D("h2_Q2teXPT_B0Reco", Q2_Rec, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_B0Reco", Q2_Rec, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_B0Reco", W_Rec, Q2_Rec, wgt);
     FillHist2D("h2_DeltaThetaPhi_B0Reco", nTheta_Diff, nPhi_Diff, wgt);
+    FillHist2D("h2_DeltaRotThetaRotPhi_B0Reco", nRotTheta_Diff, nRotPhi_Diff, wgt);
     gDirectory->cd("../../../");
     gDirectory->cd("KinematicDists/MC/B0");
     FillHist1D("h1_Q2_MCDEMPAcceptB0", Q2_MC, wgt);
@@ -472,12 +478,14 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   FillHist1D("h1_teXBABE_Reco_NoCuts", t_eXBABE, wgt);
   FillHist1D("h1_DeltaTheta_Reco_NoCuts", nTheta_Diff, wgt);
   FillHist1D("h1_DeltaPhi_Reco_NoCuts", nPhi_Diff, wgt);
+  FillHist1D("h1_MissMass_NoCuts", MMiss , wgt);
   FillHist2D("h2_Q2tBABE_Reco_NoCuts", Q2_Rec, t_BABE, wgt);
   FillHist2D("h2_Q2teX_Reco_NoCuts", Q2_Rec, t_eX, wgt);
   FillHist2D("h2_Q2teXPT_Reco_NoCuts", Q2_Rec, t_eXPT, wgt);
   FillHist2D("h2_Q2teXBABE_Reco_NoCuts", Q2_Rec, t_eXBABE, wgt);
   FillHist2D("h2_WQ2_Reco_NoCuts", W_Rec, Q2_Rec, wgt);
   FillHist2D("h2_DeltaThetaPhi_Reco_NoCuts", nTheta_Diff, nPhi_Diff, wgt);
+  FillHist2D("h2_DeltaRotThetaRotPhi_Reco_NoCuts", nRotTheta_Diff, nRotPhi_Diff, wgt);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   // Fill truth t distributions for DEMP events before cuts
@@ -495,11 +503,13 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     FillHist1D("h1_DeltaTheta_ZDCReco_NoCuts", nTheta_Diff, wgt);
     FillHist1D("h1_DeltaPhi_ZDCReco_NoCuts", nPhi_Diff, wgt);
     FillHist2D("h2_Q2tBABE_ZDCReco_NoCuts", Q2_Rec, t_BABE, wgt);
+    FillHist1D("h1_MissMass_ZDCReco_NoCuts", MMiss , wgt);
     FillHist2D("h2_Q2teX_ZDCReco_NoCuts", Q2_Rec, t_eX, wgt);
     FillHist2D("h2_Q2teXPT_ZDCReco_NoCuts", Q2_Rec, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_ZDCReco_NoCuts", Q2_Rec, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_ZDCReco_NoCuts", W_Rec, Q2_Rec, wgt);
     FillHist2D("h2_DeltaThetaPhi_ZDCReco_NoCuts", nTheta_Diff, nPhi_Diff, wgt);
+    FillHist2D("h2_DeltaRotThetaRotPhi_ZDCReco_NoCuts", nRotTheta_Diff, nRotPhi_Diff, wgt);
     gDirectory->cd("../../../");
     gDirectory->cd("KinematicDists/MC/ZDC");
     FillHist1D("h1_t_MCDEMPAcceptZDC_NoCuts", t_MC, wgt);
@@ -515,12 +525,14 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     FillHist1D("h1_teXBABE_B0Reco_NoCuts", t_eXBABE, wgt);
     FillHist1D("h1_DeltaTheta_B0Reco_NoCuts", nTheta_Diff, wgt);
     FillHist1D("h1_DeltaPhi_B0Reco_NoCuts", nPhi_Diff, wgt);
+    FillHist1D("h1_MissMass_B0Reco_NoCuts", MMiss , wgt);
     FillHist2D("h2_Q2tBABE_B0Reco_NoCuts", Q2_Rec, t_BABE, wgt);
     FillHist2D("h2_Q2teX_B0Reco_NoCuts", Q2_Rec, t_eX, wgt);
     FillHist2D("h2_Q2teXPT_B0Reco_NoCuts", Q2_Rec, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_B0Reco_NoCuts", Q2_Rec, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_B0Reco_NoCuts", W_Rec, Q2_Rec, wgt);
     FillHist2D("h2_DeltaThetaPhi_B0Reco_NoCuts", nTheta_Diff, nPhi_Diff, wgt);
+    FillHist2D("h2_DeltaRotThetaRotPhi_B0Reco_NoCuts", nRotTheta_Diff, nRotPhi_Diff, wgt);
     gDirectory->cd("../../../");
     gDirectory->cd("KinematicDists/MC/B0");
     FillHist1D("h1_t_MCDEMPAcceptB0_NoCuts", t_MC, wgt);
@@ -736,6 +748,13 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<float>  PartMomZ(tree_reader, "MCParticles.momentum.z");
   TTreeReaderArray<int>    PartPdg(tree_reader, "MCParticles.PDG");
   TTreeReaderArray<double> PartMass(tree_reader,"MCParticles.mass");
+  // Get Before Afterburned information
+  TTreeReaderArray<int>    NoABPartGenStat(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.generatorStatus");
+  TTreeReaderArray<float>  NoABPartMomX(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.x");
+  TTreeReaderArray<float>  NoABPartMomY(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.y");
+  TTreeReaderArray<float>  NoABPartMomZ(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.z");
+  TTreeReaderArray<int>    NoABPartPdg(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.PDG");
+  TTreeReaderArray<double> NoABPartMass(tree_reader,"MCParticlesHeadOnFrameNoBeamFX.mass");
   // Get Reconstructed Track Information
   TTreeReaderArray<float> trackMomX(tree_reader,"ReconstructedChargedParticles.momentum.x"); 
   TTreeReaderArray<float> trackMomY(tree_reader,"ReconstructedChargedParticles.momentum.y");
@@ -753,13 +772,6 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<float> neutPosY(tree_reader, "ReconstructedFarForwardZDCNeutrals.referencePoint.y");
   TTreeReaderArray<float> neutPosZ(tree_reader, "ReconstructedFarForwardZDCNeutrals.referencePoint.z");
   TTreeReaderArray<unsigned int> neutClus(tree_reader, "ReconstructedFarForwardZDCNeutrals.clusters_end");
-  // Get Before Afterburned information
-  TTreeReaderArray<int>    NoABPartGenStat(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.generatorStatus");
-  TTreeReaderArray<float>  NoABPartMomX(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.x");
-  TTreeReaderArray<float>  NoABPartMomY(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.y");
-  TTreeReaderArray<float>  NoABPartMomZ(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.z");
-  TTreeReaderArray<int>    NoABPartPdg(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.PDG");
-  TTreeReaderArray<double> NoABPartMass(tree_reader,"MCParticlesHeadOnFrameNoBeamFX.mass");
   // B0ECalClusters
   TTreeReaderArray<float> PosX_B0(tree_reader, "B0ECalClusters.position.x");
   TTreeReaderArray<float> PosY_B0(tree_reader, "B0ECalClusters.position.y");
@@ -790,7 +802,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   //Define histograms using BeamE value and series of true false flags
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
-  // Int_t EscapeEvent = 1000;
+  //Int_t EscapeEvent = 10000;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
     if ( EventCounter % ( nEntries / 10 ) == 0 ) {
@@ -996,17 +1008,19 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	CorrectNeutronTrack(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_e_beam, Vec_p_beam); // Calculate the corrected neutron track, also sets PMiss/PMissRot
 	Calculate_t_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_n_RecCorr, Vec_e_beam, Vec_p_beam); // Calculate -t
 	nTheta_Diff = (Vec_PMiss_Rec.Theta() - Vec_n_Rec.Theta())*TMath::RadToDeg();
+	nRotTheta_Diff = ( Vec_PMissRot_Rec.Theta() - Vec_nRot_Rec.Theta())*TMath::RadToDeg();
 	nPhi_Diff = (Vec_PMiss_Rec.Phi() - Vec_n_Rec.Phi())*TMath::RadToDeg();
+	nRotPhi_Diff = ( Vec_PMissRot_Rec.Phi() - Vec_nRot_Rec.Phi())*TMath::RadToDeg();
 	MMiss = Vec_PMiss_Rec.M();
 
 	if(KinPlots == kTRUE){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	}
 
-	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nTheta_Diff > ZDCDeltaTheta_Min && nTheta_Diff < ZDCDeltaTheta_Max && nPhi_Diff > ZDCDeltaPhi_Min && nPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol){
+	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol){
 	  DEMP_PassCuts = kTRUE;
 	}
-	else if ( nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nTheta_Diff > B0DeltaTheta_Min && nTheta_Diff < B0DeltaTheta_Max && nPhi_Diff > B0DeltaPhi_Min && nPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol){
+	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol){
 	   DEMP_PassCuts = kTRUE;	  
 	 }
 
@@ -1047,6 +1061,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   // Function to draw plots and make pdf
   WritePDF(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlots(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsQA(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   
   ofile->Write(); // Write histograms to file
   ofile->Close(); // Close output file  

@@ -66,7 +66,7 @@ int eSc_Index, pi_Index, n_Index;
 Double_t Q2_MC, t_MC, W_MC, y_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, eps_MC_NoAB;
 Double_t Q2_Rec, W_Rec, y_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
-Double_t nTheta_Diff, nPhi_Diff, MMiss;
+Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff;
 Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 
 // Check files exist, can be opened and contain a relevant tree
@@ -179,8 +179,8 @@ void SetCutVals(Double_t Hadron_Beam_E){
     ZDCDeltaPhi_Max = 55;
     B0DeltaTheta_Min = -0.2;
     B0DeltaTheta_Max = 0.2;
-    B0DeltaPhi_Min = -50;
-    B0DeltaPhi_Max = 50;
+    B0DeltaPhi_Min = -25;
+    B0DeltaPhi_Max = 25;
     MissingMass_Tol= 0;
     W_Tol = 0;
   }
@@ -188,8 +188,8 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin =40;
     ZDCDeltaTheta_Min = -0.09;
     ZDCDeltaTheta_Max = 0.14;
-    ZDCDeltaPhi_Min = -45;
-    ZDCDeltaPhi_Max = 45;
+    ZDCDeltaPhi_Min = -55;
+    ZDCDeltaPhi_Max = 55;
     B0DeltaTheta_Min = -0.8;
     B0DeltaTheta_Max = 0.7;
     B0DeltaPhi_Min = -30;
@@ -201,8 +201,8 @@ void SetCutVals(Double_t Hadron_Beam_E){
     n_Emin =40;
     ZDCDeltaTheta_Min = -0.09;
     ZDCDeltaTheta_Max = 0.14;
-    ZDCDeltaPhi_Min = -45;
-    ZDCDeltaPhi_Max = 45;
+    ZDCDeltaPhi_Min = -55;
+    ZDCDeltaPhi_Max = 55;
     B0DeltaTheta_Min = -0.8;
     B0DeltaTheta_Max = 0.7;
     B0DeltaPhi_Min = -30;
@@ -291,7 +291,6 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
   if(gSystem->AccessPathName(OutDir) == kTRUE){
     gSystem->mkdir(OutDir);
   }
-
   if(EventDists == kTRUE){
     gDirectory->cd("EventDists/MC");
     tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_eSc_pTheta_MC"));
@@ -329,8 +328,58 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     gDirectory->cd("../../");
   }
   if(Kin == kTRUE){
+    gDirectory->cd("KinematicDists/Reco/");
+    tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_NoCuts");
+    TCanvas* c_MissMass_NoCuts = new TCanvas("c_MissMass_NoCuts", "Missing Mass, No Cuts", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("hist");
+    c_MissMass_NoCuts->SetLogz();
+    c_MissMass_NoCuts->Print(Form("%s/%s_MissMass_NoCuts.png", OutDir, InBeamE.Data()));
+    tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass");
+    TCanvas* c_MissMass = new TCanvas("c_MissMass", "Missing Mass, No Cuts", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("hist");
+    c_MissMass->SetLogz();
+    c_MissMass->Print(Form("%s/%s_MissMass.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_Reco_NoCuts"));
+    TCanvas* c_DeltaRotThetaRotPhi_NoCuts = new TCanvas("c_DeltaRotThetaRotPhi_NoCuts", "#Delta#theta^{*} vs #Delta#phi^{*} No Cuts", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_DeltaRotThetaRotPhi_NoCuts->SetLogz();
+    c_DeltaRotThetaRotPhi_NoCuts->Print(Form("%s/%s_DeltaRotThetaRotPhi_NoCuts.png", OutDir, InBeamE.Data()));
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_Reco"));
+    TCanvas* c_DeltaRotThetaRotPhi = new TCanvas("c_DeltaRotThetaRotPhi", "#Delta#theta^{*} vs #Delta#phi^{*}", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    c_DeltaRotThetaRotPhi->SetLogz();
+    c_DeltaRotThetaRotPhi->Print(Form("%s/%s_DeltaRotThetaRotPhi.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
     if(ZDC == kTRUE){
       gDirectory->cd("KinematicDists/Reco/ZDC");
+      tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_ZDCReco_NoCuts");
+      TCanvas* c_MissMass_ZDCReco_NoCuts = new TCanvas("c_MissMass_ZDCReco_NoCuts", "Missing Mass, n in ZDC No Cuts", 100, 0, 2560, 1920);
+      tmpHist1D->SetTitle("");
+      tmpHist1D->Draw("hist");
+      c_MissMass_ZDCReco_NoCuts->SetLogz();
+      c_MissMass_ZDCReco_NoCuts->Print(Form("%s/%s_MissMass_ZDCReco_NoCuts.png", OutDir, InBeamE.Data()));
+      tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_ZDCReco");
+      TCanvas* c_MissMass_ZDCReco = new TCanvas("c_MissMass_ZDCReco", "Missing Mass, n in ZDC No Cuts", 100, 0, 2560, 1920);
+      tmpHist1D->SetTitle("");
+      tmpHist1D->Draw("hist");
+      c_MissMass_ZDCReco->SetLogz();
+      c_MissMass_ZDCReco->Print(Form("%s/%s_MissMass_ZDCReco.png", OutDir, InBeamE.Data()));
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_ZDCReco_NoCuts"));
+      TCanvas* c_ZDC_DeltaRotThetaRotPhi_NoCuts = new TCanvas("c_ZDC_DeltaRotThetaRotPhi_NoCuts", "#Delta#theta^{*} vs #Delta#phi^{*}, n in ZDC No Cuts", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_ZDC_DeltaRotThetaRotPhi_NoCuts->SetLogz();
+      c_ZDC_DeltaRotThetaRotPhi_NoCuts->Print(Form("%s/%s_ZDC_DeltaRotThetaRotPhi_NoCuts.png", OutDir, InBeamE.Data()));
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_ZDCReco"));
+      TCanvas* c_ZDC_DeltaRotThetaRotPhi = new TCanvas("c_ZDC_DeltaRotThetaRotPhi", "#Delta#theta^{*} vs #Delta#phi^{*}, n in ZDC", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_ZDC_DeltaRotThetaRotPhi->SetLogz();
+      c_ZDC_DeltaRotThetaRotPhi->Print(Form("%s/%s_ZDC_DeltaRotThetaRotPhi.png", OutDir, InBeamE.Data()));
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaThetaPhi_ZDCReco_NoCuts"));
       TCanvas* c_ZDC_DeltaThetaDeltaPhi = new TCanvas("c_ZDC_DeltaThetaDeltaPhi", "ZDC #Delta#theta vs #Delta#phi", 100, 0, 2560, 1920);
       tmpHist2D->SetTitle("");
@@ -341,6 +390,30 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     }
     if(B0 == kTRUE){
       gDirectory->cd("KinematicDists/Reco/B0");
+      tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_B0Reco_NoCuts");
+      TCanvas* c_MissMass_B0Reco_NoCuts = new TCanvas("c_MissMass_B0Reco_NoCuts", "Missing Mass, n in B0 No Cuts", 100, 0, 2560, 1920);
+      tmpHist1D->SetTitle("");
+      tmpHist1D->Draw("hist");
+      c_MissMass_B0Reco_NoCuts->SetLogz();
+      c_MissMass_B0Reco_NoCuts->Print(Form("%s/%s_MissMass_B0Reco_NoCuts.png", OutDir, InBeamE.Data()));
+      tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_B0Reco");
+      TCanvas* c_MissMass_B0Reco = new TCanvas("c_MissMass_B0Reco", "Missing Mass, n in B0 No Cuts", 100, 0, 2560, 1920);
+      tmpHist1D->SetTitle("");
+      tmpHist1D->Draw("hist");
+      c_MissMass_B0Reco->SetLogz();
+      c_MissMass_B0Reco->Print(Form("%s/%s_MissMass_B0Reco.png", OutDir, InBeamE.Data()));
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_B0Reco_NoCuts"));
+      TCanvas* c_B0_DeltaRotThetaRotPhi_NoCuts = new TCanvas("c_B0_DeltaRotThetaRotPhi_NoCuts", "#Delta#theta^{*} vs #Delta#phi^{*}, n in B0 No Cuts", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_B0_DeltaRotThetaRotPhi_NoCuts->SetLogz();
+      c_B0_DeltaRotThetaRotPhi_NoCuts->Print(Form("%s/%s_B0_DeltaRotThetaRotPhi_NoCuts.png", OutDir, InBeamE.Data()));
+      tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_B0Reco"));
+      TCanvas* c_B0_DeltaRotThetaRotPhi = new TCanvas("c_B0_DeltaRotThetaRotPhi", "#Delta#theta^{*} vs #Delta#phi^{*}, n in B0", 100, 0, 2560, 1920);
+      tmpHist2D->SetTitle("");
+      tmpHist2D->Draw("colz");
+      c_B0_DeltaRotThetaRotPhi->SetLogz();
+      c_B0_DeltaRotThetaRotPhi->Print(Form("%s/%s_B0_DeltaRotThetaRotPhi.png", OutDir, InBeamE.Data()));
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaThetaPhi_B0Reco_NoCuts"));
       TCanvas* c_B0_DeltaThetaDeltaPhi = new TCanvas("c_B0_DeltaThetaDeltaPhi", "B0 #Delta#theta vs #Delta#phi", 100, 0, 2560, 1920);
       tmpHist2D->SetTitle("");
@@ -382,6 +455,17 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     c_n_pTheta_RecoAcceptB0->Print(Form("%s/%s_n_Rec_pThetaB0.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
   }
+}
+
+void WritePlotsQA(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
+
+  TH1D* tmpHist1D;
+  TH2D* tmpHist2D;
+  auto OutDir = Form("%s_%s_%s_%s_Results", Inpart.Data(), InBeamE.Data(), InDate.Data(), InBeamConfig.Data());
+  if(gSystem->AccessPathName(OutDir) == kTRUE){
+    gSystem->mkdir(OutDir);
+  }
+  
   if(QA == kTRUE){
     gDirectory->cd("QADists/Efficiencies");
     tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_Q2t_effDEMPCut_ZDC"));
@@ -417,8 +501,8 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     Leg_tComp->Draw("SAME");
     c_tComp->Print(Form("%s/%s_tComp.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
-    gDirectory->cd("QADists/tComp");
     if(ZDC == kTRUE){
+      gDirectory->cd("QADists/tComp");
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_ZDC"));
       TCanvas* c_teXBABEComp_ZDC = new TCanvas("c_teXBABEComp_ZDC", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
       tmpHist2D->SetTitle("");
@@ -431,8 +515,10 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
       tmpHist2D->Draw("colz");
       c_teXBABECompAlt_ZDC->SetLogz();
       c_teXBABECompAlt_ZDC->Print(Form("%s/%s_tCompAlt_ZDC.png", OutDir, InBeamE.Data()));      
+      gDirectory->cd("../../");
     }
     if(B0 == kTRUE){
+      gDirectory->cd("QADists/tComp");
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_B0"));
       TCanvas* c_teXBABEComp_B0 = new TCanvas("c_teXBABEComp_B0", "t_{eXBABE} vs t_{MC}", 100, 0, 2560, 1920);
       tmpHist2D->SetTitle("");
@@ -444,9 +530,9 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
       tmpHist2D->SetTitle("");
       tmpHist2D->Draw("colz");
       c_teXBABECompAlt_B0->SetLogz();
-      c_teXBABECompAlt_B0->Print(Form("%s/%s_tCompAlt_B0.png", OutDir, InBeamE.Data()));      
+      c_teXBABECompAlt_B0->Print(Form("%s/%s_tCompAlt_B0.png", OutDir, InBeamE.Data()));
+      gDirectory->cd("../../");
     }
-    gDirectory->cd("../../");
   }
   if(Results == kTRUE){
     gDirectory->cd("ResultsDists/");
@@ -468,10 +554,6 @@ void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString I
     gDirectory->cd("../");
   }
 }
-
-// // Print Canvases for presentation plots as pngs
-  // c11->Print("10x130_trec_ttruth.png"); // t truth vs reco
-  // c30a->Print("10x130_DEMP_MissingMass.png");
 
 void WriteCSV(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t ZDC, Bool_t B0){
   auto OutDir = Form("%s_%s_%s_%s_Results", Inpart.Data(), InBeamE.Data(), InDate.Data(), InBeamConfig.Data());
