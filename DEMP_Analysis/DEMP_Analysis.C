@@ -205,6 +205,7 @@ void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC
   FillHist2D("h2_Pi_pTheta_RecoDEMPAccept_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
   FillHist2D("h2_n_pTheta_RecoDEMPAccept_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
   FillHist2D("h2_nRot_pTheta_RecoDEMPAccept_NoCuts", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  FillHist2D("h2_n_XY_10m_RecoDEMPAccept_NoCuts", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
   gDirectory->cd("../../");
   if(ZDC == kTRUE && nZDC == kTRUE){
     gDirectory->cd("ZDCDists/MC");
@@ -219,6 +220,7 @@ void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptZDC_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptZDC_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptZDC_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+    FillHist2D("h2_n_XY_10m_RecoDEMPAcceptZDC_NoCuts", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
     gDirectory->cd("../../");
   }
   if(B0 == kTRUE && nB0 == kTRUE){
@@ -234,6 +236,7 @@ void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptB0_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptB0_NoCuts", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptB0_NoCuts", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+    FillHist2D("h2_n_XY_10m_RecoDEMPAcceptB0_NoCuts", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
     gDirectory->cd("../../");
   }
 }
@@ -321,6 +324,7 @@ void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, 
   FillHist2D("h2_Pi_pTheta_RecoDEMPAccept", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
   FillHist2D("h2_n_pTheta_RecoDEMPAccept", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
   FillHist2D("h2_nRot_pTheta_RecoDEMPAccept", nRot_Rec.Theta()*TMath::RadToDeg(), nRot_Rec.P(), wgt);
+  FillHist2D("h2_n_XY_10m_RecoDEMPAccept", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
   gDirectory->cd("../../");
   if(ZDC == kTRUE && nZDC == kTRUE){
     gDirectory->cd("ZDCDists/MC");
@@ -335,6 +339,7 @@ void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, 
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptZDC", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptZDC", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptZDC", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+    FillHist2D("h2_n_XY_10m_RecoDEMPAcceptZDC", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
     gDirectory->cd("../../");
   }
   if(B0 == kTRUE && nB0 == kTRUE){
@@ -350,6 +355,7 @@ void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, 
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptB0", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptB0", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptB0", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
+    FillHist2D("h2_n_XY_10m_RecoDEMPAcceptB0", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
     gDirectory->cd("../../");
   }  
 }
@@ -1061,6 +1067,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   // Function to draw plots and make pdf
   WritePDF(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlots(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsKin(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlotsQA(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   
   ofile->Write(); // Write histograms to file
