@@ -69,6 +69,8 @@ Double_t Q2_Rec, W_Rec, y_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add o
 Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff;
 Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 
+Double_t Q2_JB, y_JB, Q2_DA, y_DA, Q2_Sig, y_Sig, delta_h, pt2_h, alpha_e, alpha_h;
+
 // Check files exist, can be opened and contain a relevant tree
 Bool_t CheckFiles(TString Files[3]){
   Bool_t FileCheck = kTRUE;
@@ -130,6 +132,19 @@ void CalculateBasicKinematics_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Re
   W_Rec = (Vec_Q_Rec + HBeam).mag();
   y_Rec =(HBeam.Dot(Vec_Q_Rec))/(HBeam.Dot(EBeam));
   eps_Rec = (2*(1-y_Rec))/(1+(pow(1-y_Rec,2)));
+}
+
+void CalculateKinematics_Q2Alt_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+  delta_h = (pi_Rec.E() + n_Rec.E()) - (pi_Rec.Pz() + n_Rec.Pz());
+  pt2_h = (pow((pi_Rec.Px()+n_Rec.Px()),2))+(pow((pi_Rec.Py()+n_Rec.Py()),2));
+  alpha_e = tan((eSc_Rec.Theta()/2));
+  alpha_h = delta_h/(sqrt(pt2_h));
+  y_JB = delta_h/(2*EBeam.E());
+  Q2_JB = pt2_h/(1-y_JB);
+  y_DA = (alpha_h)/(alpha_e + alpha_h);
+  Q2_DA = (4*EBeam.E()*EBeam.E())/(alpha_e*(alpha_e +alpha_h));
+  y_Sig = delta_h/(delta_h + (eSc_Rec.E()*(1-cos(eSc_Rec.Theta()))));
+  Q2_Sig = (pow(eSc_Rec.E(),2)*pow(sin(eSc_Rec.Theta()),2))/(1-y_Sig);
 }
 
 void CorrectNeutronTrack(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
@@ -273,6 +288,7 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
     gDirectory->mkdir("QADists/PartRes");
     gDirectory->mkdir("QADists/Efficiencies");
     gDirectory->mkdir("QADists/tComp");
+    gDirectory->mkdir("QADists/Q2_Alt");
   }
   if(Results == kTRUE){
     gDirectory->mkdir("ResultsDists");
@@ -572,16 +588,22 @@ void WritePlotsQA(TString InBeamE, TString InDate, TString InBeamConfig, TString
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
     TCanvas* c_tResult_ZDC_1 = new TCanvas("c_tResult_ZDC_1", "-t, 5 < Q^{2} < 7.5", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_1->Print(Form("%s/%s_tResult_Q2_5_7p5.png", OutDir, InBeamE.Data()));
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_4"));
     TCanvas* c_tResult_ZDC_4 = new TCanvas("c_tResult_ZDC_4", "-t, 15 < Q^{2} < 20", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_4->Print(Form("%s/%s_tResult_Q2_15_20.png", OutDir, InBeamE.Data()));
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_7"));
     TCanvas* c_tResult_ZDC_7 = new TCanvas("c_tResult_ZDC_7", "-t, 30 < Q^{2} < 35", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_7->Print(Form("%s/%s_tResult_Q2_30_35.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../");

@@ -633,6 +633,27 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("../../");
 }
 
+void FillDEMP_Q2Alt(float wgt){
+  gDirectory->cd("QADists/Q2_Alt");
+  FillHist1D("h1_QA_Q2Rec",Q2_Rec, wgt);
+  FillHist1D("h1_QA_Q2JB",Q2_JB, wgt);
+  FillHist1D("h1_QA_Q2DA",Q2_DA, wgt);
+  FillHist1D("h1_QA_Q2Sig",Q2_Sig, wgt);
+  FillHist1D("h1_QA_yRec",y_Rec, wgt);
+  FillHist1D("h1_QA_yJB",y_JB, wgt);
+  FillHist1D("h1_QA_yDA",y_DA, wgt);
+  FillHist1D("h1_QA_ySig",y_Sig, wgt);
+  FillHist1D("h1_QA_Q2Rec_Res",(Q2_Rec-Q2_MC)/Q2_MC*100, wgt);
+  FillHist1D("h1_QA_Q2JB_Res",(Q2_JB-Q2_MC)/Q2_MC*100, wgt);
+  FillHist1D("h1_QA_Q2DA_Res",(Q2_DA-Q2_MC)/Q2_MC*100, wgt);
+  FillHist1D("h1_QA_Q2Sig_Res",(Q2_Sig-Q2_MC)/Q2_MC*100, wgt);
+  FillHist1D("h1_QA_yRec_Res",(y_Rec-y_MC)/y_MC*100, wgt);
+  FillHist1D("h1_QA_yJB_Res",(y_JB-y_MC)/y_MC*100, wgt);
+  FillHist1D("h1_QA_yDA_Res",(y_DA-y_MC)/y_MC*100, wgt);
+  FillHist1D("h1_QA_ySig_Res",(y_Sig-y_MC)/y_MC*100, wgt);
+  gDirectory->cd("../../");
+}
+
 void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("QADists/PartRes");
   FillHist1D("h1_eSc_p_Res_QA", ((eSc_Rec.P()-eSc_MC.P())/eSc_MC.P())*100, wgt);
@@ -815,7 +836,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
     }
     // if (EventCounter > EscapeEvent){
-    //   continue;
+    //    continue;
     // }
     Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
     gDirectory->cd("EventDists/MC");
@@ -1009,9 +1030,12 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       if(KinPlots == kTRUE){
 	FillDEMPAccept_Kin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
       }
-      
+      CorrectNeutronTrack(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_e_beam, Vec_p_beam); // Calculate the corrected neutron track, also sets PMiss/PMissRot
+      CalculateKinematics_Q2Alt_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_RecCorr, Vec_e_beam, Vec_p_beam);
+      if (QAPlots == kTRUE){
+	FillDEMP_Q2Alt(weight[0]);
+      }
       if (Q2_Rec > 5 && Q2_Rec < 35){ //Cut on reconstructed Q2
-	CorrectNeutronTrack(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_e_beam, Vec_p_beam); // Calculate the corrected neutron track, also sets PMiss/PMissRot
 	Calculate_t_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_n_RecCorr, Vec_e_beam, Vec_p_beam); // Calculate -t
 	nTheta_Diff = (Vec_PMiss_Rec.Theta() - Vec_n_Rec.Theta())*TMath::RadToDeg();
 	nRotTheta_Diff = ( Vec_PMissRot_Rec.Theta() - Vec_nRot_Rec.Theta())*TMath::RadToDeg();
@@ -1027,8 +1051,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  DEMP_PassCuts = kTRUE;
 	}
 	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol){
-	   DEMP_PassCuts = kTRUE;	  
-	 }
+	  DEMP_PassCuts = kTRUE;	  
+	}
 
 	if(DEMP_PassCuts == kTRUE){
 	  // Fill lots of plots and fill histograms

@@ -581,6 +581,24 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       TH2D* h2_teXBABECompAlt_B0 = new TH2D("h2_teXBABECompAlt_B0", "-t_{eXBABE} vs -t_{MC}, n B0 Hits; -t_{eXBABE} (GeV/c); -t_{MC} (GeV/c); Rate/bin (Hz)", 50, 0, 0.5, 50, 0, 0.5);
     }
     gDirectory->cd("../../");
+    gDirectory->cd("QADists/Q2_Alt");
+    TH1D* h1_QA_Q2Rec = new TH1D("h1_QA_Q2Rec", "Q^{2}_{Rec} Distribution;Q^{2}_{Rec} (GeV/c^{2});Rate/bin(Hz) ", 100, 0, 50);
+    TH1D* h1_QA_Q2JB = new TH1D("h1_QA_Q2JB", "Q^{2}_{JB} Distribution;Q^{2}_{JB} (GeV/c^{2});Rate/bin(Hz) ", 100, 0, 50);
+    TH1D* h1_QA_Q2DA = new TH1D("h1_QA_Q2DA", "Q^{2}_{DA} Distribution;Q^{2}_{DA} (GeV/c^{2});Rate/bin(Hz) ", 100, 0, 50);
+    TH1D* h1_QA_Q2Sig = new TH1D("h1_QA_Q2Sig", "Q^{2}_{Sig} Distribution;Q^{2}_{Sig} (GeV/c^{2});Rate/bin(Hz) ", 100, 0, 50);
+    TH1D* h1_QA_yRec = new TH1D("h1_QA_yRec", "y_{Rec} Distribution;y_{Rec};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_yJB = new TH1D("h1_QA_yJB", "y_{JB} Distribution;y_{JB};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_yDA = new TH1D("h1_QA_yDA", "y_{DA} Distribution;y_{DA};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_ySig = new TH1D("h1_QA_ySig", "y_{Sig} Distribution;y_{Sig};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_Q2Rec_Res = new TH1D("h1_QA_Q2Rec_Res", "Q^{2}_{Rec} Resolution;100*(Q^{2}_{Rec}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_Q2JB_Res = new TH1D("h1_QA_Q2JB_Res", "Q^{2}_{JB} Resolution;100*(Q^{2}_{JB}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_Q2DA_Res = new TH1D("h1_QA_Q2DA_Res", "Q^{2}_{DA} Resolution;100*(Q^{2}_{DA}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_Q2Sig_Res = new TH1D("h1_QA_Q2Sig_Res", "Q^{2}_{Sig} Resolution;100*(Q^{2}_{Sig}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_yRec_Res = new TH1D("h1_QA_yRec_Res", "y_{Rec} Resolution;100*(y_{Rec}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_yJB_Res = new TH1D("h1_QA_yJB_Res", "y_{JB} Resolution;100*(y_{JB}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_yDA_Res = new TH1D("h1_QA_yDA_Res", "y_{DA} Resolution;100*(y_{DA}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH1D* h1_QA_ySig_Res = new TH1D("h1_QA_ySig_Res", "y_{Sig} Resolution;100*(y_{Sig}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    gDirectory->cd("../../");
   }
   if (Results == kTRUE){
     gDirectory->cd("ResultsDists");
