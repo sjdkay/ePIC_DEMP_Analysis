@@ -590,6 +590,10 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_QA_yJB = new TH1D("h1_QA_yJB", "y_{JB} Distribution;y_{JB};Rate/bin(Hz) ", 100, 0, 1);
     TH1D* h1_QA_yDA = new TH1D("h1_QA_yDA", "y_{DA} Distribution;y_{DA};Rate/bin(Hz) ", 100, 0, 1);
     TH1D* h1_QA_ySig = new TH1D("h1_QA_ySig", "y_{Sig} Distribution;y_{Sig};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_xRec = new TH1D("h1_QA_xRec", "x_{Rec} Distribution;x_{Rec};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_xJB = new TH1D("h1_QA_xJB", "x_{JB} Distribution;x_{JB};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_xDA = new TH1D("h1_QA_xDA", "x_{DA} Distribution;x_{DA};Rate/bin(Hz) ", 100, 0, 1);
+    TH1D* h1_QA_xSig = new TH1D("h1_QA_xSig", "x_{Sig} Distribution;x_{Sig};Rate/bin(Hz) ", 100, 0, 1);
     TH1D* h1_QA_Q2Rec_Res = new TH1D("h1_QA_Q2Rec_Res", "Q^{2}_{Rec} Resolution;100*(Q^{2}_{Rec}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
     TH1D* h1_QA_Q2JB_Res = new TH1D("h1_QA_Q2JB_Res", "Q^{2}_{JB} Resolution;100*(Q^{2}_{JB}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
     TH1D* h1_QA_Q2DA_Res = new TH1D("h1_QA_Q2DA_Res", "Q^{2}_{DA} Resolution;100*(Q^{2}_{DA}-Q^{2}_{MC})/Q^{2}_{MC};Rate/bin(Hz) ", 200, -100, 100);
@@ -598,46 +602,90 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_QA_yJB_Res = new TH1D("h1_QA_yJB_Res", "y_{JB} Resolution;100*(y_{JB}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
     TH1D* h1_QA_yDA_Res = new TH1D("h1_QA_yDA_Res", "y_{DA} Resolution;100*(y_{DA}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
     TH1D* h1_QA_ySig_Res = new TH1D("h1_QA_ySig_Res", "y_{Sig} Resolution;100*(y_{Sig}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
+    TH2D* h2_QA_Q2Rec_Q2MC = new TH2D("h2_QA_Q2Rec_Q2MC","Q^{2}_{Rec} vs Q^{2}_{MC}; Q^{2}_{Rec} (GeV/c^{2}); Q^{2}_{MC} (GeV/c^{2}); Rate/bin(Hz)", 100, 0, 50, 100, 0, 50);
+    TH2D* h2_QA_Q2DA_Q2MC = new TH2D("h2_QA_Q2DA_Q2MC","Q^{2}_{DA} vs Q^{2}_{MC}; Q^{2}_{DA} (GeV/c^{2}); Q^{2}_{MC} (GeV/c^{2}); Rate/bin(Hz)", 100, 0, 50, 100, 0, 50);
+    TH2D* h2_QA_Q2Rec_Q2Res = new TH2D("h2_QA_Q2Rec_Q2Res","Q^{2}_{Rec} vs Q^{2}_{Res}; Q^{2}_{Rec} (GeV/c^{2}); 100*(Q^{2}_{Rec}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
+    TH2D* h2_QA_Q2DA_Q2Res = new TH2D("h2_QA_Q2DA_Q2Res","Q^{2}_{DA} vs Q^{2}_{Res}, Q^{2}_{DA} (GeV/c^{2}); 100*(Q^{2}_{DA}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
     gDirectory->cd("../../");
   }
   if (Results == kTRUE){
     gDirectory->cd("ResultsDists");
-    TH1D* h1_tResult[8];
-    TH1D* h1_Q2Result[8];
-    TH1D* h1_WResult[8];
-    TH1D* h1_tResult_ZDC[8];
-    TH1D* h1_Q2Result_ZDC[8];
-    TH1D* h1_WResult_ZDC[8];   
-    TH1D* h1_tResult_B0[8];
-    TH1D* h1_Q2Result_B0[8];
-    TH1D* h1_WResult_B0[8];
+    /* TH1D* h1_tResult[8]; */
+    /* TH1D* h1_Q2Result[8]; */
+    /* TH1D* h1_WResult[8]; */
+    /* TH1D* h1_tResult_ZDC[8]; */
+    /* TH1D* h1_Q2Result_ZDC[8]; */
+    /* TH1D* h1_WResult_ZDC[8];    */
+    /* TH1D* h1_tResult_B0[8]; */
+    /* TH1D* h1_Q2Result_B0[8]; */
+    /* TH1D* h1_WResult_B0[8]; */
+   
+    /* h1_tResult[0] = new TH1D("h1_tResult_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6); */
+    /* h1_Q2Result[0] = new TH1D("h1_Q2Result_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35; Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35); */
+    /* h1_WResult[0] = new TH1D("h1_WResult_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30); */
+
+    /* if(ZDC == kTRUE){ */
+    /*   h1_tResult_ZDC[0] = new TH1D("h1_tResult_ZDC_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6); */
+    /*   h1_Q2Result_ZDC[0] = new TH1D("h1_Q2Result_ZDC_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35); */
+    /*   h1_WResult_ZDC[0] = new TH1D("h1_WResult_ZDC_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30); */
+    /* } */
+    /* if (B0 == kTRUE){ */
+    /*   h1_tResult_B0[0] = new TH1D("h1_tResult_B0_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6); */
+    /*   h1_Q2Result_B0[0] = new TH1D("h1_Q2Result_B0_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35); */
+    /*   h1_WResult_B0[0] = new TH1D("h1_WResult_B0_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30); */
+    /* } */
+
+    /* for(Int_t i = 0; i < 7; i++){ */
+    /*   h1_tResult[i+1] = new TH1D(Form("h1_tResult_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6); */
+    /*   h1_Q2Result[i+1] = new TH1D(Form("h1_Q2Result_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35); */
+    /*   h1_WResult[i+1] = new TH1D(Form("h1_WResult_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30); */
+    /*   if(ZDC == kTRUE){ */
+    /* 	h1_tResult_ZDC[i+1] = new TH1D(Form("h1_tResult_ZDC_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6); */
+    /* 	h1_Q2Result_ZDC[i+1] = new TH1D(Form("h1_Q2Result_ZDC_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35); */
+    /* 	h1_WResult_ZDC[i+1] = new TH1D(Form("h1_WResult_ZDC_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30); */
+    /* } */
+    /*   if(B0 == kTRUE){ */
+    /* 	h1_tResult_B0[i+1] = new TH1D(Form("h1_tResult_B0_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6); */
+    /* 	h1_Q2Result_B0[i+1] = new TH1D(Form("h1_Q2Result_B0_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35); */
+    /* 	h1_WResult_B0[i+1] = new TH1D(Form("h1_WResult_B0_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30); */
+    /*   } */
+    /* } */
+    TH1D* h1_tResult[31];
+    TH1D* h1_Q2Result[31];
+    TH1D* h1_WResult[31];
+    TH1D* h1_tResult_ZDC[31];
+    TH1D* h1_Q2Result_ZDC[31];
+    TH1D* h1_WResult_ZDC[31];
+    TH1D* h1_tResult_B0[31];
+    TH1D* h1_Q2Result_B0[31];
+    TH1D* h1_WResult_B0[31];
    
     h1_tResult[0] = new TH1D("h1_tResult_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6);
     h1_Q2Result[0] = new TH1D("h1_Q2Result_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35; Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
     h1_WResult[0] = new TH1D("h1_WResult_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
 
     if(ZDC == kTRUE){
-      h1_tResult_ZDC[0] = new TH1D("h1_tResult_ZDC_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6);
+      h1_tResult_ZDC[0] = new TH1D("h1_tResult_ZDC_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
       h1_Q2Result_ZDC[0] = new TH1D("h1_Q2Result_ZDC_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
       h1_WResult_ZDC[0] = new TH1D("h1_WResult_ZDC_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
     }
     if (B0 == kTRUE){
-      h1_tResult_B0[0] = new TH1D("h1_tResult_B0_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", 40, 0, 1.6);
+      h1_tResult_B0[0] = new TH1D("h1_tResult_B0_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
       h1_Q2Result_B0[0] = new TH1D("h1_Q2Result_B0_0", "Q^{2}, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
       h1_WResult_B0[0] = new TH1D("h1_WResult_B0_0", "W, DEMP Events with Cuts, 5 < Q^{2} < 35, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
     }
 
-    for(Int_t i = 0; i < 7; i++){
-      h1_tResult[i+1] = new TH1D(Form("h1_tResult_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6);
+    for(Int_t i = 0; i < 30; i++){
+      h1_tResult[i+1] = new TH1D(Form("h1_tResult_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, 0, 1.6);
       h1_Q2Result[i+1] = new TH1D(Form("h1_Q2Result_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35);
       h1_WResult[i+1] = new TH1D(Form("h1_WResult_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f; W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
       if(ZDC == kTRUE){
-	h1_tResult_ZDC[i+1] = new TH1D(Form("h1_tResult_ZDC_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6);
+	h1_tResult_ZDC[i+1] = new TH1D(Form("h1_tResult_ZDC_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, 0, 1.6);
 	h1_Q2Result_ZDC[i+1] = new TH1D(Form("h1_Q2Result_ZDC_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35);
 	h1_WResult_ZDC[i+1] = new TH1D(Form("h1_WResult_ZDC_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
     }
       if(B0 == kTRUE){
-	h1_tResult_B0[i+1] = new TH1D(Form("h1_tResult_B0_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); -t_{eXBABE} (GeV^{2}); Rate/(0.04 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 40, 0, 1.6);
+	h1_tResult_B0[i+1] = new TH1D(Form("h1_tResult_B0_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, 0, 1.6);
 	h1_Q2Result_B0[i+1] = new TH1D(Form("h1_Q2Result_B0_%i", i+1), Form("Q^{2}, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); Q^{2} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35);
 	h1_WResult_B0[i+1] = new TH1D(Form("h1_WResult_B0_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2} < %2.1f, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
       }

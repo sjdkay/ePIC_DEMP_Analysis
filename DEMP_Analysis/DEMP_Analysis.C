@@ -9,7 +9,7 @@ using namespace ROOT::Math;
 #include "TString.h"
 #include "DEMP_Analysis.h"
 #include "DEMP_Hists.h"
-#include "ECCEStyle.h"
+#include "ePICStyle.C"
 
 void FillEffRaw(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC, float wgt){
   gDirectory->cd("QADists/Efficiencies");
@@ -565,7 +565,8 @@ void FillDEMP_Results(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt)
     FillHist1D("h1_WResult_B0_0", W_Rec, wgt);
   }
   
-  for(Int_t i = 0; i < 7; i++){
+  for(Int_t i = 0; i < 30; i++){
+  //for(Int_t i = 0; i < 7; i++){
     if( Q2_Rec > Q2Vals[i] && Q2_Rec < Q2Vals[i+1]){
       FillHist1D(Form("h1_tResult_%i", i+1), t_eXBABE, wgt);
       FillHist1D(Form("h1_Q2Result_%i", i+1), Q2_Rec, wgt);
@@ -643,6 +644,10 @@ void FillDEMP_Q2Alt(float wgt){
   FillHist1D("h1_QA_yJB",y_JB, wgt);
   FillHist1D("h1_QA_yDA",y_DA, wgt);
   FillHist1D("h1_QA_ySig",y_Sig, wgt);
+  FillHist1D("h1_QA_xRec",x_Rec, wgt);
+  FillHist1D("h1_QA_xJB",x_JB, wgt);
+  FillHist1D("h1_QA_xDA",x_DA, wgt);
+  FillHist1D("h1_QA_xSig",x_Sig, wgt);
   FillHist1D("h1_QA_Q2Rec_Res",(Q2_Rec-Q2_MC)/Q2_MC*100, wgt);
   FillHist1D("h1_QA_Q2JB_Res",(Q2_JB-Q2_MC)/Q2_MC*100, wgt);
   FillHist1D("h1_QA_Q2DA_Res",(Q2_DA-Q2_MC)/Q2_MC*100, wgt);
@@ -651,6 +656,11 @@ void FillDEMP_Q2Alt(float wgt){
   FillHist1D("h1_QA_yJB_Res",(y_JB-y_MC)/y_MC*100, wgt);
   FillHist1D("h1_QA_yDA_Res",(y_DA-y_MC)/y_MC*100, wgt);
   FillHist1D("h1_QA_ySig_Res",(y_Sig-y_MC)/y_MC*100, wgt);
+  // Fill some 2D plots for the variables that look "best"
+  FillHist2D("h2_QA_Q2Rec_Q2MC", Q2_Rec, Q2_MC, wgt);
+  FillHist2D("h2_QA_Q2DA_Q2MC", Q2_DA, Q2_MC, wgt);
+  FillHist2D("h2_QA_Q2Rec_Q2Res", Q2_Rec, (Q2_Rec-Q2_MC)/Q2_MC*100, wgt);
+  FillHist2D("h2_QA_Q2DA_Q2Res", Q2_DA, (Q2_DA-Q2_MC)/Q2_MC*100, wgt);
   gDirectory->cd("../../");
 }
 
@@ -726,10 +736,7 @@ void CalcEff(Bool_t ZDC, Bool_t B0){
 void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
   
   gROOT->SetBatch(kTRUE);
-  //gROOT->ProcessLine("SetECCEStyle()");
-  gStyle->SetPadLeftMargin(0.15);
-  gStyle->SetPadRightMargin(0.18);
-  gStyle->SetTitleOffset(1.6,"z");
+  gROOT->ProcessLine("SetePICStyle()");
   gStyle->SetOptStat(0);
   
   if (BeamE == ""){
@@ -809,8 +816,13 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<unsigned int> Sim_Assoc(tree_reader, "ReconstructedParticleAssociations.simID");
   TTreeReaderArray<unsigned int> ChargedRec_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.recID");
   TTreeReaderArray<unsigned int> ChargedSim_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.simID");
+
+  auto OutDir = Form("%s_%s_%s_%s_Results", part.Data(), BeamE.Data(), Date.Data(), BeamConfig.Data());
+  if(gSystem->AccessPathName(OutDir) == kTRUE){
+    gSystem->mkdir(OutDir);
+  }
   
-  TFile *ofile = TFile::Open(Form("%s_%s_%s_%s_OutputHists.root", part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
+  TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir, part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
   
   Double_t ElecE = ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atof();
   Double_t HadE = ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atof();
@@ -829,14 +841,14 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   //Define histograms using BeamE value and series of true false flags
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
-  //Int_t EscapeEvent = 10000;
+  //Int_t EscapeEvent = 1000;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
     if ( EventCounter % ( nEntries / 10 ) == 0 ) {
       cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
     }
     // if (EventCounter > EscapeEvent){
-    //    continue;
+    //   continue;
     // }
     Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
     gDirectory->cd("EventDists/MC");

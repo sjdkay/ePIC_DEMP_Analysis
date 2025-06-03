@@ -63,13 +63,14 @@ double pMass = 0.93827208816; // proton beam
 double PartE, NoABPartE; // Energy of the MC particles 
 int eSc_Index, pi_Index, n_Index;
 
-Double_t Q2_MC, t_MC, W_MC, y_MC, eps_MC;
-Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, eps_MC_NoAB;
-Double_t Q2_Rec, W_Rec, y_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
+Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
+Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, x_MC_NoAB, eps_MC_NoAB;
+Double_t Q2_Rec, W_Rec, y_Rec, x_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
 Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff;
-Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
+//Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
+Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
-Double_t Q2_JB, y_JB, Q2_DA, y_DA, Q2_Sig, y_Sig, delta_h, pt2_h, alpha_e, alpha_h;
+Double_t Q2_JB, y_JB, x_JB, Q2_DA, y_DA, x_DA, Q2_Sig, y_Sig, x_Sig, delta_h, pt2_h, alpha_e, alpha_h;
 
 // Check files exist, can be opened and contain a relevant tree
 Bool_t CheckFiles(TString Files[3]){
@@ -112,7 +113,8 @@ void CalculateKinematicsMC(PxPyPzEVector eSc_MC, PxPyPzEVector pi_MC, PxPyPzEVec
   Vec_t_MC = (Vec_Q_MC - pi_MC);
   t_MC = -1*(Vec_t_MC.mag2());
   W_MC = (Vec_Q_MC + HBeam).mag();
-  y_MC =(HBeam.Dot(Vec_Q_MC))/(HBeam.Dot(EBeam)); 
+  y_MC =(HBeam.Dot(Vec_Q_MC))/(HBeam.Dot(EBeam));
+  x_MC = Q2_MC/(4*EBeam.E()*HBeam.E()*y_MC);  
   eps_MC = (2*(1-y_MC))/(1+(pow(1-y_MC,2)));
 }
 
@@ -123,6 +125,7 @@ void CalculateKinematicsMCNoAB(PxPyPzEVector eSc_MC, PxPyPzEVector pi_MC, PxPyPz
   t_MC_NoAB = -1*(Vec_t_MC_NoAB.mag2());
   W_MC_NoAB = (Vec_Q_MC_NoAB + HBeam).mag();
   y_MC_NoAB =(HBeam.Dot(Vec_Q_MC_NoAB))/(HBeam.Dot(EBeam)); 
+  x_MC_NoAB = Q2_MC_NoAB/(4*EBeam.E()*HBeam.E()*y_MC_NoAB);  
   eps_MC_NoAB = (2*(1-y_MC_NoAB))/(1+(pow(1-y_MC_NoAB,2)));
 }
 
@@ -131,6 +134,7 @@ void CalculateBasicKinematics_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Re
   Q2_Rec = -1*(Vec_Q_Rec.mag2());
   W_Rec = (Vec_Q_Rec + HBeam).mag();
   y_Rec =(HBeam.Dot(Vec_Q_Rec))/(HBeam.Dot(EBeam));
+  x_Rec = Q2_Rec/(4*EBeam.E()*HBeam.E()*y_Rec);
   eps_Rec = (2*(1-y_Rec))/(1+(pow(1-y_Rec,2)));
 }
 
@@ -141,10 +145,13 @@ void CalculateKinematics_Q2Alt_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_R
   alpha_h = delta_h/(sqrt(pt2_h));
   y_JB = delta_h/(2*EBeam.E());
   Q2_JB = pt2_h/(1-y_JB);
+  x_JB = Q2_JB/(4*EBeam.E()*HBeam.E()*y_JB);
   y_DA = (alpha_h)/(alpha_e + alpha_h);
   Q2_DA = (4*EBeam.E()*EBeam.E())/(alpha_e*(alpha_e +alpha_h));
+  x_DA = Q2_DA/(4*EBeam.E()*HBeam.E()*y_DA);
   y_Sig = delta_h/(delta_h + (eSc_Rec.E()*(1-cos(eSc_Rec.Theta()))));
   Q2_Sig = (pow(eSc_Rec.E(),2)*pow(sin(eSc_Rec.Theta()),2))/(1-y_Sig);
+  x_Sig = Q2_Sig/(4*EBeam.E()*HBeam.E()*y_Sig);
 }
 
 void CorrectNeutronTrack(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
@@ -621,8 +628,8 @@ void WriteCSV(TString InBeamE, TString InDate, TString InBeamConfig, TString Inp
   TString CSV_Header = "Nominal mean Q^2,Mean Q^2,Mean Q^2 error,Mean W,Mean W error,-t (bin centre),Rate (Hz), Rate (Hz) error";
   csvfile << CSV_Header << "\n\n";
   // If B0 enabled, use ZDC (if they exist), if not, use default
-  for (int i = 0; i < 7; i++) {
-    for (int j = 0; j < 10; j++) {
+  for (int i = 0; i < 30; i++) {
+    for (int j = 0; j < 20; j++) {
       if (j == 0) {
 	// If B0 enabled, use ZDC (if they exist), if not, use default
 	if( B0 == kTRUE && ZDC == kTRUE){
@@ -644,15 +651,25 @@ void WriteCSV(TString InBeamE, TString InDate, TString InBeamConfig, TString Inp
 	csvfile << ",,,,,";
       }
       if( B0 == kTRUE && ZDC == kTRUE){
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << "\n";
       }
       else{
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ",";
-	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << ",";
+	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.01 + j * 0.02)) << "\n";
       }
+      /* if( B0 == kTRUE && ZDC == kTRUE){ */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.0 + j * 0.04)) << ","; */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ","; */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_ZDC_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n"; */
+      /* } */
+      /* else{ */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetXaxis()->GetBinCenter(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ","; */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinContent(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << ","; */
+      /* 	csvfile << ((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->GetBinError(((TH1D*)gDirectory->FindObject(Form("h1_tResult_%i", i+1)))->FindFixBin(0.02 + j * 0.04)) << "\n"; */
+      /* } */
     } // End loop over bins (j)
     csvfile << "\n";
   } // End loop over Q2 ranges/plots (i)
