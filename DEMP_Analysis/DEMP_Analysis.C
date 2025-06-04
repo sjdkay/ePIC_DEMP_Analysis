@@ -659,8 +659,16 @@ void FillDEMP_Q2Alt(float wgt){
   // Fill some 2D plots for the variables that look "best"
   FillHist2D("h2_QA_Q2Rec_Q2MC", Q2_Rec, Q2_MC, wgt);
   FillHist2D("h2_QA_Q2DA_Q2MC", Q2_DA, Q2_MC, wgt);
+  FillHist2D("h2_QA_Q2Sig_Q2MC", Q2_Sig, Q2_MC, wgt);
   FillHist2D("h2_QA_Q2Rec_Q2Res", Q2_Rec, (Q2_Rec-Q2_MC)/Q2_MC*100, wgt);
   FillHist2D("h2_QA_Q2DA_Q2Res", Q2_DA, (Q2_DA-Q2_MC)/Q2_MC*100, wgt);
+  FillHist2D("h2_QA_Q2Sig_Q2Res", Q2_Sig, (Q2_Sig-Q2_MC)/Q2_MC*100, wgt);
+  FillHist2D("h2_QA_yRec_yMC", y_Rec, y_MC, wgt);
+  FillHist2D("h2_QA_yDA_yMC", y_DA, y_MC, wgt);
+  FillHist2D("h2_QA_ySig_yMC", y_Sig, y_MC, wgt);
+  FillHist2D("h2_QA_xRec_xMC", x_Rec, x_MC, wgt);
+  FillHist2D("h2_QA_xDA_xMC", x_DA, x_MC, wgt);
+  FillHist2D("h2_QA_xSig_xMC", x_Sig, x_MC, wgt);
   gDirectory->cd("../../");
 }
 

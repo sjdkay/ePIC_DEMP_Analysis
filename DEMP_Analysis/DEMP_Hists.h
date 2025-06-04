@@ -604,8 +604,18 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_QA_ySig_Res = new TH1D("h1_QA_ySig_Res", "y_{Sig} Resolution;100*(y_{Sig}-y_{MC})/y_{MC};Rate/bin(Hz) ", 200, -100, 100);
     TH2D* h2_QA_Q2Rec_Q2MC = new TH2D("h2_QA_Q2Rec_Q2MC","Q^{2}_{Rec} vs Q^{2}_{MC}; Q^{2}_{Rec} (GeV/c^{2}); Q^{2}_{MC} (GeV/c^{2}); Rate/bin(Hz)", 100, 0, 50, 100, 0, 50);
     TH2D* h2_QA_Q2DA_Q2MC = new TH2D("h2_QA_Q2DA_Q2MC","Q^{2}_{DA} vs Q^{2}_{MC}; Q^{2}_{DA} (GeV/c^{2}); Q^{2}_{MC} (GeV/c^{2}); Rate/bin(Hz)", 100, 0, 50, 100, 0, 50);
+    TH2D* h2_QA_Q2Sig_Q2MC = new TH2D("h2_QA_Q2Sig_Q2MC","Q^{2}_{Sig} vs Q^{2}_{MC}; Q^{2}_{Sig} (GeV/c^{2}); Q^{2}_{MC} (GeV/c^{2}); Rate/bin(Hz)", 100, 0, 50, 100, 0, 50);
     TH2D* h2_QA_Q2Rec_Q2Res = new TH2D("h2_QA_Q2Rec_Q2Res","Q^{2}_{Rec} vs Q^{2}_{Res}; Q^{2}_{Rec} (GeV/c^{2}); 100*(Q^{2}_{Rec}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
-    TH2D* h2_QA_Q2DA_Q2Res = new TH2D("h2_QA_Q2DA_Q2Res","Q^{2}_{DA} vs Q^{2}_{Res}, Q^{2}_{DA} (GeV/c^{2}); 100*(Q^{2}_{DA}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
+    TH2D* h2_QA_Q2DA_Q2Res = new TH2D("h2_QA_Q2DA_Q2Res","Q^{2}_{DA} vs Q^{2}_{Res}; Q^{2}_{DA} (GeV/c^{2}); 100*(Q^{2}_{DA}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
+    TH2D* h2_QA_Q2Sig_Q2Res = new TH2D("h2_QA_Q2Sig_Q2Res","Q^{2}_{Sig} vs Q^{2}_{Res}; Q^{2}_{Sig} (GeV/c^{2}); 100*(Q^{2}_{Sig}-Q^{2}_{MC})/Q^{2}_{MC}; Rate/bin(Hz)", 100, 0, 50, 200, -100, 100);
+
+    TH2D* h2_QA_yRec_yMC = new TH2D("h2_QA_yRec_yMC","y_{Rec} vs y_{MC}; y_{Rec}; y_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 0.1);
+    TH2D* h2_QA_yDA_yMC = new TH2D("h2_QA_yDA_yMC","y_{DA} vs y_{MC}; y_{DA}; y_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 0.1);
+    TH2D* h2_QA_ySig_yMC = new TH2D("h2_QA_ySig_yMC","y_{Sig} vs y_{MC}; y_{Sig}; y_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 0.1);
+    TH2D* h2_QA_xRec_xMC = new TH2D("h2_QA_xRec_xMC","x_{Rec} vs x_{MC}; x_{Rec}; x_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 1);
+    TH2D* h2_QA_xDA_xMC = new TH2D("h2_QA_xDA_xMC","x_{DA} vs x_{MC}; x_{DA}; x_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 1);
+    TH2D* h2_QA_xSig_xMC = new TH2D("h2_QA_xSig_xMC","x_{Sig} vs x_{MC}; x_{Sig}; x_{MC}; Rate/bin(Hz)", 100, 0, 1, 100, 0, 1);
+    
     gDirectory->cd("../../");
   }
   if (Results == kTRUE){
