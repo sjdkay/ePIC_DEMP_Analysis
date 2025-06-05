@@ -70,7 +70,7 @@ Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff;
 //Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
-Double_t Q2_JB, y_JB, x_JB, Q2_DA, y_DA, x_DA, Q2_Sig, y_Sig, x_Sig, delta_h, pt2_h, alpha_e, alpha_h;
+Double_t Q2_JB, y_JB, x_JB, Q2_DA, y_DA, x_DA, Q2_Sig, y_Sig, x_Sig, delta_h, pt2_h, alpha_e, alpha_h, eps_DA;
 
 // Check files exist, can be opened and contain a relevant tree
 Bool_t CheckFiles(TString Files[3]){
@@ -149,6 +149,7 @@ void CalculateKinematics_Q2Alt_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_R
   y_DA = (alpha_h)/(alpha_e + alpha_h);
   Q2_DA = (4*EBeam.E()*EBeam.E())/(alpha_e*(alpha_e +alpha_h));
   x_DA = Q2_DA/(4*EBeam.E()*HBeam.E()*y_DA);
+  eps_DA = (2*(1-y_DA))/(1+(pow(1-y_DA,2)));
   y_Sig = delta_h/(delta_h + (eSc_Rec.E()*(1-cos(eSc_Rec.Theta()))));
   Q2_Sig = (pow(eSc_Rec.E(),2)*pow(sin(eSc_Rec.Theta()),2))/(1-y_Sig);
   x_Sig = Q2_Sig/(4*EBeam.E()*HBeam.E()*y_Sig);
