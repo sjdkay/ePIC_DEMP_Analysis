@@ -6,7 +6,7 @@ This repository is based upon earlier work by Love Preet at the University of Re
 
 Currently, the main analysis script works for DEMP pion events. In future, the capability to analyse DEMP kaon events will be added.
 
-The main script is the DEMP_Analysis.C in the DEMP_Analysis directory. Instructions on running this script are provided upon executin via -
+The main script is the DEMP_Analysis.C script. Instructions on running this script are provided upon executin via -
 
 root -l DEMP_Analysis.C
 

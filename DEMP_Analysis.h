@@ -4,7 +4,8 @@
 // Header file for new DEMP Analysis script
 
 // Input file naming, hardcoded assuming certain convention, change as needed
-TString InFilePath = "/home/sjdkay/Work/ePIC_EIC/DEMP/Love_DEMP_Pion_Analysis/InputFiles";
+
+TString InFilePath = Form("%s/InputFiles", gSystem->pwd());
 
 string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString InBeamConfig, TString InDate){
   string FileName = Form("%s/EICreconOut_%s_ip6_%s_q2_%s_%s_Combined_%s_Pruned.root", InFilePath.Data(), InBeamE.Data(), Inpart.Data(), In_Q2.Data(), InBeamConfig.Data(), InDate.Data());  
