@@ -301,11 +301,428 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
   }
   if(Results == kTRUE){
     gDirectory->mkdir("ResultsDists");
+    gDirectory->mkdir("ResultsDists/Exclusive_Paper_Plots");
   }
 }
 
 
-void WritePDF(TString InBeamE, TString InDate,  TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
+void WriteResultsPDF(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t Results){
+
+  if (Results == kTRUE){
+    TH1D* tmpHist1D;
+    TH1D* tmpHist1D_2;
+    TH2D* tmpHist2D;
+    auto OutDir = Form("%s_%s_%s_%s_Results", Inpart.Data(), InBeamE.Data(), InDate.Data(), InBeamConfig.Data());
+    if(gSystem->AccessPathName(OutDir) == kTRUE){
+      gSystem->mkdir(OutDir);
+    }
+    TString Outpdf = Form("%s/%s_Results_Plots.pdf", OutDir, InBeamE.Data());
+  
+    gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+
+    TCanvas* c_Q2_Result = new TCanvas("c_Q2_Result", "Q2 MC vs Reco", 100, 0, 2560, 1920);
+    c_Q2_Result->Divide(2,2);
+    c_Q2_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPQ2_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_Q2_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMPQ2_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_Q2_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_Q2_Result->cd(4);
+    TLegend *Q2_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    Q2_Legend->SetTextSize(0.05);
+    Q2_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    Q2_Legend->AddEntry(tmpHist1D_2, "Rec (DA)", "l");
+    Q2_Legend->Draw();
+    c_Q2_Result->Print(Outpdf + "(" ); // First print command
+  
+    TCanvas* c_x_Result = new TCanvas("c_x_Result", "x MC vs Rec", 100, 0, 2560, 1920);
+    c_x_Result->Divide(2,2);
+    c_x_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPx_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_x_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMPx_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_x_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_x_Result->cd(4);
+    TLegend *x_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    x_Legend->SetTextSize(0.05);
+    x_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    x_Legend->AddEntry(tmpHist1D_2, "Rec (DA)", "l");
+    x_Legend->Draw();
+    c_x_Result->Print(Outpdf);
+
+    TCanvas* c_y_Result = new TCanvas("c_y_Result", "y MC vs Rec", 100, 0, 2560, 1920);
+    c_y_Result->Divide(2,2);
+    c_y_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPy_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_y_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMPy_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_y_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_y_Result->cd(4);
+    TLegend *y_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    y_Legend->SetTextSize(0.05);
+    y_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    y_Legend->AddEntry(tmpHist1D_2, "Rec (DA)", "l");
+    y_Legend->Draw();
+    c_y_Result->Print(Outpdf);
+
+    TCanvas* c_Delta_Result = new TCanvas("c_Delta_Result", "dQ2/dx/dy", 100, 0, 2560, 1920);
+    c_Delta_Result->Divide(2,2);
+    c_Delta_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dQ2"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_Delta_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dx"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_Delta_Result->cd(3);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dy"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_Delta_Result->Print(Outpdf);// Last print command
+
+    TCanvas* c_eScTheta_Result = new TCanvas("c_eScTheta_Result", "eSc Theta MC vs Rec", 100, 0, 2560, 1920);
+    c_eScTheta_Result->Divide(2,2);
+    c_eScTheta_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScTheta_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScTheta_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScTheta_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_eScTheta_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_eScTheta_Result->cd(4);
+    TLegend *eSc_Theta_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    eSc_Theta_Legend->SetTextSize(0.05);
+    eSc_Theta_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    eSc_Theta_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    eSc_Theta_Legend->Draw();
+    c_eScTheta_Result->Print(Outpdf);
+
+    TCanvas* c_eScE_Result = new TCanvas("c_eScE_Result", "eSc E MC vs Rec", 100, 0, 2560, 1920);
+    c_eScE_Result->Divide(2,2);
+    c_eScE_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScE_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScE_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScE_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_eScE_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_eScE_Result->cd(4);
+    TLegend *eSc_E_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    eSc_E_Legend->SetTextSize(0.05);
+    eSc_E_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    eSc_E_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    eSc_E_Legend->Draw();
+    c_eScE_Result->Print(Outpdf);
+
+    TCanvas* c_piEPz_Result = new TCanvas("c_piEPz_Result", "Pi E-Pz MC vs Rec", 100, 0, 2560, 1920);
+    c_piEPz_Result->Divide(2,2);
+    c_piEPz_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piEPz_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_piEPz_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piEPz_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_piEPz_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_piEPz_Result->cd(4);
+    TLegend *Pi_EPz_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    Pi_EPz_Legend->SetTextSize(0.05);
+    Pi_EPz_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    Pi_EPz_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    Pi_EPz_Legend->Draw();
+    c_piEPz_Result->Print(Outpdf);
+
+    TCanvas* c_piPt_Result = new TCanvas("c_piPt_Result", "Pi E-Pz MC vs Rec", 100, 0, 2560, 1920);
+    c_piPt_Result->Divide(2,2);
+    c_piPt_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piPt_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_piPt_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piPt_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_piPt_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_piPt_Result->cd(4);
+    TLegend *Pi_Pt_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    Pi_Pt_Legend->SetTextSize(0.05);
+    Pi_Pt_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    Pi_Pt_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    Pi_Pt_Legend->Draw();
+    c_piPt_Result->Print(Outpdf);
+
+    TCanvas* c_nEPz_Result = new TCanvas("c_nEPz_Result", "n E-Pz MC vs Rec", 100, 0, 2560, 1920);
+    c_nEPz_Result->Divide(2,2);
+    c_nEPz_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nEPz_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_nEPz_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nEPz_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_nEPz_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_nEPz_Result->cd(4);
+    TLegend *n_EPz_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    n_EPz_Legend->SetTextSize(0.05);
+    n_EPz_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    n_EPz_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    n_EPz_Legend->Draw();
+    c_nEPz_Result->Print(Outpdf);
+
+    TCanvas* c_nPt_Result = new TCanvas("c_nPt_Result", "n E-Pz MC vs Rec", 100, 0, 2560, 1920);
+    c_nPt_Result->Divide(2,2);
+    c_nPt_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nPt_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_nPt_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nPt_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_nPt_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_nPt_Result->cd(4);
+    TLegend *n_Pt_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    n_Pt_Legend->SetTextSize(0.05);
+    n_Pt_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    n_Pt_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    n_Pt_Legend->Draw();
+    c_nPt_Result->Print(Outpdf);
+    
+    TCanvas* c_t_Result = new TCanvas("c_t_Result", "-t MC vs Rec", 100, 0, 2560, 1920);
+    c_t_Result->Divide(2,2);
+    c_t_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_tMC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_t_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_tRec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_t_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_t_Result->cd(4);
+    TLegend *t_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    t_Legend->SetTextSize(0.05);
+    t_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    t_Legend->AddEntry(tmpHist1D_2, "Rec (tEXBABE)", "l");
+    t_Legend->Draw();
+    c_t_Result->Print(Outpdf);
+
+    TCanvas* c_EPz_Result = new TCanvas("c_EPz_Result", "E-Pz MC vs Rec", 100, 0, 2560, 1920);
+    c_EPz_Result->Divide(2,2);
+    c_EPz_Result->cd(1);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_EPz_MC"));
+    tmpHist1D->SetTitle("");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_EPz_Result->cd(2);
+    tmpHist1D_2=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_EPz_Rec"));
+    tmpHist1D_2->SetLineColor(2);
+    tmpHist1D_2->SetTitle("");
+    tmpHist1D_2->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D_2->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D_2->Draw("HISTER");
+    c_EPz_Result->cd(3);
+    tmpHist1D->Draw("HISTERR");
+    tmpHist1D_2->Draw("SAMEHISTERR");
+    c_EPz_Result->cd(4);
+    TLegend *EPz_Legend = new TLegend(0.1, 0.1, 0.9, 0.9);
+    EPz_Legend->SetTextSize(0.05);
+    EPz_Legend->AddEntry(tmpHist1D, "MC Truth", "l");
+    EPz_Legend->AddEntry(tmpHist1D_2, "Rec", "l");
+    EPz_Legend->Draw();
+    c_EPz_Result->Print(Outpdf);
+    
+    TCanvas* c_Q2MC_Result = new TCanvas("c_Q2MC_Result", "Q2 MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPQ2_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_Q2MC_Result->Print(Outpdf);
+    TCanvas* c_Q2Rec_Result = new TCanvas("c_Q2Rec_Result", "Q2 Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPQ2_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_Q2Rec_Result->Print(Outpdf);
+    TCanvas* c_xMC_Result = new TCanvas("c_xMC_Result", "x MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPx_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_xMC_Result->Print(Outpdf);
+    TCanvas* c_xRec_Result = new TCanvas("c_xRec_Result", "x Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPx_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_xRec_Result->Print(Outpdf);
+    TCanvas* c_yMC_Result = new TCanvas("c_yMC_Result", "y MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPy_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_yMC_Result->Print(Outpdf);
+    TCanvas* c_yRec_Result = new TCanvas("c_yRec_Result", "y Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMPy_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_yRec_Result->Print(Outpdf);
+    TCanvas* c_dQ2_Result = new TCanvas("c_dQ2_Result", "dQ2", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dQ2"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_dQ2_Result->Print(Outpdf);
+    TCanvas* c_dx_Result = new TCanvas("c_dx_Result", "dx", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dx"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_dx_Result->Print(Outpdf);
+    TCanvas* c_dy_Result = new TCanvas("c_dy_Result", "dy", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_dy"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_dy_Result->Print(Outpdf);
+    TCanvas* c_eScThetaMC_Result = new TCanvas("c_eScThetaMC_Result", "e' Theta MC ", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScTheta_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScThetaMC_Result->Print(Outpdf);
+    TCanvas* c_eScThetaRec_Result = new TCanvas("c_eScThetaRec_Result", "e' Theta Rec ", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScTheta_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScThetaRec_Result->Print(Outpdf);
+    TCanvas* c_eScEMC_Result = new TCanvas("c_eScEMC_Result", "e' E MC ", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScE_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScEMC_Result->Print(Outpdf);
+    TCanvas* c_eScERec_Result = new TCanvas("c_eScERec_Result", "e' E Rec ", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_eScE_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_eScERec_Result->Print(Outpdf+")");
+    
+ /*  FillHist1D("h1_Result_DEMP_piEPz_MC", Pi_MC.E() - Pi_MC.Pz(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_piEPz_Rec", Pi_Rec.E() - Pi_Rec.Pz(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_nEPz_MC", n_MC.E() - n_MC.Pz(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_nEPz_Rec", nCorr_Rec.E() - nCorr_Rec.Pz(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_piPt_MC", Pi_MC.Pt(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_piPt_Rec", Pi_Rec.Pt(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_nPt_MC", n_MC.Pt(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_nPt_Rec", nCorr_Rec.Pt(), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_tMC", t_MC_NoAB, wgt); */
+ /*  FillHist1D("h1_Result_DEMP_tRec", t_eXBABE, wgt); */
+ /*  FillHist1D("h1_Result_DEMP_EPz_MC", (eSc_MC.E() + Pi_MC.E() + n_MC.E())-(eSc_MC.Pz() + Pi_MC.Pz() + n_MC.Pz()), wgt); */
+ /*  FillHist1D("h1_Result_DEMP_EPz_Rec", (eSc_Rec.E() + Pi_Rec.E() + nCorr_Rec.E())-(eSc_Rec.Pz() + Pi_Rec.Pz() + nCorr_Rec.Pz()), wgt); */
+    
+    gDirectory->cd("../../"); 
+  }  
 }
 
 void WritePlots(TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){

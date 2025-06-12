@@ -725,6 +725,37 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       }
     }
     gDirectory->cd("../");
+    gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+    // Set of kinematics plots
+    TH1D* h1_Result_DEMPQ2_MC = new TH1D("h1_Result_DEMPQ2_MC", "Q^{2} DEMP, MC Truth;Q^{2}_{MC} (GeV/c^{2});Rate/(0.25 GeV/c^{2}) (Hz)", 200, 0, 50);
+    TH1D* h1_Result_DEMPQ2_Rec = new TH1D("h1_Result_DEMPQ2_Rec", "Q^{2} DEMP, Rec (DA);Q^{2}_{RecDA} (GeV/c^{2});Rate/(0.25 GeV/c^{2}) (Hz)", 200, 0, 50);
+    TH1D* h1_Result_DEMPx_MC = new TH1D("h1_Result_DEMPx_MC", "x DEMP, MC Truth;x_{MC};Rate/(0.005) (Hz)", 200, 0, 1);
+    TH1D* h1_Result_DEMPx_Rec = new TH1D("h1_Result_DEMPx_Rec", "x DEMP, Rec (DA);x_{RecDA};Rate/(0.005) (Hz)", 200, 0, 1);
+    TH1D* h1_Result_DEMPy_MC = new TH1D("h1_Result_DEMPy_MC", "y DEMP, MC Truth;y_{MC};Rate/(0.005) (Hz)", 40, 0, 0.2);
+    TH1D* h1_Result_DEMPy_Rec = new TH1D("h1_Result_DEMPy_Rec", "y DEMP, Rec (DA);y_{RecDA};Rate/(0.005) (Hz)", 40, 0, 0.2);
+    TH1D* h1_Result_DEMP_dQ2 = new TH1D("h1_Result_DEMP_dQ2", "DEMP dQ2; (Q^{2}_{RecDA} - Q^{2}_{MC})/Q^{2}_{MC}; Rate (Hz)", 200, -2, 2);
+    TH1D* h1_Result_DEMP_dx = new TH1D("h1_Result_DEMP_dx", "DEMP dx; (x_{RecDA} - x_{MC})/x_{MC}; Rate (Hz)", 200, -2, 2);
+    TH1D* h1_Result_DEMP_dy = new TH1D("h1_Result_DEMP_dy", "DEMP dy; (y_{RecDA} - y_{MC})/y_{MC}; Rate (Hz)", 200, -2, 2);
+    // Particle distribution plots
+    TH1D* h1_Result_DEMP_eScTheta_MC = new TH1D("h1_Result_DEMP_eScTheta_MC", "DEMP #theta_{e'MC};#theta_{e'MC} (Deg); Rate/(0.25^{#circ}) (Hz) ", NBins_Theta, 130, 180);
+    TH1D* h1_Result_DEMP_eScTheta_Rec = new TH1D("h1_Result_DEMP_eScTheta_Rec", "DEMP #theta_{e'Rec};#theta_{e'Rec} (Deg); Rate/(0.25^{#circ}) (Hz) ", NBins_Theta, 130, 180);
+    TH1D* h1_Result_DEMP_eScE_MC = new TH1D("h1_Result_DEMP_eScE_MC", "DEMP E_{e'MC};E_{e'MC} (GeV); Rate/(0.02 GeV)) (Hz) ", NBins_Energy, ElecBeamE-2, ElecBeamE+2);
+    TH1D* h1_Result_DEMP_eScE_Rec = new TH1D("h1_Result_DEMP_eScE_Rec", "DEMP E_{e'Rec};E_{e'Rec} (GeV); Rate/(0.02 GeV) (Hz) ", NBins_Energy, ElecBeamE-2, ElecBeamE+2);
+    TH1D* h1_Result_DEMP_piEPz_MC = new TH1D("h1_Result_DEMP_piEPz_MC", "DEMP E - P_{z} (#pi, MC); E_{#piMC} - P_{z#piMC}; Rate/0.01 (Hz)", 200, -1, 1);
+    TH1D* h1_Result_DEMP_piEPz_Rec = new TH1D("h1_Result_DEMP_piEPz_Rec", "DEMP E - P_{z} (#pi, Rec); E_{#piRec} - P_{z#piRec}; Rate/0.01 (Hz)", 200, -1, 1);
+    TH1D* h1_Result_DEMP_nEPz_MC = new TH1D("h1_Result_DEMP_nEPz_MC", "DEMP E - P_{z} (n, MC); E_{nMC} - P_{z nMC}; Rate/0.01 (Hz)", 200, -1, 1);
+    TH1D* h1_Result_DEMP_nEPz_Rec = new TH1D("h1_Result_DEMP_nEPz_Rec", "DEMP E - P_{z} (n, Rec); E_{nRec} - P_{z nRec}; Rate/0.01 (Hz)", 200, -1, 1);
+    TH1D* h1_Result_DEMP_piPt_MC = new TH1D("h1_Result_DEMP_piPt_MC", "DEMP P_{T} (#pi, MC); p_{T#piMC}; Rate/0.05 (Hz)", 200, 0, 10);
+    TH1D* h1_Result_DEMP_piPt_Rec = new TH1D("h1_Result_DEMP_piPt_Rec", "DEMP P_{T} (#pi, Rec); p_{T#piRec}; Rate/0.05 (Hz)", 200, 0, 10);
+    TH1D* h1_Result_DEMP_nPt_MC = new TH1D("h1_Result_DEMP_nPt_MC", "DEMP P_{T} (n, MC); p_{TnMC}; Rate/0.05 (Hz)", 200, 0, 10);
+    TH1D* h1_Result_DEMP_nPt_Rec = new TH1D("h1_Result_DEMP_nPt_Rec", "DEMP P_{T} (n, Rec); p_{TnRec}; Rate/0.05 (Hz)", 200, 0, 10);
+    // -t comparison plots
+    TH1D* h1_Result_DEMP_tMC = new TH1D("h1_Result_DEMP_tMC", "DEMP -t (MC); -t_{MC} (GeV^{2}); Rate/0.01 GeV^{2} (Hz) ", 150, 0, 1.5);
+    TH1D* h1_Result_DEMP_tRec = new TH1D("h1_Result_DEMP_tRec", "DEMP -t (eXBABE) ;-t_{eXBABE} (GeV^{2}); Rate/0.01 GeV^{2} (Hz)", 150, 0, 1.5);
+    // E - Pz (sum) plots
+    TH1D* h1_Result_DEMP_EPz_MC = new TH1D("h1_Result_DEMP_EPz_MC", "DEMP E - P_{z} (MC, all final state partcles);E_{MC}-P_{zMC};Rate/0.25 (Hz)", 200, 0, 50);
+    TH1D* h1_Result_DEMP_EPz_Rec = new TH1D("h1_Result_DEMP_EPz_Rec", "DEMP E - P_{z} (Rec, all final state partcles);E_{Rec}-P_{zRec};Rate/0.25 (Hz)", 200, 0, 50);
+    gDirectory->cd("../../");
   }  
 }
 

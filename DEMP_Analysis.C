@@ -569,7 +569,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   }
 }
 
-void FillDEMP_Results(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC,PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_Rec, PxPyPzEVector nCorr_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("ResultsDists");
   FillHist1D("h1_tResult_0", t_eXBABE, wgt);
   FillHist1D("h1_Q2Result_0", Q2_DA, wgt);
@@ -604,6 +604,33 @@ void FillDEMP_Results(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt)
     }
   }
   gDirectory->cd("../");
+  gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+  FillHist1D("h1_Result_DEMPQ2_MC", Q2_MC_NoAB, wgt);
+  FillHist1D("h1_Result_DEMPQ2_Rec", Q2_DA, wgt);
+  FillHist1D("h1_Result_DEMPx_MC", x_MC_NoAB, wgt);
+  FillHist1D("h1_Result_DEMPx_Rec", x_DA, wgt);
+  FillHist1D("h1_Result_DEMPy_MC", y_MC_NoAB, wgt);
+  FillHist1D("h1_Result_DEMPy_Rec", y_DA, wgt);
+  FillHist1D("h1_Result_DEMP_dQ2", ((Q2_DA - Q2_MC_NoAB)/Q2_MC_NoAB), wgt);
+  FillHist1D("h1_Result_DEMP_dx", ((x_DA - x_MC_NoAB)/x_MC_NoAB), wgt);
+  FillHist1D("h1_Result_DEMP_dy", ((y_DA - y_MC_NoAB)/y_MC_NoAB), wgt);
+  FillHist1D("h1_Result_DEMP_eScTheta_MC", eSc_MC.Theta()*TMath::RadToDeg(), wgt);
+  FillHist1D("h1_Result_DEMP_eScTheta_Rec", eSc_Rec.Theta()*TMath::RadToDeg(), wgt);
+  FillHist1D("h1_Result_DEMP_eScE_MC", eSc_MC.E(), wgt);
+  FillHist1D("h1_Result_DEMP_eScE_Rec", eSc_Rec.E(), wgt);
+  FillHist1D("h1_Result_DEMP_piEPz_MC", Pi_MC.E() - Pi_MC.Pz(), wgt);
+  FillHist1D("h1_Result_DEMP_piEPz_Rec", Pi_Rec.E() - Pi_Rec.Pz(), wgt);
+  FillHist1D("h1_Result_DEMP_nEPz_MC", n_MC.E() - n_MC.Pz(), wgt);
+  FillHist1D("h1_Result_DEMP_nEPz_Rec", nCorr_Rec.E() - nCorr_Rec.Pz(), wgt);
+  FillHist1D("h1_Result_DEMP_piPt_MC", Pi_MC.Pt(), wgt);
+  FillHist1D("h1_Result_DEMP_piPt_Rec", Pi_Rec.Pt(), wgt);
+  FillHist1D("h1_Result_DEMP_nPt_MC", n_MC.Pt(), wgt);
+  FillHist1D("h1_Result_DEMP_nPt_Rec", nCorr_Rec.Pt(), wgt);
+  FillHist1D("h1_Result_DEMP_tMC", t_MC_NoAB, wgt);
+  FillHist1D("h1_Result_DEMP_tRec", t_eXBABE, wgt);
+  FillHist1D("h1_Result_DEMP_EPz_MC", (eSc_MC.E() + Pi_MC.E() + n_MC.E())-(eSc_MC.Pz() + Pi_MC.Pz() + n_MC.Pz()), wgt);
+  FillHist1D("h1_Result_DEMP_EPz_Rec", (eSc_Rec.E() + Pi_Rec.E() + nCorr_Rec.E())-(eSc_Rec.Pz() + Pi_Rec.Pz() + nCorr_Rec.Pz()), wgt);
+  gDirectory->cd("../../");
 }
 
 void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
@@ -802,19 +829,19 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   // Initialize reader
   TTreeReader tree_reader(AnalysisChain);
   // Get weight information
-  TTreeReaderArray<float> weight(tree_reader, "EventHeader.weight");
+  TTreeReaderArray<double> weight(tree_reader, "EventHeader.weight");
   // Get Particle Information
   TTreeReaderArray<int>    PartGenStat(tree_reader, "MCParticles.generatorStatus");
-  TTreeReaderArray<float>  PartMomX(tree_reader, "MCParticles.momentum.x");
-  TTreeReaderArray<float>  PartMomY(tree_reader, "MCParticles.momentum.y");
-  TTreeReaderArray<float>  PartMomZ(tree_reader, "MCParticles.momentum.z");
+  TTreeReaderArray<double>  PartMomX(tree_reader, "MCParticles.momentum.x");
+  TTreeReaderArray<double>  PartMomY(tree_reader, "MCParticles.momentum.y");
+  TTreeReaderArray<double>  PartMomZ(tree_reader, "MCParticles.momentum.z");
   TTreeReaderArray<int>    PartPdg(tree_reader, "MCParticles.PDG");
   TTreeReaderArray<double> PartMass(tree_reader,"MCParticles.mass");
   // Get Before Afterburned information
   TTreeReaderArray<int>    NoABPartGenStat(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.generatorStatus");
-  TTreeReaderArray<float>  NoABPartMomX(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.x");
-  TTreeReaderArray<float>  NoABPartMomY(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.y");
-  TTreeReaderArray<float>  NoABPartMomZ(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.z");
+  TTreeReaderArray<double>  NoABPartMomX(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.x");
+  TTreeReaderArray<double>  NoABPartMomY(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.y");
+  TTreeReaderArray<double>  NoABPartMomZ(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.momentum.z");
   TTreeReaderArray<int>    NoABPartPdg(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.PDG");
   TTreeReaderArray<double> NoABPartMass(tree_reader,"MCParticlesHeadOnFrameNoBeamFX.mass");
   // Get Reconstructed Track Information
@@ -869,7 +896,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   //Define histograms using BeamE value and series of true false flags
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
-  //Int_t EscapeEvent = 1000;
+  Int_t EscapeEvent = 1000;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
     if ( EventCounter % ( nEntries / 10 ) == 0 ) {
@@ -1107,7 +1134,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  // Fill result plots binned in Q2
 	  if( ResultsPlots == kTRUE) {
 	    // Fill result histograms
-	    FillDEMP_Results(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	    FillDEMP_Results(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_RecCorr, ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	    FillDEMP_QAKin(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	    FillDEMP_QAPartRes(Vec_eSc_MC, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_Rec, Vec_n_MC, Vec_n_Rec, ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	  }
@@ -1125,7 +1152,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   }
 
   // Function to draw plots and make pdf
-  WritePDF(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WriteResultsPDF(BeamE, Date, BeamConfig, part, ResultsPlots);
   WritePlots(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlotsKin(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlotsQA(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
