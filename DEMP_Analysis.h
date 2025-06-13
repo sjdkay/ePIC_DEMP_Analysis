@@ -13,7 +13,7 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
 }
 
 Bool_t Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
-Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol;
+Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
 
 int nEntries = 0;
 int EventCounter = 0;
@@ -67,7 +67,7 @@ int eSc_Index, pi_Index, n_Index;
 Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, x_MC_NoAB, eps_MC_NoAB;
 Double_t Q2_Rec, W_Rec, y_Rec, x_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
-Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff;
+Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff, SigmaEPz;
 //Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 
@@ -174,23 +174,42 @@ void Calculate_t_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVec
 }
 
 // Define set of cut values, check input and return appropriate cut values
-void SetCutVals(Double_t Hadron_Beam_E){
-  Double_t ExpectedVals[5]={41,100,130,250,275};
+void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
+
+  Double_t EExpectedVals[3]={5,10,18};
+  Double_t HExpectedVals[5]={41,100,130,250,275};
+  
+  // Check electron beam input value, set to closest if not exactly equal. Forces sensible values
+  if(Elec_Beam_E != 5 | Elec_Beam_E != 10 | Elec_Beam_E != 18 ){
+    Double_t tmpE = EExpectedVals[0];
+    Double_t diff = abs(Elec_Beam_E - tmpE);
+    for(Int_t i = 0; i < 5; i++){
+      Double_t tmp_diff = abs(Elec_Beam_E-EExpectedVals[i]);
+      if(tmp_diff < diff){
+	tmpE = EExpectedVals[i];
+	diff = tmp_diff;
+      }
+    }
+    Elec_Beam_E = tmpE;
+  }
   
   // Check hadron beam input value, set to closest if not exactly equal. Forces sensible values
   if(Hadron_Beam_E != 41 | Hadron_Beam_E != 100 | Hadron_Beam_E != 130 | Hadron_Beam_E != 250 | Hadron_Beam_E != 275 ){
-    Double_t tmpE = ExpectedVals[0];
+    Double_t tmpE = HExpectedVals[0];
     Double_t diff = abs(Hadron_Beam_E - tmpE);
     for(Int_t i = 0; i < 5; i++){
-      Double_t tmp_diff = abs(Hadron_Beam_E-ExpectedVals[i]);
+      Double_t tmp_diff = abs(Hadron_Beam_E-HExpectedVals[i]);
       if(tmp_diff < diff){
-	tmpE = ExpectedVals[i];
+	tmpE = HExpectedVals[i];
 	diff = tmp_diff;
       }
     }
     Hadron_Beam_E = tmpE;
   }
 
+
+  SigmaEPzTol_Low = 1.8*Elec_Beam_E;
+  SigmaEPzTol_High = 2.2*Elec_Beam_E;
   ThetaStar_Max = 4.0;
   B0_ECut = 0.25;
   B0_XYTol = 50;
@@ -706,20 +725,73 @@ void WriteResultsPDF(TString InBeamE, TString InDate, TString InBeamConfig, TStr
     tmpHist1D->GetXaxis()->SetTitleOffset(1);
     tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
     tmpHist1D->Draw("HISTER");
-    c_eScERec_Result->Print(Outpdf+")");
-    
- /*  FillHist1D("h1_Result_DEMP_piEPz_MC", Pi_MC.E() - Pi_MC.Pz(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_piEPz_Rec", Pi_Rec.E() - Pi_Rec.Pz(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_nEPz_MC", n_MC.E() - n_MC.Pz(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_nEPz_Rec", nCorr_Rec.E() - nCorr_Rec.Pz(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_piPt_MC", Pi_MC.Pt(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_piPt_Rec", Pi_Rec.Pt(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_nPt_MC", n_MC.Pt(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_nPt_Rec", nCorr_Rec.Pt(), wgt); */
- /*  FillHist1D("h1_Result_DEMP_tMC", t_MC_NoAB, wgt); */
- /*  FillHist1D("h1_Result_DEMP_tRec", t_eXBABE, wgt); */
- /*  FillHist1D("h1_Result_DEMP_EPz_MC", (eSc_MC.E() + Pi_MC.E() + n_MC.E())-(eSc_MC.Pz() + Pi_MC.Pz() + n_MC.Pz()), wgt); */
- /*  FillHist1D("h1_Result_DEMP_EPz_Rec", (eSc_Rec.E() + Pi_Rec.E() + nCorr_Rec.E())-(eSc_Rec.Pz() + Pi_Rec.Pz() + nCorr_Rec.Pz()), wgt); */
+    c_eScERec_Result->Print(Outpdf);
+    TCanvas* c_PiEPzMC_Result = new TCanvas("c_PiEPzMC_Result", "pi E - Pz MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piEPz_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_PiEPzMC_Result->Print(Outpdf);
+    TCanvas* c_PiEPzRec_Result = new TCanvas("c_PiEPzRec_Result", "pi E - Pz Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piEPz_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_PiEPzRec_Result->Print(Outpdf);
+    TCanvas* c_nEPzMC_Result = new TCanvas("c_nEPzMC_Result", "n E - Pz MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nEPz_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_nEPzMC_Result->Print(Outpdf);
+    TCanvas* c_PiPtMC_Result = new TCanvas("c_PiPtMC_Result", "pi Pt MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piPt_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_PiPtMC_Result->Print(Outpdf);
+    TCanvas* c_PiPtRec_Result = new TCanvas("c_PiPtRec_Result", "pi Pt Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_piPt_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_PiPtRec_Result->Print(Outpdf);
+    TCanvas* c_nPtMC_Result = new TCanvas("c_nPtMC_Result", "n Pt MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nPt_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_nPtMC_Result->Print(Outpdf);
+    TCanvas* c_nPtRec_Result = new TCanvas("c_nPtRec_Result", "n Pt Rec", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_nPt_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_nPtRec_Result->Print(Outpdf);
+    TCanvas* c_tMC_Result = new TCanvas("c_tMC_Result", "t MC", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_tMC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_tMC_Result->Print(Outpdf);
+    TCanvas* c_tRec_Result = new TCanvas("c_tRec_Result", "teXBABE", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_tRec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_tRec_Result->Print(Outpdf);
+    TCanvas* c_EPzMC_Result = new TCanvas("c_EPzMC_Result", "E - Pz (all particles, MC)", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_EPz_MC"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_EPzMC_Result->Print(Outpdf);
+    TCanvas* c_EPzRec_Result = new TCanvas("c_EPzRec_Result", "E - Pz (all particles, Rec)", 100, 0, 2560, 1920);
+    tmpHist1D=((TH1D*)gDirectory->FindObject("h1_Result_DEMP_EPz_Rec"));
+    tmpHist1D->GetXaxis()->SetTitleOffset(1);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.5);
+    tmpHist1D->Draw("HISTER");
+    c_EPzRec_Result->Print(Outpdf+")");
     
     gDirectory->cd("../../"); 
   }  

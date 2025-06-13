@@ -618,8 +618,8 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist1D("h1_Result_DEMP_eScTheta_Rec", eSc_Rec.Theta()*TMath::RadToDeg(), wgt);
   FillHist1D("h1_Result_DEMP_eScE_MC", eSc_MC.E(), wgt);
   FillHist1D("h1_Result_DEMP_eScE_Rec", eSc_Rec.E(), wgt);
-  FillHist1D("h1_Result_DEMP_piEPz_MC", Pi_MC.E() - Pi_MC.Pz(), wgt);
-  FillHist1D("h1_Result_DEMP_piEPz_Rec", Pi_Rec.E() - Pi_Rec.Pz(), wgt);
+  FillHist1D("h1_Result_DEMP_piEPz_MC", Pi_MC.E() - abs(Pi_MC.Pz()), wgt);
+  FillHist1D("h1_Result_DEMP_piEPz_Rec", Pi_Rec.E() - abs(Pi_Rec.Pz()), wgt);
   FillHist1D("h1_Result_DEMP_nEPz_MC", n_MC.E() - n_MC.Pz(), wgt);
   FillHist1D("h1_Result_DEMP_nEPz_Rec", nCorr_Rec.E() - nCorr_Rec.Pz(), wgt);
   FillHist1D("h1_Result_DEMP_piPt_MC", Pi_MC.Pt(), wgt);
@@ -890,7 +890,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   Bool_t ResultsPlots = kTRUE;
 
   // Set cut values depending upon beam energy combination
-  SetCutVals(HadE);
+  SetCutVals(ElecE, HadE);
   // Set directories in file ahead of defining histograms
   SetDirectories(EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   //Define histograms using BeamE value and series of true false flags
@@ -1105,15 +1105,16 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	nPhi_Diff = (Vec_PMiss_Rec.Phi() - Vec_n_Rec.Phi())*TMath::RadToDeg();
 	nRotPhi_Diff = ( Vec_PMissRot_Rec.Phi() - Vec_nRot_Rec.Phi())*TMath::RadToDeg();
 	MMiss = Vec_PMiss_Rec.M();
-
+	SigmaEPz = (Vec_eSc_Rec.E() + Vec_Pi_Rec.E() + Vec_n_RecCorr.E())-(Vec_eSc_Rec.Pz() + Vec_Pi_Rec.Pz() + Vec_n_RecCorr.Pz());
+	  
 	if(KinPlots == kTRUE){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	}
 
-	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol){
+	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
 	  DEMP_PassCuts = kTRUE;
 	}
-	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol){
+	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
 	  DEMP_PassCuts = kTRUE;	  
 	}
 

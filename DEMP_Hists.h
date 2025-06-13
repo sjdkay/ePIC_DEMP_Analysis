@@ -752,9 +752,10 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     // -t comparison plots
     TH1D* h1_Result_DEMP_tMC = new TH1D("h1_Result_DEMP_tMC", "DEMP -t (MC); -t_{MC} (GeV^{2}); Rate/0.01 GeV^{2} (Hz) ", 150, 0, 1.5);
     TH1D* h1_Result_DEMP_tRec = new TH1D("h1_Result_DEMP_tRec", "DEMP -t (eXBABE) ;-t_{eXBABE} (GeV^{2}); Rate/0.01 GeV^{2} (Hz)", 150, 0, 1.5);
-    // E - Pz (sum) plots
-    TH1D* h1_Result_DEMP_EPz_MC = new TH1D("h1_Result_DEMP_EPz_MC", "DEMP E - P_{z} (MC, all final state partcles);E_{MC}-P_{zMC};Rate/0.25 (Hz)", 200, 0, 50);
-    TH1D* h1_Result_DEMP_EPz_Rec = new TH1D("h1_Result_DEMP_EPz_Rec", "DEMP E - P_{z} (Rec, all final state partcles);E_{Rec}-P_{zRec};Rate/0.25 (Hz)", 200, 0, 50);
+    // E - Pz (sum) plots - Could (and probably should) introduce a form command to determine size of bins here.
+    // This sum, sigma, should be equal to ~ 2EBeamE if no initial state radiation (ISR) was present
+    TH1D* h1_Result_DEMP_EPz_MC = new TH1D("h1_Result_DEMP_EPz_MC", "DEMP E - P_{z} (MC, all final state partcles);E_{MC}-P_{zMC};Rate (Hz)", 300, 0, 3*ElecBeamE);
+    TH1D* h1_Result_DEMP_EPz_Rec = new TH1D("h1_Result_DEMP_EPz_Rec", "DEMP E - P_{z} (Rec, all final state partcles);E_{Rec}-P_{zRec};Rate (Hz)", 300, 0, 3*ElecBeamE);
     gDirectory->cd("../../");
   }  
 }
