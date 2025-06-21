@@ -630,6 +630,18 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist1D("h1_Result_DEMP_tRec", t_eXBABE, wgt);
   FillHist1D("h1_Result_DEMP_EPz_MC", (eSc_MC.E() + Pi_MC.E() + n_MC.E())-(eSc_MC.Pz() + Pi_MC.Pz() + n_MC.Pz()), wgt);
   FillHist1D("h1_Result_DEMP_EPz_Rec", (eSc_Rec.E() + Pi_Rec.E() + nCorr_Rec.E())-(eSc_Rec.Pz() + Pi_Rec.Pz() + nCorr_Rec.Pz()), wgt);
+  // Fill 2D plots
+  FillHist2D("h2_Result_DEMPQ2", Q2_MC_NoAB, Q2_DA, wgt);
+  FillHist2D("h2_Result_DEMPx", x_MC_NoAB, x_DA, wgt);
+  FillHist2D("h2_Result_DEMPy", y_MC_NoAB, y_DA, wgt);
+  FillHist2D("h2_Result_DEMPt", t_MC_NoAB, t_eXBABE, wgt);
+  FillHist2D("h2_Result_DEMP_eScTheta", eSc_MC.Theta()*TMath::RadToDeg(), eSc_Rec.Theta()*TMath::RadToDeg(), wgt);
+  FillHist2D("h2_Result_DEMP_eScE", eSc_MC.E(), eSc_Rec.E(), wgt);
+  FillHist2D("h2_Result_DEMP_piEPz", Pi_MC.E() - abs(Pi_MC.Pz()), Pi_Rec.E() - abs(Pi_Rec.Pz()), wgt);
+  FillHist2D("h2_Result_DEMP_piPt", Pi_MC.Pt(), Pi_Rec.Pt(), wgt);
+  FillHist2D("h2_Result_DEMP_nEPz", n_MC.E() - abs(n_MC.Pz()), nCorr_Rec.E() - abs(nCorr_Rec.Pz()), wgt);
+  FillHist2D("h2_Result_DEMP_nPt", n_MC.Pt(), nCorr_Rec.Pt(), wgt);
+  FillHist2D("h2_Result_DEMP_EPz", (eSc_MC.E() + Pi_MC.E() + n_MC.E())-(eSc_MC.Pz() + Pi_MC.Pz() + n_MC.Pz()), (eSc_Rec.E() + Pi_Rec.E() + nCorr_Rec.E())-(eSc_Rec.Pz() + Pi_Rec.Pz() + nCorr_Rec.Pz()), wgt);
   gDirectory->cd("../../");
 }
 

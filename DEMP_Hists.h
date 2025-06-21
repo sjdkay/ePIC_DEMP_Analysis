@@ -754,8 +754,20 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_Result_DEMP_tRec = new TH1D("h1_Result_DEMP_tRec", "DEMP -t (eXBABE) ;-t_{eXBABE} (GeV^{2}); Rate/0.01 GeV^{2} (Hz)", 150, 0, 1.5);
     // E - Pz (sum) plots - Could (and probably should) introduce a form command to determine size of bins here.
     // This sum, sigma, should be equal to ~ 2EBeamE if no initial state radiation (ISR) was present
-    TH1D* h1_Result_DEMP_EPz_MC = new TH1D("h1_Result_DEMP_EPz_MC", "DEMP E - P_{z} (MC, all final state partcles);E_{MC}-P_{zMC};Rate (Hz)", 300, 0, 3*ElecBeamE);
-    TH1D* h1_Result_DEMP_EPz_Rec = new TH1D("h1_Result_DEMP_EPz_Rec", "DEMP E - P_{z} (Rec, all final state partcles);E_{Rec}-P_{zRec};Rate (Hz)", 300, 0, 3*ElecBeamE);
+    TH1D* h1_Result_DEMP_EPz_MC = new TH1D("h1_Result_DEMP_EPz_MC", "DEMP E - P_{z} (MC, all final state partcles);E_{MC}-P_{zMC};Rate (Hz)", 200, 1.8*ElecBeamE , 2.2*ElecBeamE);
+    TH1D* h1_Result_DEMP_EPz_Rec = new TH1D("h1_Result_DEMP_EPz_Rec", "DEMP E - P_{z} (Rec, all final state partcles);E_{Rec}-P_{zRec};Rate (Hz)", 200, 1.8*ElecBeamE , 2.2*ElecBeamE);
+    // 2D plots
+    TH2D* h2_Result_DEMPQ2 = new TH2D("h2_Result_DEMPQ2", "DEMP Q^{2} Response; Q^{2}_{MC} (GeV/c^{2}); Q^{2}_{DA} (GeV/c^{2}); Rate (Hz)", 200, 0, 50, 200, 0, 50);
+    TH2D* h2_Result_DEMPx = new TH2D("h2_Result_DEMPx", "DEMP x Response; x_{MC}; x_{DA}; Rate (Hz)", 200, 0, 1, 200, 0, 1);
+    TH2D* h2_Result_DEMPy = new TH2D("h2_Result_DEMPy", "DEMP x Response; y_{MC}; y_{DA}; Rate (Hz)", 200, 0, 0.11, 200, 0, 0.11);
+    TH2D* h2_Result_DEMPt = new TH2D("h2_Result_DEMPt", "DEMP x Response; t_{MC} (GeV^{2}); t_{eXBABE}(GeV^{2}); Rate (Hz)", 150, 0, 1.5, 150, 0, 1.5);
+    TH2D* h2_Result_DEMP_eScTheta = new TH2D("h2_Result_DEMP_eScTheta", "DEMP e' #theta; #theta_{e'MC} (Deg); #theta_{e'Rec} (Deg); Rate (Hz)", NBins_Theta, 130, 180, NBins_Theta, 130, 180);
+    TH2D* h2_Result_DEMP_eScE = new TH2D("h2_Result_DEMP_eScE", "DEMP e' Energy; E_{e'MC} (GeV); E_{e'Rec} (GeV); Rate (Hz)", NBins_Energy, ElecBeamE-2, ElecBeamE+2, NBins_Energy, ElecBeamE-2, ElecBeamE+2);
+    TH2D* h2_Result_DEMP_piEPz = new TH2D("h2_Result_DEMP_piEPz", "DEMP #pi E - P_{z}; (E - P_{z})_{#piMC}; (E - P_{z})_{#piRec}; Rate (Hz)", 200, -1, 1, 200, -1, 1);
+    TH2D* h2_Result_DEMP_piPt = new TH2D("h2_Result_DEMP_piPt", "DEMP #pi P_{T}; P_{T#piMC}; P_{T#piRec}; Rate (Hz)", 200, 0, 10, 200, 0, 10);
+    TH2D* h2_Result_DEMP_nEPz = new TH2D("h2_Result_DEMP_nEPz", "DEMP n E - P_{z}; (E - P_{z})_{nMC}; (E - P_{z})_{nRec}; Rate (Hz)", 200, -0.2, 0.2, 200, -0.2, 0.2);
+    TH2D* h2_Result_DEMP_nPt = new TH2D("h2_Result_DEMP_nPt", "DEMP n P_{T}; P_{TnMC}; P_{TnRec}; Rate (Hz)", 200, 0, 10, 200, 0, 10);
+    TH2D* h2_Result_DEMP_EPz = new TH2D("h2_Result_DEMP_EPz", "DEMP E - P_{z}; (E - P_{z})_{MC}; (E - P_{z})_{Rec}; Rate (Hz)", 200, 1.8*ElecBeamE , 2.2*ElecBeamE, 200, 1.8*ElecBeamE , 2.2*ElecBeamE);
     gDirectory->cd("../../");
   }  
 }
