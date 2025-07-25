@@ -35,6 +35,7 @@ PxPyPzEVector Vec_p_beam; // initialized the 4 vector for proton beam */
 PxPyPzEVector Vec_e_beam_NoAB; // initialized the 4 vector for proton beam for nbf */
 PxPyPzEVector Vec_p_beam_NoAB; // initialized the 4 vector for proton beam for nbf */
 
+PxPyPzEVector Vec_tmp;
 PxPyPzEVector Vec_eSc_Rec;
 PxPyPzEVector Vec_Pi_Rec;
 PxPyPzEVector Vec_n_Rec;
@@ -1099,11 +1100,12 @@ void WritePlotsQA(TString InBeamE, TString InDate, TString InBeamConfig, TString
     c_Q2t_effDEMPCut_B0->Print(Form("%s/%s_Q2t_DetEff_B0.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
     gDirectory->cd("QADists/Kin");
-    TLegend* Leg_tComp = new TLegend (0.8,0.4,0.6,0.7); //2 sapce between them,3 more on left,4 on downside 
+    TLegend* Leg_tComp = new TLegend (0.8,0.4,0.6,0.7);  
     Leg_tComp->SetBorderSize(0);Leg_tComp->SetFillStyle(0); 
     TCanvas* c_tComp = new TCanvas("c_tComp", "-t Reconsturction method comparison", 100, 0, 2560, 1920);
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBABE_Res_QA_ZDC"));
     tmpHist1D->SetFillColorAlpha(kGreen, 0.3);
+    tmpHist1D->GetXaxis()->SetTitle("(t - t_{MC})/t_{MC} (%)");
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("HIST");
     Leg_tComp->AddEntry(tmpHist1D, "t_{eXBABE}");
@@ -1124,6 +1126,34 @@ void WritePlotsQA(TString InBeamE, TString InDate, TString InBeamConfig, TString
     Leg_tComp->AddEntry(tmpHist1D, "t_{BABE}");
     Leg_tComp->Draw("SAME");
     c_tComp->Print(Form("%s/%s_tComp.png", OutDir, InBeamE.Data()));
+    gDirectory->cd("../../");
+    gDirectory->cd("QADists/Q2_Alt");
+    TLegend* Leg_Q2Comp = new TLegend (0.525,0.7,0.725,0.9); 
+    Leg_Q2Comp->SetBorderSize(0);Leg_Q2Comp->SetFillStyle(0); 
+    TCanvas* c_Q2Comp = new TCanvas("c_Q2Comp", "Q^{2} Reconsturction method comparison", 100, 0, 2560, 1920);
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2DA_Res"));
+    tmpHist1D->SetFillColorAlpha(kGreen, 0.3);
+    tmpHist1D->GetXaxis()->SetTitle("(Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%)");
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("HIST");
+    Leg_Q2Comp->AddEntry(tmpHist1D, "DA Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2JB_Res"));
+    tmpHist1D->SetFillColorAlpha(kMagenta, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp->AddEntry(tmpHist1D, "JB Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Rec_Res"));
+    tmpHist1D->SetFillColorAlpha(kBlue, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp->AddEntry(tmpHist1D, "Electron Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Sig_Res"));
+    tmpHist1D->SetFillColorAlpha(kRed, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp->AddEntry(tmpHist1D, "Sigma Method");
+    Leg_Q2Comp->Draw("SAME");
+    c_Q2Comp->Print(Form("%s/%s_Q2Comp.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../../");
     if(ZDC == kTRUE){
       gDirectory->cd("QADists/tComp");
@@ -1161,26 +1191,26 @@ void WritePlotsQA(TString InBeamE, TString InDate, TString InBeamConfig, TString
   if(Results == kTRUE){
     gDirectory->cd("ResultsDists/");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_1"));
-    TCanvas* c_tResult_ZDC_1 = new TCanvas("c_tResult_ZDC_1", "-t, 5 < Q^{2} < 7.5", 100, 0, 2560, 1920);
+    TCanvas* c_tResult_ZDC_1 = new TCanvas("c_tResult_ZDC_1", "-t, 5 < Q^{2} < 6", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
-    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
-    c_tResult_ZDC_1->Print(Form("%s/%s_tResult_Q2_5_7p5.png", OutDir, InBeamE.Data()));
-    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_4"));
-    TCanvas* c_tResult_ZDC_4 = new TCanvas("c_tResult_ZDC_4", "-t, 15 < Q^{2} < 20", 100, 0, 2560, 1920);
+    c_tResult_ZDC_1->Print(Form("%s/%s_tResult_Q2_5_6.png", OutDir, InBeamE.Data()));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_13"));
+    TCanvas* c_tResult_ZDC_13 = new TCanvas("c_tResult_ZDC_13", "-t, 17 < Q^{2} < 18", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
-    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
-    c_tResult_ZDC_4->Print(Form("%s/%s_tResult_Q2_15_20.png", OutDir, InBeamE.Data()));
-    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_7"));
-    TCanvas* c_tResult_ZDC_7 = new TCanvas("c_tResult_ZDC_7", "-t, 30 < Q^{2} < 35", 100, 0, 2560, 1920);
+    c_tResult_ZDC_13->Print(Form("%s/%s_tResult_Q2_17_18.png", OutDir, InBeamE.Data()));
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tResult_ZDC_28"));
+    TCanvas* c_tResult_ZDC_28 = new TCanvas("c_tResult_ZDC_28", "-t, 32 < Q^{2} < 33", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
-    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist1D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
-    c_tResult_ZDC_7->Print(Form("%s/%s_tResult_Q2_30_35.png", OutDir, InBeamE.Data()));
+    c_tResult_ZDC_28->Print(Form("%s/%s_tResult_Q2_32_33.png", OutDir, InBeamE.Data()));
     gDirectory->cd("../");
   }
 }

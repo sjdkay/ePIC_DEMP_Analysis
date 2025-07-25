@@ -30,7 +30,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_Pi_pTheta_MCAccept_NoAB = new TH2D("h2_Pi_pTheta_MCAccept_NoAB", "#pi MC Truth Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_Pi_pTheta_MCDEMPAccept_NoCuts_NoAB = new TH2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts_NoAB", "#pi MC Truth DEMP Accepted, NoCuts, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_Pi_pTheta_MCDEMPAccept_NoAB = new TH2D("h2_Pi_pTheta_MCDEMPAccept_NoAB", "#pi MC Truth DEMP Accepted, No Beam Effects; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
-    TH2D* h2_Pi_pTheta_MC = new TH2D("h2_Pi_pTheta_MC", "#pi MC Truth; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, 1.5*NBins_Energy, 0, 150);
+    TH2D* h2_Pi_pTheta_MC = new TH2D("h2_Pi_pTheta_MC", "#pi MC Truth; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_Pi_pTheta_MCMatched = new TH2D("h2_Pi_pTheta_MCMatched", "#pi MC Truth (matched track); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_Pi_pTheta_MCAccept = new TH2D("h2_Pi_pTheta_MCAccept", "#pi MC Truth Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_Pi_pTheta_MCDEMPAccept_NoCuts = new TH2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts", "#pi MC Truth DEMP Accepted, No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);

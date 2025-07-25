@@ -926,7 +926,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       if(PartGenStat[i] == 4 && PartPdg[i] == 11){ Vec_e_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       if(PartGenStat[i] == 4 && PartPdg[i] == 2212){ Vec_p_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       // Select stable thrown particles
-      if(PartGenStat[i] == 1){
+      if(PartGenStat[i] == 1){ // Should also do a parent tracing check to find the real esc?
 	if(PartPdg[i] == 11){
 	  eSc_Index = i;
 	  Vec_eSc_MC.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);
@@ -979,50 +979,85 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     if(KinPlots == kTRUE){
       FillMCKin(weight[0]);
     }
-    // Loop over reconstructed particles, looking for associations
-    for(unsigned int i = 0; i < ChargedSim_Assoc.GetSize(); i++){
-      if (ChargedSim_Assoc[i] == eSc_Index){ // If matching track for electron found, assign reconstructed pion 4 vector
-	Vec_eSc_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
-	gDirectory->cd("EventDists/MC");	    
-	FillHist2D("h2_eSc_pTheta_MCMatched", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
-	FillHist2D("h2_eSc_pTheta_MCMatched_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
-	gDirectory->cd("../../");
+    // // Loop over reconstructed particles, looking for associations
+    // for(unsigned int i = 0; i < ChargedSim_Assoc.GetSize(); i++){
+    //   if (ChargedSim_Assoc[i] == eSc_Index){ // If matching track for electron found, assign reconstructed electron 4 vector
+    // 	Vec_eSc_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
+    // 	gDirectory->cd("EventDists/MC");	    
+    // 	FillHist2D("h2_eSc_pTheta_MCMatched", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+    // 	FillHist2D("h2_eSc_pTheta_MCMatched_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
+    // 	gDirectory->cd("../../");
+    // 	gDirectory->cd("EventDists/Reco");
+    // 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+    // 	gDirectory->cd("../../");
+    // 	if(trackCharge[ChargedRec_Assoc[i]] < 0 && trackMomZ[ChargedRec_Assoc[i]] < 0){ // Check if track LOOKS like an electron
+    // 	  Good_eSc_Track = kTRUE;
+    // 	  gDirectory->cd("EventDists/MC");	
+    // 	  FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+    // 	  FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
+    // 	  gDirectory->cd("../../");
+    // 	  gDirectory->cd("EventDists/Reco");
+    // 	  FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+    // 	  gDirectory->cd("../../");
+    // 	}
+    //   }
+    //   else if(ChargedSim_Assoc[i] == pi_Index){ // If matching track for pion found, assign reconstructed pion 4 vector
+    // 	Vec_Pi_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
+    // 	gDirectory->cd("EventDists/MC");
+    // 	FillHist2D("h2_Pi_pTheta_MCMatched", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
+    // 	FillHist2D("h2_Pi_pTheta_MCMatched_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
+    // 	gDirectory->cd("../../");
+    // 	gDirectory->cd("EventDists/Reco");
+    // 	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
+    // 	gDirectory->cd("../../");	
+    // 	if(trackCharge[ChargedRec_Assoc[i]] > 0 && trackMomZ[ChargedRec_Assoc[i]] > 0){ // Check if track LOOKS like an electron
+    // 	  Good_Pi_Track = kTRUE;
+    // 	  gDirectory->cd("EventDists/MC");
+    // 	  FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
+    // 	  FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
+    // 	  gDirectory->cd("../../");
+    // 	  gDirectory->cd("EventDists/Reco");
+    // 	  FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
+    // 	  gDirectory->cd("../../");
+    // 	}
+    //   }
+    // } // End loop over charged particle associations
+
+    // Loop over reconstructed charged particles, look for electrons and pions without using associations
+    for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
+      Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
+      // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher)
+      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE)){ // If track looks like a good scattered electron track, assign it 
+	Vec_eSc_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
-	if(trackCharge[ChargedRec_Assoc[i]] < 0 && trackMomZ[ChargedRec_Assoc[i]] < 0){ // Check if track LOOKS like an electron
-	  Good_eSc_Track = kTRUE;
-	  gDirectory->cd("EventDists/MC");	
-	  FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
-	  FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
-	  gDirectory->cd("../../");
-	  gDirectory->cd("EventDists/Reco");
-	  FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
-	  gDirectory->cd("../../");
-	}
-      }
-      else if(ChargedSim_Assoc[i] == pi_Index){ // If matching track for pion found, assign reconstructed pion 4 vector
-	Vec_Pi_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
-	gDirectory->cd("EventDists/MC");
-	FillHist2D("h2_Pi_pTheta_MCMatched", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
-	FillHist2D("h2_Pi_pTheta_MCMatched_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
+	Good_eSc_Track = kTRUE;
+	gDirectory->cd("EventDists/MC");	
+	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
 	gDirectory->cd("../../");
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");	    
+      }
+      // +ve charge, +ve z direction, > 1 GeV/c momentum
+      else if (trackCharge[i] > 0 && trackMomZ[i] > 0 && Vec_tmp.P() > 1){ // If track looks like a good scattered pion track, assign it
+	Vec_Pi_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
 	gDirectory->cd("../../");	
-	if(trackCharge[ChargedRec_Assoc[i]] > 0 && trackMomZ[ChargedRec_Assoc[i]] > 0){ // Check if track LOOKS like an electron
-	  Good_Pi_Track = kTRUE;
-	  gDirectory->cd("EventDists/MC");
-	  FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
-	  FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
-	  gDirectory->cd("../../");
-	  gDirectory->cd("EventDists/Reco");
-	  FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
-	  gDirectory->cd("../../");
-	}
+	Good_Pi_Track = kTRUE;
+	gDirectory->cd("EventDists/MC");
+	FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
+	FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
+	gDirectory->cd("../../");
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
       }
-    } // End loop over charged particle associations
-
+    } // End loop over charged particles
+    
     // Check ZDC info to find neutrons
     for(unsigned int i=0; i<neutE.GetSize(); i++) { // Loop over zdc neutrons
       Vec_n_Rec.SetPxPyPzE(neutMomX[i],neutMomY[i],neutMomZ[i], neutE[i]);
