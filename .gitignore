@@ -1,5 +1,6 @@
 InputFiles
 InputFiles/*
+InputFiles*
 #*
 *.csv
 *.pdf
