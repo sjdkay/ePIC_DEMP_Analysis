@@ -8,7 +8,7 @@ using namespace ROOT::Math;
 
 #include "TString.h"
 #include "DEMP_Analysis_DIS.h"
-#include "DEMP_Hists.h"
+#include "DEMP_Hists_DIS.h"
 #include "ePICStyle.C"
 
 void FillEffRaw(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC){
@@ -808,7 +808,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
   gStyle->SetOptStat(0);
   
   if (BeamE == ""){
-    cout << "Enter a beam energy combination in the format - XonY - where X is the electron beam energy in GeV and Y is the proton beam energy:" << endl;
+    cout << "Enter a beam energy combination in the format - XxY - where X is the electron beam energy in GeV and Y is the proton beam energy:" << endl;
     cin >> BeamE;
   }
 
@@ -876,8 +876,8 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
   
   TFile *ofile = TFile::Open(Form("%s/DIS_ep_%s_OutputHists.root", OutDir, BeamE.Data()),"RECREATE");
   
-  Double_t ElecE = ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atof();
-  Double_t HadE = ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atof();
+  Double_t ElecE = ((TObjString *)((BeamE.Tokenize("x"))->At(0)))->String().Atof();
+  Double_t HadE = ((TObjString *)((BeamE.Tokenize("x"))->At(1)))->String().Atof();
   
   Bool_t EventDistPlots = kTRUE;
   Bool_t KinPlots = kTRUE;

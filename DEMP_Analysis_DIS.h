@@ -8,7 +8,7 @@
 TString InFilePath_DIS = Form("%s/InputFiles_DIS", gSystem->pwd());
 
 string ConstructFileName_DIS(TString InBeamE, TString In_Q2){
-  string FileName = Form("%s/DIS_%s_q2_%s_Combined_Pruned.root", InFilePath_DIS.Data(), InBeamE.Data(), In_Q2.Data());
+  string FileName = Form("%s/DIS_%s_Q2_%s_Combined_Pruned.root", InFilePath_DIS.Data(), InBeamE.Data(), In_Q2.Data());
   return FileName;
 }
 
@@ -75,9 +75,9 @@ Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 
 Double_t Q2_JB, y_JB, x_JB, Q2_DA, y_DA, x_DA, Q2_Sig, y_Sig, x_Sig, delta_h, pt2_h, alpha_e, alpha_h, eps_DA;
 
 // Check files exist, can be opened and contain a relevant tree
-Bool_t CheckFiles(TString Files[3]){
+Bool_t CheckFiles(TString Files[2]){
   Bool_t FileCheck = kTRUE;
-  for (unsigned int i = 0;  i < 3; i++){
+  for (unsigned int i = 0;  i < 2; i++){
     if (gSystem->AccessPathName(Files[i]) == kTRUE){
       FileCheck = kFALSE;
       cout << "Input file - " << Files[i] << " not found." << endl;
