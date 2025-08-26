@@ -12,7 +12,7 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
   return FileName;
 }
 
-Bool_t Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
+Bool_t Good_eSc_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
 Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
 
 int nEntries = 0;
@@ -36,7 +36,8 @@ PxPyPzEVector Vec_e_beam_NoAB; // initialized the 4 vector for proton beam for n
 PxPyPzEVector Vec_p_beam_NoAB; // initialized the 4 vector for proton beam for nbf */
 
 PxPyPzEVector Vec_tmp;
-PxPyPzEVector Vec_eSc_Rec;
+//PxPyPzEVector Vec_eSc_Rec;
+PtEtaPhiMVector Vec_eSc_Rec;
 PxPyPzEVector Vec_Pi_Rec;
 PxPyPzEVector Vec_n_Rec;
 PxPyPzEVector Vec_nRot_Rec;
@@ -63,7 +64,8 @@ double neutMass = 0.93965420;
 double eMass = 0.000510998950; //electron beam
 double pMass = 0.93827208816; // proton beam
 double PartE, NoABPartE; // Energy of the MC particles 
-int eSc_Index, pi_Index, n_Index;
+double ClusE, eSc_P;
+int eSc_Index, pi_Index, n_Index, MaxClusIndex, MaxBClusIndex;
 
 Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, x_MC_NoAB, eps_MC_NoAB;
@@ -131,7 +133,7 @@ void CalculateKinematicsMCNoAB(PxPyPzEVector eSc_MC, PxPyPzEVector pi_MC, PxPyPz
   eps_MC_NoAB = (2*(1-y_MC_NoAB))/(1+(pow(1-y_MC_NoAB,2)));
 }
 
-void CalculateBasicKinematics_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+void CalculateBasicKinematics_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   Vec_Q_Rec = (EBeam - eSc_Rec);
   Q2_Rec = -1*(Vec_Q_Rec.mag2());
   W_Rec = (Vec_Q_Rec + HBeam).mag();
@@ -140,7 +142,7 @@ void CalculateBasicKinematics_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Re
   eps_Rec = (2*(1-y_Rec))/(1+(pow(1-y_Rec,2)));
 }
 
-void CalculateKinematics_Q2Alt_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+void CalculateKinematics_Q2Alt_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   delta_h = (pi_Rec.E() + n_Rec.E()) - (pi_Rec.Pz() + n_Rec.Pz());
   pt2_h = (pow((pi_Rec.Px()+n_Rec.Px()),2))+(pow((pi_Rec.Py()+n_Rec.Py()),2));
   alpha_e = tan((eSc_Rec.Theta()/2));
@@ -157,13 +159,13 @@ void CalculateKinematics_Q2Alt_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_R
   x_Sig = Q2_Sig/(4*EBeam.E()*HBeam.E()*y_Sig);
 }
 
-void CorrectNeutronTrack(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+void CorrectNeutronTrack(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   Vec_PMiss_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec);
   Vec_PMissRot_Rec = rot*Vec_PMiss_Rec;
   Vec_n_RecCorr.SetPxPyPzE(Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*cos(n_Rec.Phi()), Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*sin(n_Rec.Phi()), Vec_PMiss_Rec.P()*cos(n_Rec.Theta()), sqrt(pow(Vec_PMiss_Rec.P(),2)+(pow(neutMass,2))));
 }
 
-void Calculate_t_DEMPRec(PxPyPzEVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector n_RecCorr, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
+void Calculate_t_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector n_RecCorr, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   Vec_t_BABE = (HBeam - n_Rec);
   Vec_t_eX = ((EBeam - eSc_Rec) - pi_Rec);
   Vec_t_eXPT = rot*(eSc_Rec + pi_Rec); // Rotate vetors prior to getting perpendicular component

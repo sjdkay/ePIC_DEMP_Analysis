@@ -3,6 +3,7 @@
 // 28/03/25
 // New DEMP Analysis script based upon Love's earlier work, segmented code out into functions and tried to make it more generic
 // Filling routines should ideally be segmented out to an includes file such that this file is ONLY the analysis loop
+
 using namespace ROOT::Math;
 
 #include "TString.h"
@@ -193,7 +194,7 @@ void FillEffDEMPCut(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_M
   gDirectory->cd("../../");
 }
 
-void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
   gDirectory->cd("EventDists/MC");
   FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoCuts", eSc_MC.Theta()*TMath::RadToDeg(), eSc_MC.P(), wgt);
   FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts", Pi_MC.Theta()*TMath::RadToDeg(), Pi_MC.P(), wgt);
@@ -320,7 +321,7 @@ void FillDEMPAccept_Kin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, f
   }
 }
 
-void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, float wgt, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
 
   gDirectory->cd("EventDists/MC");
   FillHist2D("h2_eSc_pTheta_MCDEMPAccept", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
@@ -569,7 +570,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   }
 }
 
-void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC,PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_Rec, PxPyPzEVector nCorr_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC,PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_Rec, PxPyPzEVector nCorr_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("ResultsDists");
   FillHist1D("h1_tResult_0", t_eXBABE, wgt);
   FillHist1D("h1_Q2Result_0", Q2_DA, wgt);
@@ -731,7 +732,7 @@ void FillDEMP_Q2Alt(float wgt){
   gDirectory->cd("../../");
 }
 
-void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
+void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("QADists/PartRes");
   FillHist1D("h1_eSc_p_Res_QA", ((eSc_Rec.P()-eSc_MC.P())/eSc_MC.P())*100, wgt);
   FillHist1D("h1_Pi_p_Res_QA", ((Pi_Rec.P()-Pi_MC.P())/Pi_MC.P())*100, wgt);
@@ -864,6 +865,15 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<int>   trackPdg(tree_reader,"ReconstructedChargedParticles.PDG");
   TTreeReaderArray<float> trackMass(tree_reader,"ReconstructedChargedParticles.mass");
   TTreeReaderArray<float> trackCharge(tree_reader,"ReconstructedChargedParticles.charge");
+  // Get ECalEndCapNClusters info
+  TTreeReaderArray<float> ECalClustE = {tree_reader, "EcalEndcapNClusters.energy"};
+  TTreeReaderArray<float> ECalX = {tree_reader, "EcalEndcapNClusters.position.x"};
+  TTreeReaderArray<float> ECalY = {tree_reader, "EcalEndcapNClusters.position.y"};
+  // Get Barrel ECal clusters info
+  TTreeReaderArray<float> BECalClustE = {tree_reader, "EcalBarrelClusters.energy"};
+  TTreeReaderArray<float> BECalX = {tree_reader, "EcalBarrelClusters.position.x"};
+  TTreeReaderArray<float> BECalY = {tree_reader, "EcalBarrelClusters.position.y"};
+  TTreeReaderArray<float> BECalZ = {tree_reader, "EcalBarrelClusters.position.z"};  
   // ZDC Neutrons
   TTreeReaderArray<float> neutE(tree_reader, "ReconstructedFarForwardZDCNeutrals.energy");
   TTreeReaderArray<float> neutMomX(tree_reader, "ReconstructedFarForwardZDCNeutrals.momentum.x");
@@ -900,7 +910,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   Bool_t B0Plots = kTRUE;
   Bool_t QAPlots = kTRUE;
   Bool_t ResultsPlots = kTRUE;
-
+  Int_t nElecCandidates, nPionCandidates, nNeutCandidates;
+  
   // Set cut values depending upon beam energy combination
   SetCutVals(ElecE, HadE);
   // Set directories in file ahead of defining histograms
@@ -917,7 +928,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     // if (EventCounter > EscapeEvent){
     //   continue;
     // }
-    Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
+    Good_eSc_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
+    nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");
     // Loop over MC particles, assign e'/pi/n info - Segment into function?
     for (unsigned int i = 0; i < PartGenStat.GetSize(); i++){ 
@@ -926,7 +938,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       if(PartGenStat[i] == 4 && PartPdg[i] == 11){ Vec_e_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       if(PartGenStat[i] == 4 && PartPdg[i] == 2212){ Vec_p_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       // Select stable thrown particles
-      if(PartGenStat[i] == 1){ // Should also do a parent tracing check to find the real esc?
+      if(PartGenStat[i] == 1){ // Should also do a parent tracing check to find the real esc? How does this handle multiple electrons?
 	if(PartPdg[i] == 11){
 	  eSc_Index = i;
 	  Vec_eSc_MC.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);
@@ -1023,12 +1035,40 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     //   }
     // } // End loop over charged particle associations
 
+    // Loop over clusters in the EEMC
+    ClusE = 0; // Reset to 0 before each pass
+    for (unsigned int i = 0; i < ECalClustE.GetSize(); i++){
+      if( sqrt((ECalX[i] * ECalX[i]) + (ECalY[i] * ECalY[i])) > 550) continue;
+      if(ECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
+	ClusE = ECalClustE[i];
+	MaxClusIndex = i; // Find the index of the highest energy cluster for later use
+      }
+    } // End loop over end cap clusters, ONLY if an electron energy with > 0.8 * beam energy retained, assign a "good" cluster
+    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE;
+    // If no good cluster found, check the barrel calorimeter
+    if ( Good_eSc_Clust == kFALSE){
+      ClusE = 0; // Reset to 0 in case anythng withing EEMC loop was stuck here
+      for(unsigned int i = 0; i < BECalClustE.GetSize(); i++){
+	if ( BECalZ[i] > 0) continue; // Only look at clusters in -z direction
+	if( sqrt((BECalX[i] * BECalX[i]) + (BECalY[i] * BECalY[i])) < 750) continue; // Ignore clusters that aren't roughly at the position of the barrel
+	if(BECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
+	  ClusE = BECalClustE[i];
+	  MaxBClusIndex = i; // Find the index of the highest energy cluster for later use
+	}	
+      }
+    }
+    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE; // Check again to see if a good cluster was found
+    
     // Loop over reconstructed charged particles, look for electrons and pions without using associations
     for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
       Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
-      // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher)
-      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE)){ // If track looks like a good scattered electron track, assign it 
-	Vec_eSc_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
+      // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher), require a GOOD cluster from the EEMC
+      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kTRUE){ // If track looks like a good scattered electron track, assign it 
+	// Add loop on using/matching cluster information
+	eSc_P = sqrt((ClusE*ClusE)-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
+	// If E/p looks bad, continue - Within +/- 0.2
+	if ( (Vec_eSc_Rec.E()/Vec_tmp.P()) > 1.2 ||  (Vec_eSc_Rec.E()/Vec_tmp.P()) < 0.8) continue; 
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
@@ -1039,7 +1079,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	gDirectory->cd("../../");
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
-	gDirectory->cd("../../");	    
+	gDirectory->cd("../../");
+	nElecCandidates+=1;
       }
       // +ve charge, +ve z direction, > 1 GeV/c momentum
       else if (trackCharge[i] > 0 && trackMomZ[i] > 0 && Vec_tmp.P() > 1){ // If track looks like a good scattered pion track, assign it
@@ -1055,6 +1096,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
+	nPionCandidates+=1;
       }
     } // End loop over charged particles
     
@@ -1077,6 +1119,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	Good_nRec = kTRUE;
 	nZDCHit = kTRUE; 
 	FillNeutAccept(Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, weight[0], ZDCPlots, KinPlots);
+	nNeutCandidates+=1;
       }
     }// End loop over ZDC info
     
@@ -1131,7 +1174,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       FillEffAccept(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0], Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit);
     }
     // Now, check for coin events, calculate quantities and fill relevant histograms
-    if ( Good_eSc_Track == kTRUE && Good_Pi_Track == kTRUE && Good_nRec == kTRUE){
+    if ( Good_eSc_Track == kTRUE && Good_Pi_Track == kTRUE && Good_nRec == kTRUE  && nElecCandidates == 1 && nPionCandidates == 1 && nNeutCandidates ==1 ){ // For now, enforce 1 candidate particle (of each type) per event
       CalculateBasicKinematics_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_e_beam, Vec_p_beam); // Calculate Q2/W/eps/y/x for reconstructed DEMP events. Calculate some quantities multiple ways
       CorrectNeutronTrack(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_Rec, Vec_e_beam, Vec_p_beam); // Calculate the corrected neutron track, also sets PMiss/PMissRot
       CalculateKinematics_Q2Alt_DEMPRec(Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_RecCorr, Vec_e_beam, Vec_p_beam);
