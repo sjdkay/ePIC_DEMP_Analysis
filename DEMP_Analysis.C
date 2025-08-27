@@ -1058,7 +1058,6 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
       }
     }
     if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE; // Check again to see if a good cluster was found
-    
     // Loop over reconstructed charged particles, look for electrons and pions without using associations
     for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
       Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
@@ -1069,6 +1068,8 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	// If E/p looks bad, continue - Within +/- 0.2
 	if ( (Vec_eSc_Rec.E()/Vec_tmp.P()) > 1.2 ||  (Vec_eSc_Rec.E()/Vec_tmp.P()) < 0.8) continue; 
+	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
@@ -1081,6 +1082,23 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
 	nElecCandidates+=1;
+      }
+      // Relying upon a good cluster hit leaves an acceptance gap around ~160-163 degrees. Some of these events might be recoverable. Add a specific case that checks events in this range where no good cluster was identified
+      else if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kFALSE && (Vec_tmp.Theta()*TMath::RadToDeg()) > 160 && (Vec_tmp.Theta()*TMath::RadToDeg()) < 163){
+	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
+	Good_eSc_Track = kTRUE;
+	gDirectory->cd("EventDists/MC");	
+	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
+	gDirectory->cd("../../");
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
+	nElecCandidates+=1;	
       }
       // +ve charge, +ve z direction, > 1 GeV/c momentum
       else if (trackCharge[i] > 0 && trackMomZ[i] > 0 && Vec_tmp.P() > 1){ // If track looks like a good scattered pion track, assign it
