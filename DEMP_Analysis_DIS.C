@@ -194,7 +194,7 @@ void FillEffDEMPCut(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_M
   gDirectory->cd("../../");
 }
 
-void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
   gDirectory->cd("EventDists/MC");
   FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoCuts", eSc_MC.Theta()*TMath::RadToDeg(), eSc_MC.P());
   FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts", Pi_MC.Theta()*TMath::RadToDeg(), Pi_MC.P());
@@ -321,7 +321,7 @@ void FillDEMPAccept_Kin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   }
 }
 
-void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
+void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_MC_NoAB, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_MC_NoAB, PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, Bool_t ZDC, Bool_t B0, Bool_t nZDC, Bool_t nB0){
 
   gDirectory->cd("EventDists/MC");
   FillHist2D("h2_eSc_pTheta_MCDEMPAccept", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P());
@@ -570,7 +570,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   }
 }
 
-void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC,PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_Rec, PxPyPzEVector nCorr_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
+void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC,PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_Rec, PxPyPzEVector nCorr_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   gDirectory->cd("ResultsDists");
   FillHist1D("h1_tResult_0", t_eXBABE);
   FillHist1D("h1_Q2Result_0", Q2_DA);
@@ -732,7 +732,7 @@ void FillDEMP_Q2Alt(){
   gDirectory->cd("../../");
 }
 
-void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
+void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PtEtaPhiMVector eSc_Rec, PxPyPzEVector Pi_MC, PxPyPzEVector Pi_Rec, PxPyPzEVector n_MC, PxPyPzEVector n_Rec, Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   gDirectory->cd("QADists/PartRes");
   FillHist1D("h1_eSc_p_Res_QA", ((eSc_Rec.P()-eSc_MC.P())/eSc_MC.P())*100);
   FillHist1D("h1_Pi_p_Res_QA", ((Pi_Rec.P()-Pi_MC.P())/Pi_MC.P())*100);
@@ -858,6 +858,15 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
   TTreeReaderArray<float> neutPosY(tree_reader, "ReconstructedFarForwardZDCNeutrals.referencePoint.y");
   TTreeReaderArray<float> neutPosZ(tree_reader, "ReconstructedFarForwardZDCNeutrals.referencePoint.z");
   TTreeReaderArray<unsigned int> neutClus(tree_reader, "ReconstructedFarForwardZDCNeutrals.clusters_end");
+  // Get ECalEndCapNClusters info
+  TTreeReaderArray<float> ECalClustE = {tree_reader, "EcalEndcapNClusters.energy"};
+  TTreeReaderArray<float> ECalX = {tree_reader, "EcalEndcapNClusters.position.x"};
+  TTreeReaderArray<float> ECalY = {tree_reader, "EcalEndcapNClusters.position.y"};
+  // Get Barrel ECal clusters info
+  TTreeReaderArray<float> BECalClustE = {tree_reader, "EcalBarrelClusters.energy"};
+  TTreeReaderArray<float> BECalX = {tree_reader, "EcalBarrelClusters.position.x"};
+  TTreeReaderArray<float> BECalY = {tree_reader, "EcalBarrelClusters.position.y"};
+  TTreeReaderArray<float> BECalZ = {tree_reader, "EcalBarrelClusters.position.z"};  
   // B0ECalClusters
   TTreeReaderArray<float> PosX_B0(tree_reader, "B0ECalClusters.position.x");
   TTreeReaderArray<float> PosY_B0(tree_reader, "B0ECalClusters.position.y");
@@ -885,6 +894,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
   Bool_t B0Plots = kTRUE;
   Bool_t QAPlots = kTRUE;
   Bool_t ResultsPlots = kTRUE;
+  Int_t nElecCandidates, nPionCandidates, nNeutCandidates;
 
   // Set cut values depending upon beam energy combination
   SetCutVals(ElecE, HadE);
@@ -902,7 +912,8 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
     // if (EventCounter > EscapeEvent){
     //   continue;
     // }
-    Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
+    Good_eSc_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
+    nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");
     // Loop over MC particles, assign e'/pi/n info - Segment into function?
     for (unsigned int i = 0; i < PartGenStat.GetSize(); i++){ 
@@ -964,82 +975,87 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
     if(KinPlots == kTRUE){
       FillMCKin();
     }
-    // // Loop over reconstructed particles, looking for associations
-    // for(unsigned int i = 0; i < ChargedSim_Assoc.GetSize(); i++){
-    //   if (ChargedSim_Assoc[i] == eSc_Index){ // If matching track for electron found, assign reconstructed electron 4 vector
-    // 	Vec_eSc_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
-    // 	gDirectory->cd("EventDists/MC");	    
-    // 	FillHist2D("h2_eSc_pTheta_MCMatched", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P());
-    // 	FillHist2D("h2_eSc_pTheta_MCMatched_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P());
-    // 	gDirectory->cd("../../");
-    // 	gDirectory->cd("EventDists/Reco");
-    // 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P());
-    // 	gDirectory->cd("../../");
-    // 	if(trackCharge[ChargedRec_Assoc[i]] < 0 && trackMomZ[ChargedRec_Assoc[i]] < 0){ // Check if track LOOKS like an electron
-    // 	  Good_eSc_Track = kTRUE;
-    // 	  gDirectory->cd("EventDists/MC");	
-    // 	  FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P());
-    // 	  FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P());
-    // 	  gDirectory->cd("../../");
-    // 	  gDirectory->cd("EventDists/Reco");
-    // 	  FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P());
-    // 	  gDirectory->cd("../../");
-    // 	}
-    //   }
-    //   else if(ChargedSim_Assoc[i] == pi_Index){ // If matching track for pion found, assign reconstructed pion 4 vector
-    // 	Vec_Pi_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
-    // 	gDirectory->cd("EventDists/MC");
-    // 	FillHist2D("h2_Pi_pTheta_MCMatched", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P());
-    // 	FillHist2D("h2_Pi_pTheta_MCMatched_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P());
-    // 	gDirectory->cd("../../");
-    // 	gDirectory->cd("EventDists/Reco");
-    // 	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P());
-    // 	gDirectory->cd("../../");	
-    // 	if(trackCharge[ChargedRec_Assoc[i]] > 0 && trackMomZ[ChargedRec_Assoc[i]] > 0){ // Check if track LOOKS like an electron
-    // 	  Good_Pi_Track = kTRUE;
-    // 	  gDirectory->cd("EventDists/MC");
-    // 	  FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P());
-    // 	  FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P());
-    // 	  gDirectory->cd("../../");
-    // 	  gDirectory->cd("EventDists/Reco");
-    // 	  FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P());
-    // 	  gDirectory->cd("../../");
-    // 	}
-    //   }
-    // } // End loop over charged particle associations
 
+    // Loop over clusters in the EEMC
+    ClusE = 0; // Reset to 0 before each pass
+    for (unsigned int i = 0; i < ECalClustE.GetSize(); i++){
+      if( sqrt((ECalX[i] * ECalX[i]) + (ECalY[i] * ECalY[i])) > 550) continue;
+      if(ECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
+	ClusE = ECalClustE[i];
+	MaxClusIndex = i; // Find the index of the highest energy cluster for later use
+      }
+    } // End loop over end cap clusters, ONLY if an electron energy with > 0.8 * beam energy retained, assign a "good" cluster
+    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE;
+    // If no good cluster found, check the barrel calorimeter
+    if ( Good_eSc_Clust == kFALSE){
+      ClusE = 0; // Reset to 0 in case anythng withing EEMC loop was stuck here
+      for(unsigned int i = 0; i < BECalClustE.GetSize(); i++){
+	if ( BECalZ[i] > 0) continue; // Only look at clusters in -z direction
+	if( sqrt((BECalX[i] * BECalX[i]) + (BECalY[i] * BECalY[i])) < 750) continue; // Ignore clusters that aren't roughly at the position of the barrel
+	if(BECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
+	  ClusE = BECalClustE[i];
+	  MaxBClusIndex = i; // Find the index of the highest energy cluster for later use
+	}	
+      }
+    }
+    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE; // Check again to see if a good cluster was found
     // Loop over reconstructed charged particles, look for electrons and pions without using associations
     for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
       Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
-      // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher)
-      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE)){ // If track looks like a good scattered electron track, assign it 
-	Vec_eSc_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
+      // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher), require a GOOD cluster from the EEMC
+      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kTRUE){ // If track looks like a good scattered electron track, assign it 
+	// Add loop on using/matching cluster information
+	eSc_P = sqrt((ClusE*ClusE)-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
+	// If E/p looks bad, continue - Within +/- 0.2
+	if ( (Vec_eSc_Rec.E()/Vec_tmp.P()) > 1.2 ||  (Vec_eSc_Rec.E()/Vec_tmp.P()) < 0.8) continue; 
+	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
-	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P());
+	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
 	Good_eSc_Track = kTRUE;
 	gDirectory->cd("EventDists/MC");	
-	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P());
-	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P());
+	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
 	gDirectory->cd("../../");
 	gDirectory->cd("EventDists/Reco");
-	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P());
-	gDirectory->cd("../../");	    
+	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
+	nElecCandidates+=1;
+      }
+      // Relying upon a good cluster hit leaves an acceptance gap around ~160-163 degrees. Some of these events might be recoverable. Add a specific case that checks events in this range where no good cluster was identified
+      else if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kFALSE && (Vec_tmp.Theta()*TMath::RadToDeg()) > 160 && (Vec_tmp.Theta()*TMath::RadToDeg()) < 163){
+	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
+	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
+	Good_eSc_Track = kTRUE;
+	gDirectory->cd("EventDists/MC");	
+	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
+	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
+	gDirectory->cd("../../");
+	gDirectory->cd("EventDists/Reco");
+	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
+	gDirectory->cd("../../");
+	nElecCandidates+=1;	
       }
       // +ve charge, +ve z direction, > 1 GeV/c momentum
       else if (trackCharge[i] > 0 && trackMomZ[i] > 0 && Vec_tmp.P() > 1){ // If track looks like a good scattered pion track, assign it
 	Vec_Pi_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
 	gDirectory->cd("EventDists/Reco");
-	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P());
+	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
 	gDirectory->cd("../../");	
 	Good_Pi_Track = kTRUE;
 	gDirectory->cd("EventDists/MC");
-	FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P());
-	FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P());
+	FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
+	FillHist2D("h2_Pi_pTheta_MCAccept_NoAB", Vec_Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_Pi_MC_NoAB.P(), weight[0]);
 	gDirectory->cd("../../");
 	gDirectory->cd("EventDists/Reco");
-	FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P());
+	FillHist2D("h2_Pi_pTheta_RecoAccept", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
+	nPionCandidates+=1;
       }
     } // End loop over charged particles
     
@@ -1049,19 +1065,20 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
       Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
       Vec_n_Vertex.SetXYZ(neutPosX[i],neutPosY[i],neutPosZ[i]);
       gDirectory->cd("EventDists/Reco");
-      FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P());
-      FillHist2D("h2_nRot_pTheta_Reco", Vec_nRot_Rec.Theta()*TMath::RadToDeg(), Vec_nRot_Rec.P());
+      FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
+      FillHist2D("h2_nRot_pTheta_Reco", Vec_nRot_Rec.Theta()*TMath::RadToDeg(), Vec_nRot_Rec.P(), weight[0]);
       gDirectory->cd("../../");
       if(ZDCPlots == kTRUE){
 	gDirectory->cd("ZDCDists/Reco");
-	FillHist2D("h2_n_XY_Reco", Vec_n_Vertex.X(), Vec_n_Vertex.Y());
-	FillHist2D("h2_nRot_XY_Reco", 35000*sin(Vec_nRot_Rec.Theta())*cos(Vec_nRot_Rec.Phi()), 35000*sin(Vec_nRot_Rec.Theta())*sin(Vec_nRot_Rec.Phi()));
+	FillHist2D("h2_n_XY_Reco", Vec_n_Vertex.X(), Vec_n_Vertex.Y(), weight[0]);
+	FillHist2D("h2_nRot_XY_Reco", 35000*sin(Vec_nRot_Rec.Theta())*cos(Vec_nRot_Rec.Phi()), 35000*sin(Vec_nRot_Rec.Theta())*sin(Vec_nRot_Rec.Phi()), weight[0]);
 	gDirectory->cd("../../");
       }
       if(Vec_nRot_Rec.Theta()*1000 < ThetaStar_Max && Vec_nRot_Rec.E() > n_Emin){
 	Good_nRec = kTRUE;
 	nZDCHit = kTRUE; 
-	FillNeutAccept(Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ZDCPlots, KinPlots);
+	FillNeutAccept(Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, weight[0], ZDCPlots, KinPlots);
+	nNeutCandidates+=1;
       }
     }// End loop over ZDC info
     
@@ -1072,7 +1089,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
       // Fill some hits with raw B0 info
       gDirectory->cd("B0Dists/Reco");
       FillHist1D("h1_B0_nClusters", E_B0.GetSize());
-      FillHist2D("h2_n_pTheta_MC_B0", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P());
+      FillHist2D("h2_n_pTheta_MC_B0", Vec_n_MC.Theta()*TMath::RadToDeg(), Vec_n_MC.P(), weight[0]);
       gDirectory->cd("../../");
       for (Int_t i = 0; i < E_B0.GetSize(); i++){
 	gDirectory->cd("B0Dists/Reco");
@@ -1098,7 +1115,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	  }
 	  Vec_n_Rec.SetPxPyPzE((sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*cos(Vec_n_Vertex.Phi()), (sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*sin(Vec_n_Vertex.Theta())*sin(Vec_n_Vertex.Phi()),(sqrt((ESum_B0*ESum_B0)+(neutMass*neutMass)))*cos(Vec_n_Vertex.Theta()), ESum_B0);
 	  gDirectory->cd("B0Dists/Reco");
-	  FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P());
+	  FillHist2D("h2_n_pTheta_Reco", Vec_n_Rec.Theta()*TMath::RadToDeg(), Vec_n_Rec.P(), weight[0]);
 	  gDirectory->cd("../../");
 	  if(ESum_B0 > 10*B0_ECut){ // Ignore low energy junk events, assign vectors, fill histograms
 	    Vec_n_Vertex.SetXYZ(tmpB0PosX/ESum_B0, tmpB0PosY/ESum_B0, tmpB0PosZ/ESum_B0);
@@ -1106,7 +1123,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 		Good_nRec = kTRUE;
 		nB0Hit = kTRUE;
 		Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
-		FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, KinPlots);
+		FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
 	    }
 	  }
 	}
