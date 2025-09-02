@@ -386,6 +386,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){;
   FillHist1D("h1_DeltaTheta_Reco", nTheta_Diff);
   FillHist1D("h1_DeltaPhi_Reco", nPhi_Diff);
   FillHist1D("h1_MissMass", MMiss);
+  FillHist1D("h1_MissMass2", MMiss*MMiss);
   FillHist2D("h2_Q2tBABE_Reco", Q2_DA, t_BABE);
   FillHist2D("h2_Q2teX_Reco", Q2_DA, t_eX);
   FillHist2D("h2_Q2teXPT_Reco", Q2_DA, t_eXPT);
@@ -505,7 +506,8 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   FillHist1D("h1_teXBABE_Reco_NoCuts", t_eXBABE);
   FillHist1D("h1_DeltaTheta_Reco_NoCuts", nTheta_Diff);
   FillHist1D("h1_DeltaPhi_Reco_NoCuts", nPhi_Diff);
-  FillHist1D("h1_MissMass_NoCuts", MMiss );
+  FillHist1D("h1_MissMass_NoCuts", MMiss);
+  FillHist1D("h1_MissMass2_NoCuts", MMiss*MMiss);
   FillHist2D("h2_Q2tBABE_Reco_NoCuts", Q2_DA, t_BABE);
   FillHist2D("h2_Q2teX_Reco_NoCuts", Q2_DA, t_eX);
   FillHist2D("h2_Q2teXPT_Reco_NoCuts", Q2_DA, t_eXPT);
@@ -1202,12 +1204,14 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	  if( Good_FECal_Clust == kTRUE ){
 	    FillHist1D("h1_FECal_ClustE", ClusE);
 	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio); 
-	    FillHist2D("h2_FECal_Ep_Ratio_P_NoCut", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
+	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
+	    FillHist2D("h2_FECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE);
 	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio); 
 	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
+	    FillHist2D("h2_BECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
 	  }
 	  gDirectory->cd("../../");
 	  // Fill lots of plots and fill histograms
