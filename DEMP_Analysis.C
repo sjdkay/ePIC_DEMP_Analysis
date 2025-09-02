@@ -543,7 +543,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     FillHist2D("h2_Q2t_MCDEMPAcceptZDC_NoCuts", Q2_MC, t_MC, wgt);
     FillHist1D("h1_t_MCDEMPAcceptZDC_NoCuts_NoAB", t_MC_NoAB, wgt);
     FillHist2D("h2_Q2t_MCDEMPAcceptZDC_NoCuts_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);}
-    gDirectory->cd("../../../");
+  gDirectory->cd("../../../");
   if(B0 == kTRUE && nB0 == kTRUE){
     gDirectory->cd("KinematicDists/Reco/B0");
     FillHist1D("h1_tBABE_B0Reco_NoCuts", t_BABE, wgt);
@@ -587,7 +587,7 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   }
   
   for(Int_t i = 0; i < 30; i++){
-  //for(Int_t i = 0; i < 7; i++){
+    //for(Int_t i = 0; i < 7; i++){
     if( Q2_DA > Q2Vals[i] && Q2_DA < Q2Vals[i+1]){
       FillHist1D(Form("h1_tResult_%i", i+1), t_eXBABE, wgt);
       FillHist1D(Form("h1_Q2Result_%i", i+1), Q2_DA, wgt);
@@ -744,7 +744,7 @@ void FillDEMP_QAPartRes(PxPyPzEVector eSc_MC, PtEtaPhiMVector eSc_Rec, PxPyPzEVe
     FillHist1D("h1_Pi_p_Res_QA_ZDC", ((Pi_Rec.P()-Pi_MC.P())/Pi_MC.P())*100, wgt);
     FillHist1D("h1_n_p_Res_QA_ZDC", ((n_Rec.P()-n_MC.P())/n_MC.P())*100, wgt);
     FillHist1D("h1_n_Theta_Res_QA_ZDC", ((n_Rec.Theta()-n_MC.Theta())/n_MC.Theta())*100, wgt);
-FillHist1D("h1_n_Phi_Res_QA_ZDC", ((n_Rec.Phi()-n_MC.Phi())/n_MC.Phi())*100, wgt);
+    FillHist1D("h1_n_Phi_Res_QA_ZDC", ((n_Rec.Phi()-n_MC.Phi())/n_MC.Phi())*100, wgt);
   }
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist1D("h1_eSc_p_Res_QA_B0", ((eSc_Rec.P()-eSc_MC.P())/eSc_MC.P())*100, wgt);
@@ -928,13 +928,13 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     // if (EventCounter > EscapeEvent){
     //   continue;
     // }
-    Good_eSc_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
+    Good_eSc_Clust = kFALSE, Good_FECal_Clust = kFALSE, Good_BECal_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
     nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");
     // Loop over MC particles, assign e'/pi/n info - Segment into function?
     for (unsigned int i = 0; i < PartGenStat.GetSize(); i++){ 
       PartE = sqrt(pow(PartMomX[i],2) + pow(PartMomY[i],2) + pow(PartMomZ[i],2) + pow(PartMass[i],2)); // Energy of MC Particle
-     // Assign beam 4 vectors
+      // Assign beam 4 vectors
       if(PartGenStat[i] == 4 && PartPdg[i] == 11){ Vec_e_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       if(PartGenStat[i] == 4 && PartPdg[i] == 2212){ Vec_p_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
       // Select stable thrown particles
@@ -965,11 +965,11 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     
     // Loop over MC NoABParticles without beam effects, assign e'/pi/n info - Segment into function?
     for (unsigned int i = 0; i < NoABPartGenStat.GetSize(); i++){
-	NoABPartE = sqrt(pow(NoABPartMomX[i],2) + pow(NoABPartMomY[i],2) + pow(NoABPartMomZ[i],2) + pow(NoABPartMass[i],2)); // Energy of MC Non Afterbruned particle
-	// Assign beam 4 vectors
-	if(NoABPartGenStat[i] == 4 && NoABPartPdg[i] == 11){Vec_e_beam_NoAB.SetPxPyPzE(NoABPartMomX[i], NoABPartMomY[i], NoABPartMomZ[i], NoABPartE);}
-	if(NoABPartGenStat[i] == 4 && NoABPartPdg[i] == 2212){Vec_p_beam_NoAB.SetPxPyPzE(NoABPartMomX[i], NoABPartMomY[i], NoABPartMomZ[i], NoABPartE);}
-	 // Select stable thrown NoABParticles
+      NoABPartE = sqrt(pow(NoABPartMomX[i],2) + pow(NoABPartMomY[i],2) + pow(NoABPartMomZ[i],2) + pow(NoABPartMass[i],2)); // Energy of MC Non Afterbruned particle
+      // Assign beam 4 vectors
+      if(NoABPartGenStat[i] == 4 && NoABPartPdg[i] == 11){Vec_e_beam_NoAB.SetPxPyPzE(NoABPartMomX[i], NoABPartMomY[i], NoABPartMomZ[i], NoABPartE);}
+      if(NoABPartGenStat[i] == 4 && NoABPartPdg[i] == 2212){Vec_p_beam_NoAB.SetPxPyPzE(NoABPartMomX[i], NoABPartMomY[i], NoABPartMomZ[i], NoABPartE);}
+      // Select stable thrown NoABParticles
       if(NoABPartGenStat[i] == 1){
 	if(NoABPartPdg[i] == 11){
 	  Vec_eSc_MC_NoAB.SetPxPyPzE(NoABPartMomX[i], NoABPartMomY[i], NoABPartMomZ[i], NoABPartE);
@@ -1037,6 +1037,7 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 
     // Loop over clusters in the EEMC
     ClusE = 0; // Reset to 0 before each pass
+    EpRatio = 0;
     for (unsigned int i = 0; i < ECalClustE.GetSize(); i++){
       if( sqrt((ECalX[i] * ECalX[i]) + (ECalY[i] * ECalY[i])) > 550) continue;
       if(ECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
@@ -1044,8 +1045,10 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	MaxClusIndex = i; // Find the index of the highest energy cluster for later use
       }
     } // End loop over end cap clusters, ONLY if an electron energy with > 0.8 * beam energy retained, assign a "good" cluster
-    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE;
-    // If no good cluster found, check the barrel calorimeter
+    if (ClusE > (0.8*ElecE)){
+      Good_eSc_Clust = kTRUE;
+      Good_FECal_Clust = kTRUE;
+    } // If no good cluster found, check the barrel calorimeter
     if ( Good_eSc_Clust == kFALSE){
       ClusE = 0; // Reset to 0 in case anythng withing EEMC loop was stuck here
       for(unsigned int i = 0; i < BECalClustE.GetSize(); i++){
@@ -1054,10 +1057,13 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	if(BECalClustE[i] > ClusE){ // This ensures the highest energy cluster from each event is the one retained
 	  ClusE = BECalClustE[i];
 	  MaxBClusIndex = i; // Find the index of the highest energy cluster for later use
-	}	
-      }
+	}
+      } // End loop over BECal clusters
     }
-    if (ClusE > (0.8*ElecE))  Good_eSc_Clust = kTRUE; // Check again to see if a good cluster was found
+    if (ClusE > (0.8*ElecE)){
+      Good_eSc_Clust = kTRUE; // Check again to see if a good cluster was found
+      Good_BECal_Clust = kTRUE;
+    }
     // Loop over reconstructed charged particles, look for electrons and pions without using associations
     for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
       Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
@@ -1066,8 +1072,26 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	// Add loop on using/matching cluster information
 	eSc_P = sqrt((ClusE*ClusE)-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
+	EpRatio = (Vec_eSc_Rec.E())/(Vec_tmp.P());
+	gDirectory->cd("EventDists/Reco"); // Fill uncut dists here
+	FillHist1D("h1_ECal_ClustE_NoCuts", ClusE, weight[0]);
+	FillHist1D("h1_ECal_Ep_Ratio_NoCuts", EpRatio, weight[0]);
+	FillHist2D("h2_ECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
+	FillHist2D("h2_ECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	// Add some versions of the first six which are BECal or FECal only
+	if( Good_FECal_Clust == kTRUE ){
+	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE, weight[0]);
+	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
+	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	}
+	if( Good_BECal_Clust == kTRUE ){
+	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE, weight[0]);
+	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
+	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	}
+	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
-	if ( (Vec_eSc_Rec.E()/Vec_tmp.P()) > 1.2 ||  (Vec_eSc_Rec.E()/Vec_tmp.P()) < 0.8) continue; 
+	if ( EpRatio > 1.2 ||  EpRatio < 0.8) continue; 
 	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
@@ -1179,10 +1203,10 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  if(ESum_B0 > 10*B0_ECut){ // Ignore low energy junk events, assign vectors, fill histograms
 	    Vec_n_Vertex.SetXYZ(tmpB0PosX/ESum_B0, tmpB0PosY/ESum_B0, tmpB0PosZ/ESum_B0);
 	    if ( sqrt(pow((Vec_n_Vertex.X())+180,2) + pow(Vec_n_Vertex.Y() ,2)) > 55){ // Exclude the central region of the B0, addition of 180 is to remove x axis offset of the ZDC
-		Good_nRec = kTRUE;
-		nB0Hit = kTRUE;
-		Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
-		FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
+	      Good_nRec = kTRUE;
+	      nB0Hit = kTRUE;
+	      Vec_nRot_Rec = rot*Vec_n_Rec; // Rotation wrt proton axis
+	      FillB0Accept(E_B0.GetSize(), B0_ClusAccept, Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, ESum_B0, weight[0], KinPlots);
 	    }
 	  }
 	}
@@ -1212,9 +1236,9 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	nRotTheta_Diff = ( Vec_PMissRot_Rec.Theta() - Vec_nRot_Rec.Theta())*TMath::RadToDeg();
 	nPhi_Diff = (Vec_PMiss_Rec.Phi() - Vec_n_Rec.Phi())*TMath::RadToDeg();
 	nRotPhi_Diff = ( Vec_PMissRot_Rec.Phi() - Vec_nRot_Rec.Phi())*TMath::RadToDeg();
-	MMiss = Vec_PMiss_Rec.M();
+	MMiss = Vec_PMiss_DEMP_Rec.M(); // Use PMiss_DEMP which is the sum of all DEMP particles
 	SigmaEPz = (Vec_eSc_Rec.E() + Vec_Pi_Rec.E() + Vec_n_RecCorr.E())-(Vec_eSc_Rec.Pz() + Vec_Pi_Rec.Pz() + Vec_n_RecCorr.Pz());
-	  
+	
 	if(KinPlots == kTRUE){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	}
@@ -1227,6 +1251,23 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	}
 
 	if(DEMP_PassCuts == kTRUE){
+	  gDirectory->cd("EventDists/Reco"); // Fill uncut dists here
+	  FillHist1D("h1_ECal_ClustE", ClusE, weight[0]);
+	  FillHist1D("h1_ECal_Ep_Ratio", EpRatio, weight[0]);
+	  FillHist2D("h2_ECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
+	  FillHist2D("h2_ECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	  // Add some versions of the first six which are BECal or FECal only
+	  if( Good_FECal_Clust == kTRUE ){
+	    FillHist1D("h1_FECal_ClustE", ClusE, weight[0]);
+	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]); 
+	    FillHist2D("h2_FECal_Ep_Ratio_P_NoCut", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	  }
+	  if( Good_BECal_Clust == kTRUE ){
+	    FillHist1D("h1_BECal_ClustE", ClusE, weight[0]);
+	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]); 
+	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	  }
+	  gDirectory->cd("../../");
 	  // Fill lots of plots and fill histograms
 	  if(QAPlots == kTRUE){
 	    FillEffDEMPCut(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0], nZDCHit, nB0Hit);

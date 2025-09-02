@@ -12,7 +12,7 @@ string ConstructFileName_DIS(TString InBeamE, TString In_Q2){
   return FileName;
 }
 
-Bool_t Good_eSc_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
+Bool_t Good_eSc_Clust, Good_FECal_Clust, Good_BECal_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
 Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
 
 int nEntries = 0;
@@ -43,6 +43,7 @@ PxPyPzEVector Vec_nRot_Rec;
 PxPyPzEVector Vec_n_RecCorr;
 PxPyPzEVector Vec_PMiss_Rec;
 PxPyPzEVector Vec_PMissRot_Rec;
+PxPyPzEVector Vec_PMiss_DEMP_Rec;
 
 XYZVector Vec_n_Vertex;
 
@@ -63,8 +64,7 @@ double neutMass = 0.93965420;
 double eMass = 0.000510998950; //electron beam
 double pMass = 0.93827208816; // proton beam
 double PartE, NoABPartE; // Energy of the MC particles 
-int eSc_Index, pi_Index, n_Index;
-double ClusE, eSc_P;
+double ClusE, eSc_P, EpRatio;
 int eSc_Index, pi_Index, n_Index, MaxClusIndex, MaxBClusIndex;
 
 Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
@@ -163,6 +163,7 @@ void CorrectNeutronTrack(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEV
   Vec_PMiss_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec);
   Vec_PMissRot_Rec = rot*Vec_PMiss_Rec;
   Vec_n_RecCorr.SetPxPyPzE(Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*cos(n_Rec.Phi()), Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*sin(n_Rec.Phi()), Vec_PMiss_Rec.P()*cos(n_Rec.Theta()), sqrt(pow(Vec_PMiss_Rec.P(),2)+(pow(neutMass,2))));
+  Vec_PMiss_DEMP_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec + Vec_n_RecCorr);
 }
 
 void Calculate_t_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector n_RecCorr, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
