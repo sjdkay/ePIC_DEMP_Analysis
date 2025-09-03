@@ -70,7 +70,7 @@ int eSc_Index, pi_Index, n_Index, MaxClusIndex, MaxBClusIndex;
 Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, x_MC_NoAB, eps_MC_NoAB;
 Double_t Q2_Rec, W_Rec, y_Rec, x_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
-Double_t nTheta_Diff, nPhi_Diff, MMiss, nRotTheta_Diff, nRotPhi_Diff, SigmaEPz;
+Double_t nTheta_Diff, nPhi_Diff, MMiss, MMiss2, nRotTheta_Diff, nRotPhi_Diff, SigmaEPz;
 //Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
 

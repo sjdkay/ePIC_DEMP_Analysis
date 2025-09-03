@@ -159,8 +159,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_x_Reco_NoCuts = new TH1D("h1_x_Reco_NoCuts", "x_{DA} Reconstructed (No Cuts); x_{DA}; Rate/bin (Hz)", 120, -0.2, 1);
     TH1D* h1_DeltaTheta_Reco_NoCuts = new TH1D("h1_DeltaTheta_Reco_NoCuts", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC/B0}) Reconstructed (Q^{2} Cut Only); #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
     TH1D* h1_DeltaPhi_Reco_NoCuts = new TH1D("h1_DeltaPhi_Reco_NoCuts", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed (Q^{2} Cut Only); #Delta#phi (Deg); Rate/bin (Hz)", 50, -25, 25);
-    TH1D* h1_MissMass_NoCuts = new TH1D("h1_MissMass_NoCuts", "Missing Mass Distribution, Reconstructed (Q^{2} Cut Only); Missing Mass (GeV/c^{2}); Rate/bin (Hz)", 100, -5, 5);
-    TH1D* h1_MissMass2_NoCuts = new TH1D("h1_MissMass2_NoCuts", "(Missing Mass)^{2} Distribution, Reconstructed (Q^{2} Cut Only); (Missing Mass (GeV/c^{2}))^{2}; Rate/bin (Hz)", 100, 0, 100);
+    TH1D* h1_MissMass_NoCuts = new TH1D("h1_MissMass_NoCuts", "Missing Mass Distribution, Reconstructed (Q^{2} Cut Only); Missing Mass (GeV/c^{2}); Rate/bin (Hz)", 100, 0, 5);
+    TH1D* h1_MissMass2_NoCuts = new TH1D("h1_MissMass2_NoCuts", "(Missing Mass)^{2} Distribution, Reconstructed (Q^{2} Cut Only); (Missing Mass (GeV/c^{2}))^{2}; Rate/bin (Hz)", 200, -25, 25);
     TH2D* h2_Q2tBABE_Reco_NoCuts = new TH2D("h2_Q2tBABE_Reco_NoCuts", "Q^{2}_{DA} vs -t_{BABE} Reconstructed (Q^{2}_{DA} Cut Only); Q^{2}_{DA} (GeV^{2}); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teX_Reco_NoCuts = new TH2D("h2_Q2teX_Reco_NoCuts", "Q^{2}_{DA} vs -t_{eX} Reconstructed (Q^{2}_{DA} Cut Only); Q^{2}_{DA} (GeV^{2}); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teXPT_Reco_NoCuts = new TH2D("h2_Q2teXPT_Reco_NoCuts", "Q^{2}_{DA} vs -t_{eXPT} Reconstructed (Q^{2}_{DA} Cut Only); Q^{2}_{DA} (GeV^{2}); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
@@ -180,8 +180,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_x_Reco = new TH1D("h1_x_Reco", "x_{DA} Reconstructed; x_{DA}; Rate/bin (Hz)", 120, -0.2, 1);
     TH1D* h1_DeltaTheta_Reco = new TH1D("h1_DeltaTheta_Reco", "#Delta#theta (#theta_{pMiss} - #theta_{ZDC/B0}) Reconstructed; #Delta#theta (Deg); Rate/bin (Hz)", 180, -0.3, 1.5);
     TH1D* h1_DeltaPhi_Reco = new TH1D("h1_DeltaPhi_Reco", "#Delta#phi (#phi_{pMiss} - #phi_{ZDC/B0}) Reconstructed; #Delta#phi (Deg); Rate/bin (Hz)", 200, -100, 100);
-    TH1D* h1_MissMass = new TH1D("h1_MissMass", "Missing Mass Distribution; Missing Mass (GeV/c^{2}); Rate/bin (Hz)", 100, -5, 5);
-    TH1D* h1_MissMass2 = new TH1D("h1_MissMass2", "(Missing Mass)^{2} Distribution; (Missing Mass (GeV/c^{2}))^{2}; Rate/bin (Hz)", 100, 0, 25);
+    TH1D* h1_MissMass = new TH1D("h1_MissMass", "Missing Mass Distribution; Missing Mass (GeV/c^{2}); Rate/bin (Hz)", 100, 0, 5);
+    TH1D* h1_MissMass2 = new TH1D("h1_MissMass2", "(Missing Mass)^{2} Distribution; (Missing Mass (GeV/c^{2}))^{2}; Rate/bin (Hz)", 200, -25, 25);
     TH2D* h2_Q2tBABE_Reco = new TH2D("h2_Q2tBABE_Reco", "Q^{2}_{DA} vs -t_{BABE} Reconstructed; Q^{2}_{DA} (GeV^{2}); -t_{BABE} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teX_Reco = new TH2D("h2_Q2teX_Reco", "Q^{2}_{DA} vs -t_{eX} Reconstructed; Q^{2}_{DA} (GeV^{2}); -t_{eX} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);
     TH2D* h2_Q2teXPT_Reco = new TH2D("h2_Q2teXPT_Reco", "Q^{2}_{DA} vs -t_{eXPT} Reconstructed; Q^{2}_{DA} (GeV^{2}); -t_{eXPT} (GeV^{2}); Rate/bin (Hz)", 40, 0, 40, 40, 0, 1.6);

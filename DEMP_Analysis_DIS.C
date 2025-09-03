@@ -386,7 +386,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){;
   FillHist1D("h1_DeltaTheta_Reco", nTheta_Diff);
   FillHist1D("h1_DeltaPhi_Reco", nPhi_Diff);
   FillHist1D("h1_MissMass", MMiss);
-  FillHist1D("h1_MissMass2", MMiss*MMiss);
+  FillHist1D("h1_MissMass2", MMiss2);
   FillHist2D("h2_Q2tBABE_Reco", Q2_DA, t_BABE);
   FillHist2D("h2_Q2teX_Reco", Q2_DA, t_eX);
   FillHist2D("h2_Q2teXPT_Reco", Q2_DA, t_eXPT);
@@ -507,7 +507,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   FillHist1D("h1_DeltaTheta_Reco_NoCuts", nTheta_Diff);
   FillHist1D("h1_DeltaPhi_Reco_NoCuts", nPhi_Diff);
   FillHist1D("h1_MissMass_NoCuts", MMiss);
-  FillHist1D("h1_MissMass2_NoCuts", MMiss*MMiss);
+  FillHist1D("h1_MissMass2_NoCuts", MMiss2);
   FillHist2D("h2_Q2tBABE_Reco_NoCuts", Q2_DA, t_BABE);
   FillHist2D("h2_Q2teX_Reco_NoCuts", Q2_DA, t_eX);
   FillHist2D("h2_Q2teXPT_Reco_NoCuts", Q2_DA, t_eXPT);
@@ -1180,7 +1180,8 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	nRotTheta_Diff = ( Vec_PMissRot_Rec.Theta() - Vec_nRot_Rec.Theta())*TMath::RadToDeg();
 	nPhi_Diff = (Vec_PMiss_Rec.Phi() - Vec_n_Rec.Phi())*TMath::RadToDeg();
 	nRotPhi_Diff = ( Vec_PMissRot_Rec.Phi() - Vec_nRot_Rec.Phi())*TMath::RadToDeg();
-	MMiss = Vec_PMiss_DEMP_Rec.M(); // Use PMiss_DEMP which is the sum of all DEMP particles
+	MMiss = abs(Vec_PMiss_DEMP_Rec.M()); // Use PMiss_DEMP which is the sum of all DEMP particles - .M() returns -sqrt(-M2) if M2 is negative, take abs so always +ve
+	MMiss2 = Vec_PMiss_DEMP_Rec.M2(); // Can be -ve or +ve
 	SigmaEPz = (Vec_eSc_Rec.E() + Vec_Pi_Rec.E() + Vec_n_RecCorr.E())-(Vec_eSc_Rec.Pz() + Vec_Pi_Rec.Pz() + Vec_n_RecCorr.Pz());
 	  
 	if(KinPlots == kTRUE){
