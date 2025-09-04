@@ -13,7 +13,7 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
 }
 
 Bool_t Good_eSc_Clust, Good_FECal_Clust, Good_BECal_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
-Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
+Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, W_High, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
 
 int nEntries = 0;
 int EventCounter = 0;
@@ -212,7 +212,6 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     Hadron_Beam_E = tmpE;
   }
 
-
   SigmaEPzTol_Low = 1.8*Elec_Beam_E;
   SigmaEPzTol_High = 2.2*Elec_Beam_E;
   ThetaStar_Max = 4.0;
@@ -231,6 +230,7 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     B0DeltaPhi_Max = 25;
     MissingMass_Tol= 0;
     W_Tol = 0;
+    W_High = 15;
   }
   else if(Hadron_Beam_E == 100){
     n_Emin =40;
@@ -244,6 +244,7 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     B0DeltaPhi_Max = 30;
     MissingMass_Tol=0 ;
     W_Tol = 0;
+    W_High = 15;
   }
   else if(Hadron_Beam_E == 130){
     n_Emin =40;
@@ -257,6 +258,7 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     B0DeltaPhi_Max = 30;
     MissingMass_Tol=0 ;
     W_Tol = 0;
+    W_High = 15;
   }
   else if(Hadron_Beam_E == 250){
     n_Emin = 120;
@@ -270,6 +272,7 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     B0DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
+    W_High = 20;
   }
   else if(Hadron_Beam_E == 275){
     n_Emin = 120;
@@ -283,6 +286,7 @@ void SetCutVals(Double_t Elec_Beam_E, Double_t Hadron_Beam_E){
     B0DeltaPhi_Max = 80;
     MissingMass_Tol= 0;
     W_Tol = 0;
+    W_High = 25;
   }
 }
 
