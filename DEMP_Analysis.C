@@ -983,11 +983,11 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
   Int_t EscapeEvent = 1000;
-  cout << "Processing -" << nEntries << " events" << endl;
+  cout << "Processing - " << nEntries << " events" << endl;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
-    if ( EventCounter % ( nEntries / 5 ) == 0 ) {
-      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
+    if ( EventCounter % ( nEntries / 20 ) == 0 ) {
+      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;	  
     }
     // if (EventCounter > EscapeEvent){
     //   continue;
@@ -1360,17 +1360,17 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 
   // Function to write rates to csv file, comment out if unwanted
   if (ResultsPlots == kTRUE){
-    WriteCSV(BeamE, Date, BeamConfig, part, ZDCPlots, B0Plots);
+    WriteCSV(OutDir, BeamE, Date, BeamConfig, part, ZDCPlots, B0Plots);
   }
   if(QAPlots == kTRUE){
     CalcEff(ZDCPlots, B0Plots);
   }
 
   // Function to draw plots and make pdf
-  WriteResultsPDF(BeamE, Date, BeamConfig, part, ResultsPlots);
-  WritePlots(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
-  WritePlotsKin(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
-  WritePlotsQA(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WriteResultsPDF(OutDir, BeamE, Date, BeamConfig, part, ResultsPlots);
+  WritePlots(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsKin(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsQA(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   
   ofile->Write(); // Write histograms to file
   ofile->Close(); // Close output file  
