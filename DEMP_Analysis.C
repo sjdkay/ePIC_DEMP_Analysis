@@ -811,11 +811,24 @@ void CalcEff(Bool_t ZDC, Bool_t B0){
   gDirectory->cd("../../");
 }
 
-void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
+void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
   
   gROOT->SetBatch(kTRUE);
   gROOT->ProcessLine("SetePICStyle()");
   gStyle->SetOptStat(0);
+
+  if(SimCam == "True" || SimCam == "true" || SimCam == "kTRUE" || SimCam == "TRUE" || SimCam == "1" || SimCam == "y" || SimCam == "Yes" || SimCam == "Y" || SimCam == "YES"){ // Interpret range of possible options as True
+    CampaignFiles = kTRUE;
+    cout << "Campaign file flag set to true, will use simulation campaign files." << endl;
+  }
+  else if(SimCam == "False" || SimCam == "false" || SimCam == "kFALSE" || SimCam == "FALSE" || SimCam == "0" || SimCam == "n" || SimCam == "No" || SimCam == "N" || SimCam == "NO"){
+    CampaignFiles = kFALSE;
+    cout << "Campaign file flag set to false, looking for local files." << endl;
+  }
+  else{ // Default to false
+    CampaignFiles = kFALSE;
+    cout << "Campaign file flag set to false, looking for local files." << endl;
+  }
   
   if (BeamE == ""){
     cout << "Enter a beam energy combination in the format - XonY - where X is the electron beam energy in GeV and Y is the proton beam energy:" << endl;
@@ -838,16 +851,47 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     part = "Pi+";
   }
 
-  TString InputFiles[3]={ConstructFileName(BeamE, part, "3_10", BeamConfig, Date), ConstructFileName(BeamE, part, "10_20", BeamConfig, Date), ConstructFileName(BeamE, part, "20_35", BeamConfig, Date)};
-
-  if(CheckFiles(InputFiles) == kFALSE){ // Check files exist, can be opened and contain tree with fn
-    exit(1);
-  }
+  auto ExecDate = TDatime();
   TChain *AnalysisChain = new TChain("events");
-  for (Int_t i = 0; i <3; i++){
-    AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
+
+  // If simulation campaign files not used, look for local files using inputs
+  if(CampaignFiles == kFALSE){
+    TString InputFiles[3]={ConstructFileName(BeamE, part, "3_10", BeamConfig, Date), ConstructFileName(BeamE, part, "10_20", BeamConfig, Date), ConstructFileName(BeamE, part, "20_35", BeamConfig, Date)};
+    if(CheckFiles(InputFiles) == kFALSE){ // Check files exist, can be opened and contain tree with fn
+      exit(1);
+    }
+    for (Int_t i = 0; i <3; i++){
+      AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
+    }
   }
 
+  // If simulation campaign files used, find campaign files and use these instead
+  else if(CampaignFiles == kTRUE){
+    if (part == "Pi+") part = "pi+";
+    TString CampaignDirBase = Form("/volatile/eic/EPIC/RECO/%s.%s.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.4", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data());
+    TString CampaignDirs[3] = {Form("%s/%ix%i/q2_3_10/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_10_20/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_20_35/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data())};
+    for(Int_t i = 0; i < 3; i++){
+      TSystemDirectory dir(CampaignDirs[i], CampaignDirs[i]);
+      TList *files = dir.GetListOfFiles();
+      if (files) {
+	TSystemFile *file;
+	TString fname, fpath;
+	TIter next(files);
+	while ((file=(TSystemFile*)next())) {
+	  fname = file->GetName();
+	  {
+	    if (!file->IsDirectory() && fname.EndsWith(".root")){ 
+	      fpath = Form("%s%s", CampaignDirs[i].Data(), fname.Data());
+	      if(CheckFile(fpath) == kFALSE) cout << "!!!!! File either missing or broken !!!!!" << endl << fpath << endl << "!!!!! File either missing or broken !!!!!" << endl;
+	      else if(CheckFile(fpath) == kTRUE) AnalysisChain->Add(fpath);
+	    }
+	  }
+	} // End of while loop over files
+	cout << "All files in directory - " << CampaignDirs[i] << " - added to chain" << endl;
+      }
+    } // End of for loop over directories
+  }
+  
   // Note, from April 2025 onwards, MCParticles and EventHeader are no longer floats, they are doubles, change if needed
   // Initialize reader
   TTreeReader tree_reader(AnalysisChain);
@@ -904,12 +948,21 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<unsigned int> ChargedRec_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.recID");
   TTreeReaderArray<unsigned int> ChargedSim_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.simID");
 
-  auto OutDir = Form("%s_%s_%s_%s_Results", part.Data(), BeamE.Data(), Date.Data(), BeamConfig.Data());
-  if(gSystem->AccessPathName(OutDir) == kTRUE){
-    gSystem->mkdir(OutDir);
+  TString OutDir;
+  if(CampaignFiles == kFALSE){
+    OutDir = Form("%s_%s_%s_%s_Results", part.Data(), BeamE.Data(), Date.Data(), BeamConfig.Data());
+    if(gSystem->AccessPathName(OutDir) == kTRUE){
+      gSystem->mkdir(OutDir);
+    }
+  }
+  else if(CampaignFiles == kTRUE){
+    OutDir = Form("SimCampaign_%s.%s.0_Output_%s_%s_%d_%d_%d", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data(), BeamE.Data(), part.Data(), ExecDate.GetDay(), ExecDate.GetMonth(), ExecDate.GetYear());
+    if(gSystem->AccessPathName(OutDir) == kTRUE){
+      gSystem->mkdir(OutDir);
+    }
   }
   
-  TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir, part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
+  TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir.Data(), part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
   
   Double_t ElecE = ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atof();
   Double_t HadE = ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atof();
@@ -930,9 +983,10 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
   Int_t EscapeEvent = 1000;
+  cout << "Processing -" << nEntries << " events" << endl;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
-    if ( EventCounter % ( nEntries / 10 ) == 0 ) {
+    if ( EventCounter % ( nEntries / 5 ) == 0 ) {
       cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
     }
     // if (EventCounter > EscapeEvent){

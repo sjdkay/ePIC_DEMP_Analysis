@@ -12,7 +12,7 @@ string ConstructFileName(TString InBeamE, TString Inpart, TString In_Q2, TString
   return FileName;
 }
 
-Bool_t Good_eSc_Clust, Good_FECal_Clust, Good_BECal_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
+Bool_t CampaignFiles, Good_eSc_Clust, Good_FECal_Clust, Good_BECal_Clust, Good_eSc_Track, Good_Pi_Track, Good_nRec, nZDCHit, nB0Hit, DEMP_PassCuts;
 Double_t ThetaStar_Max, n_Emin, ZDCDeltaTheta_Min, ZDCDeltaTheta_Max, ZDCDeltaPhi_Min, ZDCDeltaPhi_Max, B0DeltaTheta_Min, B0DeltaTheta_Max, B0DeltaPhi_Min, B0DeltaPhi_Max, MissingMass_Tol, W_Tol, W_High, B0_ECut, B0_XYTol, SigmaEPzTol_Low, SigmaEPzTol_High;
 
 int nEntries = 0;
@@ -106,6 +106,39 @@ Bool_t CheckFiles(TString Files[3]){
 	  tmpfile->Close();  // Close the file if it was partially opened
 	  delete tmpfile;    // Delete the file pointer
 	}
+      }
+    }
+  }
+  return FileCheck;
+}
+
+// Check files exist, can be opened and contain a relevant tree
+Bool_t CheckFile(TString File){
+  Bool_t FileCheck = kTRUE;
+  if (gSystem->AccessPathName(File) == kTRUE){
+    FileCheck = kFALSE;
+    cout << "Input file - " << File << " not found." << endl;
+    cout << "Check pathing and edit input arguments/DEMP_Analysis.h as needed!" << endl;
+  }
+  else{ // File exists, try to open it!
+    TFile *tmpfile = TFile::Open(File);
+    if (tmpfile && !tmpfile->IsZombie()) {
+      TTree *tmptree = (TTree*)tmpfile->Get("events");
+      // Ensure the file also contains a valid tree
+      if (!tmptree) {
+	cout << "Tree 'events' not found in file: " << File << endl;
+	FileCheck = kFALSE;
+      }
+      nEntries+=tmptree->GetEntries();
+      tmpfile->Close();  // Close the file
+      delete tmpfile;    // Delete the file pointer
+    }
+    else {
+      cout << "Failed to open file: " << File <<endl;
+      FileCheck = kFALSE;
+      if (tmpfile) {
+	tmpfile->Close();  // Close the file if it was partially opened
+	delete tmpfile;    // Delete the file pointer
       }
     }
   }
