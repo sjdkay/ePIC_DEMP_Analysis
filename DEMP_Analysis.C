@@ -877,13 +877,14 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	TSystemFile *file;
 	TString fname, fpath;
 	TIter next(files);
+	
 	while ((file=(TSystemFile*)next())) {
 	  fname = file->GetName();
 	  {
 	    if (!file->IsDirectory() && fname.EndsWith(".root")){ 
 	      fpath = Form("%s%s", CampaignDirs[i].Data(), fname.Data());
 	      if(CheckFile(fpath) == kFALSE) cout << "!!!!! File either missing or broken !!!!!" << endl << fpath << endl << "!!!!! File either missing or broken !!!!!" << endl;
-	      else if(CheckFile(fpath) == kTRUE) AnalysisChain->Add(fpath);
+	      else AnalysisChain->Add(fpath);
 	    }
 	  }
 	} // End of while loop over files
@@ -1146,12 +1147,12 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	if( Good_FECal_Clust == kTRUE ){
 	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
-	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	}
 	if( Good_BECal_Clust == kTRUE ){
 	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
-	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
@@ -1325,12 +1326,12 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  if( Good_FECal_Clust == kTRUE ){
 	    FillHist1D("h1_FECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]); 
-	    FillHist2D("h2_FECal_Ep_Ratio_P_NoCut", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]); 
-	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	  }
 	  gDirectory->cd("../../");
 	  // Fill lots of plots and fill histograms
