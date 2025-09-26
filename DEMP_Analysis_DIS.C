@@ -394,6 +394,10 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){;
   FillHist2D("h2_WQ2_Reco", W_Rec, Q2_DA);
   FillHist2D("h2_DeltaThetaPhi_Reco", nTheta_Diff, nPhi_Diff);
   FillHist2D("h2_DeltaRotThetaRotPhi_Reco", nRotTheta_Diff, nRotPhi_Diff);
+  FillHist2D("h2_MissMass_Q2DA", MMiss, Q2_DA);
+  FillHist2D("h2_MissMass_teXBABE", MMiss, t_eXBABE);
+  FillHist2D("h2_MissMass2_Q2DA", MMiss2, Q2_DA);
+  FillHist2D("h2_MissMass2_teXBABE", MMiss2, t_eXBABE);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   FillHist1D("h1_Q2_MCDEMPAccept", Q2_MC);
@@ -515,6 +519,10 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   FillHist2D("h2_WQ2_Reco_NoCuts", W_Rec, Q2_DA);
   FillHist2D("h2_DeltaThetaPhi_Reco_NoCuts", nTheta_Diff, nPhi_Diff);
   FillHist2D("h2_DeltaRotThetaRotPhi_Reco_NoCuts", nRotTheta_Diff, nRotPhi_Diff);
+  FillHist2D("h2_MissMass_Q2DA_NoCuts", MMiss, Q2_DA);
+  FillHist2D("h2_MissMass_teXBABE_NoCuts", MMiss, t_eXBABE);
+  FillHist2D("h2_MissMass2_Q2DA_NoCuts", MMiss2, Q2_DA);
+  FillHist2D("h2_MissMass2_teXBABE_NoCuts", MMiss2, t_eXBABE);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   // Fill truth t distributions for DEMP events before cuts
@@ -1188,10 +1196,10 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit);
 	}
 
-	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
+	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
 	  DEMP_PassCuts = kTRUE;
 	}
-	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
+	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
 	  DEMP_PassCuts = kTRUE;	  
 	}
 

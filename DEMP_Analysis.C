@@ -394,6 +394,10 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
   FillHist2D("h2_WQ2_Reco", W_Rec, Q2_DA, wgt);
   FillHist2D("h2_DeltaThetaPhi_Reco", nTheta_Diff, nPhi_Diff, wgt);
   FillHist2D("h2_DeltaRotThetaRotPhi_Reco", nRotTheta_Diff, nRotPhi_Diff, wgt);
+  FillHist2D("h2_MissMass_Q2DA", MMiss, Q2_DA, wgt);
+  FillHist2D("h2_MissMass_teXBABE", MMiss, t_eXBABE, wgt);
+  FillHist2D("h2_MissMass2_Q2DA", MMiss2, Q2_DA, wgt);
+  FillHist2D("h2_MissMass2_teXBABE", MMiss2, t_eXBABE, wgt);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   FillHist1D("h1_Q2_MCDEMPAccept", Q2_MC, wgt);
@@ -515,6 +519,10 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   FillHist2D("h2_WQ2_Reco_NoCuts", W_Rec, Q2_DA, wgt);
   FillHist2D("h2_DeltaThetaPhi_Reco_NoCuts", nTheta_Diff, nPhi_Diff, wgt);
   FillHist2D("h2_DeltaRotThetaRotPhi_Reco_NoCuts", nRotTheta_Diff, nRotPhi_Diff, wgt);
+  FillHist2D("h2_MissMass_Q2DA_NoCuts", MMiss, Q2_DA, wgt);
+  FillHist2D("h2_MissMass_teXBABE_NoCuts", MMiss, t_eXBABE, wgt);
+  FillHist2D("h2_MissMass2_Q2DA_NoCuts", MMiss2, Q2_DA, wgt);
+  FillHist2D("h2_MissMass2_teXBABE_NoCuts", MMiss2, t_eXBABE, wgt);
   gDirectory->cd("../../");
   gDirectory->cd("KinematicDists/MC");
   // Fill truth t distributions for DEMP events before cuts
@@ -803,11 +811,24 @@ void CalcEff(Bool_t ZDC, Bool_t B0){
   gDirectory->cd("../../");
 }
 
-void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
+void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
   
   gROOT->SetBatch(kTRUE);
   gROOT->ProcessLine("SetePICStyle()");
   gStyle->SetOptStat(0);
+
+  if(SimCam == "True" || SimCam == "true" || SimCam == "kTRUE" || SimCam == "TRUE" || SimCam == "1" || SimCam == "y" || SimCam == "Yes" || SimCam == "Y" || SimCam == "YES"){ // Interpret range of possible options as True
+    CampaignFiles = kTRUE;
+    cout << "Campaign file flag set to true, will use simulation campaign files." << endl;
+  }
+  else if(SimCam == "False" || SimCam == "false" || SimCam == "kFALSE" || SimCam == "FALSE" || SimCam == "0" || SimCam == "n" || SimCam == "No" || SimCam == "N" || SimCam == "NO"){
+    CampaignFiles = kFALSE;
+    cout << "Campaign file flag set to false, looking for local files." << endl;
+  }
+  else{ // Default to false
+    CampaignFiles = kFALSE;
+    cout << "Campaign file flag set to false, looking for local files." << endl;
+  }
   
   if (BeamE == ""){
     cout << "Enter a beam energy combination in the format - XonY - where X is the electron beam energy in GeV and Y is the proton beam energy:" << endl;
@@ -830,16 +851,48 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
     part = "Pi+";
   }
 
-  TString InputFiles[3]={ConstructFileName(BeamE, part, "3_10", BeamConfig, Date), ConstructFileName(BeamE, part, "10_20", BeamConfig, Date), ConstructFileName(BeamE, part, "20_35", BeamConfig, Date)};
-
-  if(CheckFiles(InputFiles) == kFALSE){ // Check files exist, can be opened and contain tree with fn
-    exit(1);
-  }
+  auto ExecDate = TDatime();
   TChain *AnalysisChain = new TChain("events");
-  for (Int_t i = 0; i <3; i++){
-    AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
+
+  // If simulation campaign files not used, look for local files using inputs
+  if(CampaignFiles == kFALSE){
+    TString InputFiles[3]={ConstructFileName(BeamE, part, "3_10", BeamConfig, Date), ConstructFileName(BeamE, part, "10_20", BeamConfig, Date), ConstructFileName(BeamE, part, "20_35", BeamConfig, Date)};
+    if(CheckFiles(InputFiles) == kFALSE){ // Check files exist, can be opened and contain tree with fn
+      exit(1);
+    }
+    for (Int_t i = 0; i <3; i++){
+      AnalysisChain->Add(InputFiles[i]);  // Add valid file to the chain
+    }
   }
 
+  // If simulation campaign files used, find campaign files and use these instead
+  else if(CampaignFiles == kTRUE){
+    if (part == "Pi+") part = "pi+";
+    TString CampaignDirBase = Form("/volatile/eic/EPIC/RECO/%s.%s.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.4", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data());
+    TString CampaignDirs[3] = {Form("%s/%ix%i/q2_3_10/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_10_20/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_20_35/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data())};
+    for(Int_t i = 0; i < 3; i++){
+      TSystemDirectory dir(CampaignDirs[i], CampaignDirs[i]);
+      TList *files = dir.GetListOfFiles();
+      if (files) {
+	TSystemFile *file;
+	TString fname, fpath;
+	TIter next(files);
+	
+	while ((file=(TSystemFile*)next())) {
+	  fname = file->GetName();
+	  {
+	    if (!file->IsDirectory() && fname.EndsWith(".root")){ 
+	      fpath = Form("%s%s", CampaignDirs[i].Data(), fname.Data());
+	      if(CheckFile(fpath) == kFALSE) cout << "!!!!! File either missing or broken !!!!!" << endl << fpath << endl << "!!!!! File either missing or broken !!!!!" << endl;
+	      else AnalysisChain->Add(fpath);
+	    }
+	  }
+	} // End of while loop over files
+	cout << "All files in directory - " << CampaignDirs[i] << " - added to chain" << endl;
+      }
+    } // End of for loop over directories
+  }
+  
   // Note, from April 2025 onwards, MCParticles and EventHeader are no longer floats, they are doubles, change if needed
   // Initialize reader
   TTreeReader tree_reader(AnalysisChain);
@@ -896,12 +949,21 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   TTreeReaderArray<unsigned int> ChargedRec_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.recID");
   TTreeReaderArray<unsigned int> ChargedSim_Assoc(tree_reader, "ReconstructedChargedParticleAssociations.simID");
 
-  auto OutDir = Form("%s_%s_%s_%s_Results", part.Data(), BeamE.Data(), Date.Data(), BeamConfig.Data());
-  if(gSystem->AccessPathName(OutDir) == kTRUE){
-    gSystem->mkdir(OutDir);
+  TString OutDir;
+  if(CampaignFiles == kFALSE){
+    OutDir = Form("%s_%s_%s_%s_Results", part.Data(), BeamE.Data(), Date.Data(), BeamConfig.Data());
+    if(gSystem->AccessPathName(OutDir) == kTRUE){
+      gSystem->mkdir(OutDir);
+    }
+  }
+  else if(CampaignFiles == kTRUE){
+    OutDir = Form("SimCampaign_%s.%s.0_Output_%s_%s_%d_%d_%d", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data(), BeamE.Data(), part.Data(), ExecDate.GetDay(), ExecDate.GetMonth(), ExecDate.GetYear());
+    if(gSystem->AccessPathName(OutDir) == kTRUE){
+      gSystem->mkdir(OutDir);
+    }
   }
   
-  TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir, part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
+  TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir.Data(), part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
   
   Double_t ElecE = ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atof();
   Double_t HadE = ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atof();
@@ -922,10 +984,11 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
   Int_t EscapeEvent = 1000;
+  cout << "Processing - " << nEntries << " events" << endl;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
-    if ( EventCounter % ( nEntries / 10 ) == 0 ) {
-      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events" << endl;	  
+    if ( EventCounter % ( nEntries / 20 ) == 0 ) {
+      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;	  
     }
     // if (EventCounter > EscapeEvent){
     //   continue;
@@ -1084,12 +1147,12 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	if( Good_FECal_Clust == kTRUE ){
 	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
-	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	}
 	if( Good_BECal_Clust == kTRUE ){
 	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
-	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
+	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
@@ -1246,10 +1309,10 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	}
 
-	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
+	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
 	  DEMP_PassCuts = kTRUE;
 	}
-	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High){
+	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
 	  DEMP_PassCuts = kTRUE;	  
 	}
 
@@ -1263,12 +1326,12 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 	  if( Good_FECal_Clust == kTRUE ){
 	    FillHist1D("h1_FECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]); 
-	    FillHist2D("h2_FECal_Ep_Ratio_P_NoCut", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]); 
-	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
+	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	  }
 	  gDirectory->cd("../../");
 	  // Fill lots of plots and fill histograms
@@ -1298,17 +1361,17 @@ void DEMP_Analysis(TString BeamE = "", TString Date = "", TString BeamConfig = "
 
   // Function to write rates to csv file, comment out if unwanted
   if (ResultsPlots == kTRUE){
-    WriteCSV(BeamE, Date, BeamConfig, part, ZDCPlots, B0Plots);
+    WriteCSV(OutDir, BeamE, Date, BeamConfig, part, ZDCPlots, B0Plots);
   }
   if(QAPlots == kTRUE){
     CalcEff(ZDCPlots, B0Plots);
   }
 
   // Function to draw plots and make pdf
-  WriteResultsPDF(BeamE, Date, BeamConfig, part, ResultsPlots);
-  WritePlots(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
-  WritePlotsKin(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
-  WritePlotsQA(BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WriteResultsPDF(OutDir, BeamE, Date, BeamConfig, part, ResultsPlots);
+  WritePlots(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsKin(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
+  WritePlotsQA(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   
   ofile->Write(); // Write histograms to file
   ofile->Close(); // Close output file  
