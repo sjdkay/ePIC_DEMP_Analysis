@@ -1035,11 +1035,13 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE);
 	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio); 
 	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg());
+	  FillHist2D("h2_FECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg());
 	}
 	if( Good_BECal_Clust == kTRUE ){
 	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE);
 	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio); 
 	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg());
+	  FillHist2D("h2_BECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg());
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
@@ -1213,13 +1215,13 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	  if( Good_FECal_Clust == kTRUE ){
 	    FillHist1D("h1_FECal_ClustE", ClusE);
 	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio); 
-	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
+	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P());
 	    FillHist2D("h2_FECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE);
 	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio); 
-	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
+	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P());
 	    FillHist2D("h2_BECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg());
 	  }
 	  gDirectory->cd("../../");

@@ -47,7 +47,7 @@ TStyle* ePICStyle()
   // use large fonts
   //Int_t font=72; // Helvetica italics
   Int_t font=42; // Helvetica
-  Double_t tsize=0.05;
+  Double_t tsize=0.04;
   ePICStyle->SetTextFont(font);
 
   ePICStyle->SetTextSize(tsize);

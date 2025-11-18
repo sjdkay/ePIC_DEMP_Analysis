@@ -112,6 +112,32 @@ Bool_t CheckFiles(TString Files[3]){
   return FileCheck;
 }
 
+// Add details for an ePIC plot
+void ePIC_Plot(Double_t TextXPos, Double_t TextYPos, Double_t LogoXPos, Double_t LogoYPos, TString BeamE){
+  TLatex Text_com;
+  Text_com.SetTextSize(0.04);
+  Text_com.SetTextFont(42);
+  Text_com.SetTextAlign(13);  //align at top
+  Text_com.DrawLatexNDC(TextXPos,TextYPos-0.04,Form("e+p, %s(e)x%s(p)", ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Data()));
+  Text_com.DrawLatexNDC(TextXPos,TextYPos-0.08,"25.10.2 Campaign");
+  Text_com.DrawLatexNDC(TextXPos,TextYPos-0.12,"DEMPgen 1.2.4");
+  Text_com.DrawLatexNDC(TextXPos,TextYPos-0.16,"DEMP ep#rightarrow e'n#pi^{+}");
+  TLatex Text_ePIC;
+  Text_ePIC.SetTextSize(0.04);
+  Text_ePIC.SetTextFont(62);
+  Text_ePIC.DrawLatexNDC(TextXPos,TextYPos,"ePIC Performance");  // performance plot
+  //Text_ePIC.DrawLatexNDC(.15,.88,"ePIC Internal");  // for internal use only
+  //Text_ePIC.DrawLatexNDC(.15,.88,"ePIC Preliminary"); // preliminary released version 
+  //Text_ePIC.DrawLatexNDC(.15,.88,"ePIC Work in Progress"); // work in progress to be shown outside
+  //Text_ePIC.DrawLatexNDC(.15,.88,"ePIC"); // final published version
+  // ===== Add ePIC logo to the figure if desired ======
+  TImage *logo = TImage::Open("EPIC-logo_black_small.png");
+  TPad *pad2 = new TPad("pad2", "Pad 2", LogoXPos, LogoYPos, LogoXPos + 0.13, LogoYPos + 0.13); // Create a new pad and then draw the image in it
+  pad2->Draw();
+  pad2->cd(); // Enter the new pad
+  logo->Draw();
+}
+
 // Check files exist, can be opened and contain a relevant tree
 Bool_t CheckFile(TString File){
   Bool_t FileCheck = kTRUE;
@@ -363,9 +389,9 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
   if(Results == kTRUE){
     gDirectory->mkdir("ResultsDists");
     gDirectory->mkdir("ResultsDists/Exclusive_Paper_Plots");
+    gDirectory->mkdir("ResultsDists/tEff_Plots");
   }
 }
-
 
 void WriteResultsPDF(TString OutDir, TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t Results){
 
@@ -965,6 +991,30 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     tmpHist1D->Draw("hist");
     c_MissMass_NoCuts->SetLogz();
     c_MissMass_NoCuts->Print(Form("%s/%s_MissMass_NoCuts.png", OutDir.Data(), InBeamE.Data()));
+
+    tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass_NoCuts");
+    TCanvas* c_MissMass_NoCuts_v2 = new TCanvas("c_MissMass_NoCuts_v2", "Missing Mass, No Cuts", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("hist");
+    gPad->Update();
+    TLine *MissMassHigh = new TLine(0.75, 0, 0.75, gPad->GetUymax());
+    MissMassHigh->SetLineColor(kRed);
+    MissMassHigh->SetLineWidth(5);
+    MissMassHigh->SetLineStyle(kDashed);
+    MissMassHigh->Draw("same");
+    c_MissMass_NoCuts_v2->Print(Form("%s/PaperPlots/%s_MissMass.png", OutDir.Data(), InBeamE.Data()));
+    tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass2_NoCuts");
+    TCanvas* c_MissMass2_NoCuts = new TCanvas("c_MissMass2_NoCuts", "(Missing Mass)^{2}, No Cuts", 100, 0, 2560, 1920);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("hist");
+    gPad->Update();
+    TLine *MissMass2Low = new TLine(-1, 0, -1, gPad->GetUymax());
+    MissMass2Low->SetLineColor(kRed);
+    MissMass2Low->SetLineWidth(5);
+    MissMass2Low->SetLineStyle(kDashed);
+    MissMass2Low->Draw("same");
+    c_MissMass2_NoCuts->Print(Form("%s/PaperPlots/%s_MissMass2.png", OutDir.Data(), InBeamE.Data()));
+    
     tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass");
     TCanvas* c_MissMass = new TCanvas("c_MissMass", "Missing Mass, No Cuts", 100, 0, 2560, 1920);
     tmpHist1D->SetTitle("");
@@ -977,6 +1027,34 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     tmpHist2D->Draw("colz");
     c_DeltaRotThetaRotPhi_NoCuts->SetLogz();
     c_DeltaRotThetaRotPhi_NoCuts->Print(Form("%s/%s_DeltaRotThetaRotPhi_NoCuts.png", OutDir.Data(), InBeamE.Data()));
+
+    tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_Reco_NoCuts"));
+    TCanvas* c_DeltaRotThetaRotPhi_NoCuts_v2 = new TCanvas("c_DeltaRotThetaRotPhi_NoCuts_v2", "#Delta#theta^{*} vs #Delta#phi^{*} No Cuts", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("colz");
+    TLine *ThetaLow = new TLine(ZDCDeltaTheta_Min, -100, ZDCDeltaTheta_Min, 100);
+    ThetaLow->SetLineColor(kRed);
+    ThetaLow->SetLineWidth(5);
+    ThetaLow->SetLineStyle(kDashed);
+    ThetaLow->Draw("same");
+    TLine *ThetaHigh = new TLine(ZDCDeltaTheta_Max, -100, ZDCDeltaTheta_Max, 100);
+    ThetaHigh->SetLineColor(kRed);
+    ThetaHigh->SetLineWidth(5);
+    ThetaHigh->SetLineStyle(kDashed);
+    ThetaHigh->Draw("same");
+    TLine *PhiLow = new TLine(-1, ZDCDeltaPhi_Min, 1, ZDCDeltaPhi_Min);
+    PhiLow->SetLineColor(kRed);
+    PhiLow->SetLineWidth(5);
+    PhiLow->SetLineStyle(kDashed);
+    PhiLow->Draw("same");
+    TLine *PhiHigh = new TLine(-1, ZDCDeltaPhi_Max, 1, ZDCDeltaPhi_Max);
+    PhiHigh->SetLineColor(kRed);
+    PhiHigh->SetLineWidth(5) ;
+    PhiHigh->SetLineStyle(kDashed);
+    PhiHigh->Draw("same");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);   
+    c_DeltaRotThetaRotPhi_NoCuts_v2->Print(Form("%s/PaperPlots/%s_DeltaRotThetaRotPhi_NoCuts.png", OutDir.Data(), InBeamE.Data()));
+    
     tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_DeltaRotThetaRotPhi_Reco"));
     TCanvas* c_DeltaRotThetaRotPhi = new TCanvas("c_DeltaRotThetaRotPhi", "#Delta#theta^{*} vs #Delta#phi^{*}", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
@@ -1100,7 +1178,7 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
 }
 
 void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t EventDists, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t QA, Bool_t Results){
-
+       
   TH1D* tmpHist1D;
   TH2D* tmpHist2D;
   if(QA == kTRUE){
@@ -1124,62 +1202,125 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tmpHist2D->Draw("colz");
     c_Q2t_effDEMPCut_B0->Print(Form("%s/%s_Q2t_DetEff_B0.png", OutDir.Data(), InBeamE.Data()));
     gDirectory->cd("../../");
+
     gDirectory->cd("QADists/Kin");
-    TLegend* Leg_tComp = new TLegend (0.8,0.4,0.6,0.7);  
+    TLegend* Leg_tComp = new TLegend (0.6, 0.72, 0.85, 0.9);
     Leg_tComp->SetBorderSize(0);Leg_tComp->SetFillStyle(0); 
     TCanvas* c_tComp = new TCanvas("c_tComp", "-t Reconsturction method comparison", 100, 0, 2560, 1920);
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBABE_Res_QA_ZDC"));
-    tmpHist1D->SetFillColorAlpha(kGreen, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Violet, 0.8);
     tmpHist1D->GetXaxis()->SetTitle("(t - t_{MC})/t_{MC} (%)");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1.3);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.4);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("HIST");
     Leg_tComp->AddEntry(tmpHist1D, "t_{eXBABE}");
-    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_QA_ZDC"));
-    tmpHist1D->SetFillColorAlpha(kMagenta, 0.3);
-    tmpHist1D->SetTitle("");
-    tmpHist1D->Draw("SAMEHIST");
-    Leg_tComp->AddEntry(tmpHist1D, "t_{eXPT}");
+    /* tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_QA_ZDC")); */
+    /* tmpHist1D->SetFillColorAlpha(kP6Red, 0.3); */
+    /* tmpHist1D->SetTitle(""); */
+    /* tmpHist1D->Draw("SAMEHIST"); */
+    /* Leg_tComp->AddEntry(tmpHist1D, "t_{eXPT}"); */
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teX_Res_QA_ZDC"));
-    tmpHist1D->SetFillColorAlpha(kBlue, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.8);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_tComp->AddEntry(tmpHist1D, "t_{eX}");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tBABE_Res_QA_ZDC"));
-    tmpHist1D->SetFillColorAlpha(kRed, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Red, 0.8);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_tComp->AddEntry(tmpHist1D, "t_{BABE}");
     Leg_tComp->Draw("SAME");
-    c_tComp->Print(Form("%s/%s_tComp.png", OutDir.Data(), InBeamE.Data()));
+    ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
+    c_tComp->Print(Form("%s/PaperPlots/%s_tComp.png", OutDir.Data(), InBeamE.Data()));
+    TLegend* Leg_tComp_Abs = new TLegend (0.6, 0.72, 0.85, 0.9);
+    Leg_tComp_Abs->SetBorderSize(0);Leg_tComp_Abs->SetFillStyle(0); 
+    TCanvas* c_tComp_Abs = new TCanvas("c_tComp_Abs", "-t Reconsturction method comparison", 100, 0, 2560, 1920);
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBABE_Res_Abs_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Violet, 0.8);
+    tmpHist1D->GetXaxis()->SetTitle("(t - t_{MC}) (GeV^{2})");
+    tmpHist1D->GetXaxis()->SetTitleOffset(1.3);
+    tmpHist1D->GetYaxis()->SetTitleOffset(1.4);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("HIST");
+    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{eXBABE}");
+    /* tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_Abs_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Red, 0.3);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{eXPT}"); */
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teX_Res_Abs_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.8);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{eX}");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_tBABE_Res_Abs_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Red, 0.8);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{BABE}");
+    Leg_tComp_Abs->Draw("SAME");
+    ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
+    c_tComp_Abs->Print(Form("%s/PaperPlots/%s_tComp_Abs.png", OutDir.Data(), InBeamE.Data()));
     gDirectory->cd("../../");
+
     gDirectory->cd("QADists/Q2_Alt");
     TLegend* Leg_Q2Comp = new TLegend (0.525,0.7,0.725,0.9); 
     Leg_Q2Comp->SetBorderSize(0);Leg_Q2Comp->SetFillStyle(0); 
     TCanvas* c_Q2Comp = new TCanvas("c_Q2Comp", "Q^{2} Reconsturction method comparison", 100, 0, 2560, 1920);
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2DA_Res"));
-    tmpHist1D->SetFillColorAlpha(kGreen, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Violet, 0.8);
     tmpHist1D->GetXaxis()->SetTitle("(Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%)");
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("HIST");
     Leg_Q2Comp->AddEntry(tmpHist1D, "DA Method");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2JB_Res"));
-    tmpHist1D->SetFillColorAlpha(kMagenta, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Red, 0.8);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_Q2Comp->AddEntry(tmpHist1D, "JB Method");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Rec_Res"));
-    tmpHist1D->SetFillColorAlpha(kBlue, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.8);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_Q2Comp->AddEntry(tmpHist1D, "Electron Method");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Sig_Res"));
-    tmpHist1D->SetFillColorAlpha(kRed, 0.3);
+    tmpHist1D->SetFillColorAlpha(kP6Blue, 0.8);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_Q2Comp->AddEntry(tmpHist1D, "Sigma Method");
     Leg_Q2Comp->Draw("SAME");
-    c_Q2Comp->Print(Form("%s/%s_Q2Comp.png", OutDir.Data(), InBeamE.Data()));
+    ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
+    c_Q2Comp->Print(Form("%s/PaperPlots/%s_Q2Comp.png", OutDir.Data(), InBeamE.Data()));
+    TLegend* Leg_Q2Comp_Abs = new TLegend (0.525,0.7,0.725,0.9); 
+    Leg_Q2Comp_Abs->SetBorderSize(0);Leg_Q2Comp_Abs->SetFillStyle(0); 
+    TCanvas* c_Q2Comp_Abs = new TCanvas("c_Q2Comp_Abs", "Q^{2} Reconsturction method comparison", 100, 0, 2560, 1920);
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2DA_Res_Abs"));
+    tmpHist1D->SetFillColorAlpha(kP6Violet, 0.8);
+    tmpHist1D->GetXaxis()->SetTitle("(Q^{2} - Q^{2}_{MC})/Q^{2}_{MC} (%)");
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("HIST");
+    Leg_Q2Comp_Abs->AddEntry(tmpHist1D, "DA Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2JB_Res_Abs"));
+    tmpHist1D->SetFillColorAlpha(kP6Red, 0.8);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp_Abs->AddEntry(tmpHist1D, "JB Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Rec_Res_Abs"));
+    tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.8);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp_Abs->AddEntry(tmpHist1D, "Electron Method");
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_QA_Q2Sig_Res_Abs"));
+    tmpHist1D->SetFillColorAlpha(kP6Blue, 0.8);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_Q2Comp_Abs->AddEntry(tmpHist1D, "Sigma Method");
+    Leg_Q2Comp_Abs->Draw("SAME");
+    ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
+    c_Q2Comp_Abs->Print(Form("%s/PaperPlots/%s_Q2Comp_Abs.png", OutDir.Data(), InBeamE.Data()));    
     gDirectory->cd("../../");
+    
     if(ZDC == kTRUE){
       gDirectory->cd("QADists/tComp");
       tmpHist2D = ((TH2D*)gDirectory->FindObject("h2_teXBABEComp_ZDC"));
@@ -1236,7 +1377,87 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tmpHist1D->SetLineWidth(3);
     tmpHist1D->Draw("histerr");
     c_tResult_ZDC_28->Print(Form("%s/%s_tResult_Q2_32_33.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_WResults[3];
+    TString StampPDF = Form("%s/PaperPlots/%s_WResult_StampCollection.pdf", OutDir.Data(), InBeamE.Data());
+    for(int i =0; i<3; i++){
+      c_WResults[i] = new TCanvas(Form("c_WResults_%i", i+1), Form("W Results Page %i", 1+1), 100, 0, 2560, 1920);
+      c_WResults[i]->Divide(5,2);
+      for (int j = 0; j < 10; j++){
+	c_WResults[i]->cd(j+1);
+	tmpHist1D = ((TH1D*)gDirectory->FindObject(Form("h1_WResult_ZDC_%i", (i*10)+(j+1))));
+	tmpHist1D->SetTitle("");
+	tmpHist1D->SetLineWidth(3);
+	tmpHist1D->Draw("histerr");
+      }
+      if(i == 0){
+	c_WResults[i]->Print(StampPDF +"(");
+      }
+      else if(i == 2){
+	c_WResults[i]->Print(StampPDF + ")");
+      }
+      else{
+	c_WResults[i]->Print(StampPDF);
+      }
+    }
     gDirectory->cd("../");
+
+    gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+    // Add Q2 and -t plots, limit to 0 to 40 and 0 to 0.6. Add ePIC style elements, log Z scales
+    TCanvas* c_Q2_Result_2D_v2 = new TCanvas("c_Q2_Result_2D_v2", "Q2 2D v2", 100, 0, 2560, 1920);
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Result_DEMPQ2"));
+    tmpHist2D->GetXaxis()->SetTitleOffset(1);
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 40);
+    tmpHist2D->GetYaxis()->SetTitleOffset(1.1);
+    tmpHist2D->GetYaxis()->SetRangeUser(0, 40);
+    tmpHist2D->GetZaxis()->SetLabelSize(0.04);
+    tmpHist2D->Draw("colz");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);
+    c_Q2_Result_2D_v2->Print(Form("%s/PaperPlots/%s_Q2_Comp_2D.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_t_Result_2D_v2 = new TCanvas("c_t_Result_2D_v2", "t 2D v2", 100, 0, 2560, 1920);
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Result_DEMPt"));
+    tmpHist2D->GetXaxis()->SetTitleOffset(1);
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetYaxis()->SetTitleOffset(1.1);
+    tmpHist2D->GetYaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetZaxis()->SetLabelSize(0.04);
+    tmpHist2D->GetZaxis()->SetTitleOffset(1.4);
+    tmpHist2D->Draw("colz");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);
+    c_t_Result_2D_v2->Print(Form("%s/PaperPlots/%s_t_Comp_2D.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_t_Result_2D_Q2_1 = new TCanvas("c_t_Result_2D_Q2_1", "t 2D Q2 1", 100, 0, 2560, 1920);
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Result_DEMPt_Q2_1"));
+    tmpHist2D->GetXaxis()->SetTitleOffset(1);
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetYaxis()->SetTitleOffset(1.1);
+    tmpHist2D->GetYaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetZaxis()->SetLabelSize(0.04);
+    tmpHist2D->GetZaxis()->SetTitleOffset(1.4);
+    tmpHist2D->Draw("colz");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);
+    c_t_Result_2D_Q2_1->Print(Form("%s/PaperPlots/%s_t_Comp_2D_Q2_5_10.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_t_Result_2D_Q2_2 = new TCanvas("c_t_Result_2D_Q2_2", "t 2D Q2 2", 100, 0, 2560, 1920);
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Result_DEMPt_Q2_2"));
+    tmpHist2D->GetXaxis()->SetTitleOffset(1);
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetYaxis()->SetTitleOffset(1.1);
+    tmpHist2D->GetYaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetZaxis()->SetLabelSize(0.04);
+    tmpHist2D->GetZaxis()->SetTitleOffset(1.4);
+    tmpHist2D->Draw("colz");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);
+    c_t_Result_2D_Q2_2->Print(Form("%s/PaperPlots/%s_t_Comp_2D_Q2_10_20.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_t_Result_2D_Q2_3 = new TCanvas("c_t_Result_2D_Q2_3", "t 2D Q2 3", 100, 0, 2560, 1920);
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Result_DEMPt_Q2_3"));
+    tmpHist2D->GetXaxis()->SetTitleOffset(1);
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetYaxis()->SetTitleOffset(1.1);
+    tmpHist2D->GetYaxis()->SetRangeUser(0, 0.6);
+    tmpHist2D->GetZaxis()->SetLabelSize(0.04);
+    tmpHist2D->GetZaxis()->SetTitleOffset(1.4);
+    tmpHist2D->Draw("colz");
+    ePIC_Plot(0.18, 0.88, 0.65, 0.8, InBeamE);
+    c_t_Result_2D_Q2_3->Print(Form("%s/PaperPlots/%s_t_Comp_2D_Q2_20_35.png", OutDir.Data(), InBeamE.Data()));
+    gDirectory->cd("../../");
   }
 }
 

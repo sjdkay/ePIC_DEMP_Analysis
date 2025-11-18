@@ -73,19 +73,23 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_ECal_Ep_Ratio_P = new TH2D("h2_ECal_Ep_Ratio_P", "E Cal E/p vs P; E/p; P (GeV/c); Rate/bin (Hz)", 200, 0, 2, 200, 0, 20);
     TH2D* h2_ECal_Ep_Ratio_Theta_NoCuts = new TH2D("h2_ECal_Ep_Ratio_Theta_NoCuts", "E Cal E/p vs #theta, No Cuts; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
     TH2D* h2_ECal_Ep_Ratio_Theta = new TH2D("h2_ECal_Ep_Ratio_Theta", "E Cal E/p vs #theta; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
-    // Add some versions of the first six which are BECal or FECal only
+    // Add some versions of the first six which are BECal or FECal onlyo
     TH1D* h1_FECal_ClustE_NoCuts = new TH1D("h1_FECal_ClustE_NoCuts", "FE Cal Cluster Energy, No Cuts; E_{Clust}; Rate/bin (Hz)", 200, 0, 20); 
     TH1D* h1_FECal_ClustE = new TH1D("h1_FECal_ClustE", "FE Cal Cluster Energy; E_{Clust}; Rate/bin (Hz)", 200, 0, 20);
     TH1D* h1_FECal_Ep_Ratio_NoCuts = new TH1D("h1_FECal_Ep_Ratio_NoCuts", "FE Cal E/p, No Cuts; E/p; Rate/bin (Hz)", 200, 0, 2); 
     TH1D* h1_FECal_Ep_Ratio = new TH1D("h1_FECal_Ep_Ratio", "FE Cal E/p; E/p; Rate/bin (Hz)", 200, 0, 2);
     TH2D* h2_FECal_Ep_Ratio_P_NoCuts = new TH2D("h2_FECal_Ep_Ratio_P_NoCuts", "FE Cal E/p vs P, No Cuts; E/p; P (GeV/c); Rate/bin (Hz)", 200, 0, 2, 200, 0, 20);
     TH2D* h2_FECal_Ep_Ratio_P = new TH2D("h2_FECal_Ep_Ratio_P", "FE Cal E/p vs P; E/p; P (GeV/c); Rate/bin (Hz)", 200, 0, 2, 200, 0, 20);
+    TH2D* h2_FECal_Ep_Ratio_Theta_NoCuts = new TH2D("h2_FECal_Ep_Ratio_Theta, No Cuts", "FE Cal E/p vs #theta; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
+    TH2D* h2_FECal_Ep_Ratio_Theta = new TH2D("h2_FECal_Ep_Ratio_Theta", "FE Cal E/p vs #theta; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
     TH1D* h1_BECal_ClustE_NoCuts = new TH1D("h1_BECal_ClustE_NoCuts", "BE Cal Cluster Energy, No Cuts; E_{Clust}; Rate/bin (Hz)", 200, 0, 20); 
     TH1D* h1_BECal_ClustE = new TH1D("h1_BECal_ClustE", "BE Cal Cluster Energy; E_{Clust}; Rate/bin (Hz)", 200, 0, 20);
     TH1D* h1_BECal_Ep_Ratio_NoCuts = new TH1D("h1_BECal_Ep_Ratio_NoCuts", "BE Cal E/p, No Cuts; E/p; Rate/bin (Hz)", 200, 0, 2); 
     TH1D* h1_BECal_Ep_Ratio = new TH1D("h1_BECal_Ep_Ratio", "BE Cal E/p; E/p; Rate/bin (Hz)", 200, 0, 2);
     TH2D* h2_BECal_Ep_Ratio_P_NoCuts = new TH2D("h2_BECal_Ep_Ratio_P_NoCuts", "BE Cal E/p vs P, No Cuts; E/p; P (GeV/c); Rate/bin (Hz)", 200, 0, 2, 200, 0, 20);
     TH2D* h2_BECal_Ep_Ratio_P = new TH2D("h2_BECal_Ep_Ratio_P", "BE Cal  E/p vs P; E/p; P (GeV/c); Rate/bin (Hz)", 200, 0, 2, 200, 0, 20);
+    TH2D* h2_BECal_Ep_Ratio_Theta_NoCuts = new TH2D("h2_BECal_Ep_Ratio_Theta, No Cuts", "BE Cal E/p vs #theta; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
+    TH2D* h2_BECal_Ep_Ratio_Theta = new TH2D("h2_BECal_Ep_Ratio_Theta", "BE Cal E/p vs #theta; E/p; #theta (Deg); Rate/bin (Hz)", 200, 0, 2, 200, 80, 180);
     gDirectory->cd("../../");
   }
   

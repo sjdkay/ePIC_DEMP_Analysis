@@ -646,6 +646,15 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist2D("h2_Result_DEMPx", x_MC_NoAB, x_DA, wgt);
   FillHist2D("h2_Result_DEMPy", y_MC_NoAB, y_DA, wgt);
   FillHist2D("h2_Result_DEMPt", t_MC_NoAB, t_eXBABE, wgt);
+  if(Q2_MC_NoAB >= 5 && Q2_MC_NoAB < 10){
+    FillHist2D("h2_Result_DEMPt_Q2_1", t_MC_NoAB, t_eXBABE, wgt);
+  }
+  else if(Q2_MC_NoAB >= 10 && Q2_MC_NoAB < 20){
+    FillHist2D("h2_Result_DEMPt_Q2_2", t_MC_NoAB, t_eXBABE, wgt);
+  }
+  else if(Q2_MC_NoAB >= 20 && Q2_MC_NoAB < 35){
+    FillHist2D("h2_Result_DEMPt_Q2_3", t_MC_NoAB, t_eXBABE, wgt);
+  }
   FillHist2D("h2_Result_DEMP_eScTheta", eSc_MC.Theta()*TMath::RadToDeg(), eSc_Rec.Theta()*TMath::RadToDeg(), wgt);
   FillHist2D("h2_Result_DEMP_eScE", eSc_MC.E(), eSc_Rec.E(), wgt);
   FillHist2D("h2_Result_DEMP_piEPz", Pi_MC.E() - abs(Pi_MC.Pz()), Pi_Rec.E() - abs(Pi_Rec.Pz()), wgt);
@@ -656,12 +665,47 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   gDirectory->cd("../../");
 }
 
+void FillDEMP_ResultsEffCorr(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC, float wgt){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  FillHist1D("h1_tMC_Result_0", t_MC, wgt);
+  for(Int_t i = 0; i < 30; i++){
+    if( Q2_MC > Q2Vals[i] && Q2_MC < Q2Vals[i+1]){
+      FillHist1D(Form("h1_tMC_Result_%i", i+1), t_MC, wgt);
+    }
+  }
+  gDirectory->cd("../../");
+}
+
+void FillDEMP_TruthEffCorr(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC, float wgt){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  FillHist1D("h1_tMC_Truth_0", t_MC, wgt);
+  for(Int_t i = 0; i < 30; i++){
+    if( Q2_MC > Q2Vals[i] && Q2_MC < Q2Vals[i+1]){
+      FillHist1D(Form("h1_tMC_Truth_%i", i+1), t_MC, wgt);
+    }
+  }
+  gDirectory->cd("../../");
+}
+
+void Calc_tEff(){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  DivideHists1D("h1_tMC_Eff_0", "h1_tMC_Result_0", "h1_tMC_Truth_0");
+  for(Int_t i = 0; i < 30; i++){
+    DivideHists1D(Form("h1_tMC_Eff_%i", i+1), Form("h1_tMC_Result_%i", i+1), Form("h1_tMC_Truth_%i", i+1));
+  }
+  gDirectory->cd("../../");
+}
+
 void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("QADists/Kin");
   FillHist1D("h1_tBABE_Res_QA", ((t_BABE - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teX_Res_QA", ((t_eX - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teXPT_Res_QA", ((t_eXPT - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teXBABE_Res_QA", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_tBABE_Res_Abs_QA", (t_BABE - t_MC), wgt);
+  FillHist1D("h1_teX_Res_Abs_QA", (t_eX - t_MC), wgt);
+  FillHist1D("h1_teXPT_Res_Abs_QA", (t_eXPT - t_MC), wgt);
+  FillHist1D("h1_teXBABE_Res_Abs_QA", (t_eXBABE - t_MC), wgt);
   FillHist1D("h1_Q2_Res_QA", ((Q2_DA - Q2_MC)/Q2_MC)*100, wgt);
   FillHist1D("h1_W_Res_QA", ((W_Rec - W_MC)/W_MC)*100, wgt);
   if ( nZDC == kTRUE && ZDC == kTRUE){
@@ -669,6 +713,10 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
     FillHist1D("h1_teX_Res_QA_ZDC", ((t_eX - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXPT_Res_QA_ZDC", ((t_eXPT - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXBABE_Res_QA_ZDC", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_tBABE_Res_Abs_QA_ZDC", (t_BABE - t_MC), wgt);
+    FillHist1D("h1_teX_Res_Abs_QA_ZDC", (t_eX - t_MC), wgt);
+    FillHist1D("h1_teXPT_Res_Abs_QA_ZDC", (t_eXPT - t_MC), wgt);
+    FillHist1D("h1_teXBABE_Res_Abs_QA_ZDC", (t_eXBABE - t_MC), wgt);
     FillHist1D("h1_Q2_Res_QA_ZDC", ((Q2_DA - Q2_MC)/Q2_MC)*100, wgt);
     FillHist1D("h1_W_Res_QA_ZDC", ((W_Rec - W_MC)/W_MC)*100, wgt);
   }
@@ -677,6 +725,10 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
     FillHist1D("h1_teX_Res_QA_B0", ((t_eX - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXPT_Res_QA_B0", ((t_eXPT - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXBABE_Res_QA_B0", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_tBABE_Res_Abs_QA_B0", (t_BABE - t_MC), wgt);
+    FillHist1D("h1_teX_Res_Abs_QA_B0", (t_eX - t_MC), wgt);
+    FillHist1D("h1_teXPT_Res_Abs_QA_B0", (t_eXPT - t_MC), wgt);
+    FillHist1D("h1_teXBABE_Res_Abs_QA_B0", (t_eXBABE - t_MC), wgt);
     FillHist1D("h1_Q2_Res_QA_B0", ((Q2_DA - Q2_MC)/Q2_MC)*100, wgt);
     FillHist1D("h1_W_Res_QA_B0", ((W_Rec - W_MC)/W_MC)*100, wgt);
   }
@@ -722,6 +774,10 @@ void FillDEMP_Q2Alt(float wgt){
   FillHist1D("h1_QA_Q2JB_Res",(Q2_JB-Q2_MC)/Q2_MC*100, wgt);
   FillHist1D("h1_QA_Q2DA_Res",(Q2_DA-Q2_MC)/Q2_MC*100, wgt);
   FillHist1D("h1_QA_Q2Sig_Res",(Q2_Sig-Q2_MC)/Q2_MC*100, wgt);
+  FillHist1D("h1_QA_Q2Rec_Res_Abs",(Q2_Rec-Q2_MC), wgt);
+  FillHist1D("h1_QA_Q2JB_Res_Abs",(Q2_JB-Q2_MC), wgt);
+  FillHist1D("h1_QA_Q2DA_Res_Abs",(Q2_DA-Q2_MC), wgt);
+  FillHist1D("h1_QA_Q2Sig_Res_Abs",(Q2_Sig-Q2_MC), wgt);
   FillHist1D("h1_QA_yRec_Res",(y_Rec-y_MC)/y_MC*100, wgt);
   FillHist1D("h1_QA_yJB_Res",(y_JB-y_MC)/y_MC*100, wgt);
   FillHist1D("h1_QA_yDA_Res",(y_DA-y_MC)/y_MC*100, wgt);
@@ -868,7 +924,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   // If simulation campaign files used, find campaign files and use these instead
   else if(CampaignFiles == kTRUE){
     if (part == "Pi+") part = "pi+";
-    TString CampaignDirBase = Form("/volatile/eic/EPIC/RECO/%s.%s.0/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.4", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data());
+    TString CampaignDirBase = Form("/volatile/eic/EPIC/RECO/%s.%s.2/epic_craterlake/EXCLUSIVE/DEMP/DEMPgen-1.2.4", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data());
     TString CampaignDirs[3] = {Form("%s/%ix%i/q2_3_10/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_10_20/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data()), Form("%s/%ix%i/q2_20_35/%s/", CampaignDirBase.Data(), ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atoi(), ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atoi(), part.Data())};
     for(Int_t i = 0; i < 3; i++){
       TSystemDirectory dir(CampaignDirs[i], CampaignDirs[i]);
@@ -955,11 +1011,17 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     if(gSystem->AccessPathName(OutDir) == kTRUE){
       gSystem->mkdir(OutDir);
     }
+    if(gSystem->AccessPathName(OutDir+"/PaperPlots") == kTRUE){
+      gSystem->mkdir(OutDir+"/PaperPlots");
+    }
   }
   else if(CampaignFiles == kTRUE){
-    OutDir = Form("SimCampaign_%s.%s.0_Output_%s_%s_%d_%d_%d", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data(), BeamE.Data(), part.Data(), ExecDate.GetDay(), ExecDate.GetMonth(), ExecDate.GetYear());
+    OutDir = Form("SimCampaign_%s.%s.2_Output_%s_%s_%d_%d_%d", (TString(((TObjString *)(Date.Tokenize("_"))->At(2))->String()).Remove(0,2)).Data(), (TString(((TObjString *)(Date.Tokenize("_"))->At(1))->String())).Data(), BeamE.Data(), part.Data(), ExecDate.GetDay(), ExecDate.GetMonth(), ExecDate.GetYear());
     if(gSystem->AccessPathName(OutDir) == kTRUE){
       gSystem->mkdir(OutDir);
+    }
+    if(gSystem->AccessPathName(OutDir+"/PaperPlots") == kTRUE){
+      gSystem->mkdir(OutDir+"/PaperPlots");
     }
   }
   
@@ -983,16 +1045,16 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   //Define histograms using BeamE value and series of true false flags
   DefHists(BeamE, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
 
-  Int_t EscapeEvent = 1000;
+  Int_t EscapeEvent = 10000;
   cout << "Processing - " << nEntries << " events" << endl;
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
     if ( EventCounter % ( nEntries / 20 ) == 0 ) {
       cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;	  
     }
-    // if (EventCounter > EscapeEvent){
-    //   continue;
-    // }
+    if (EventCounter > EscapeEvent){
+      continue;
+    }
     Good_eSc_Clust = kFALSE, Good_FECal_Clust = kFALSE, Good_BECal_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
     nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");
@@ -1055,6 +1117,12 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     // Fill kinematics plots with MC truth info
     if(KinPlots == kTRUE){
       FillMCKin(weight[0]);
+    }
+    if(ResultsPlots == kTRUE){
+      FillDEMP_TruthEffCorr(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0]);
+      gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+      FillHist1D("h1_Result_tMC_Full", t_MC, weight[0]);
+      gDirectory->cd("../../");
     }
     // // Loop over reconstructed particles, looking for associations
     // for(unsigned int i = 0; i < ChargedSim_Assoc.GetSize(); i++){
@@ -1148,15 +1216,17 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
 	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
+	  FillHist2D("h2_FECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
 	}
 	if( Good_BECal_Clust == kTRUE ){
 	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE, weight[0]);
 	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
 	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
+	  FillHist2D("h2_BECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
-	if ( EpRatio > 1.2 ||  EpRatio < 0.8) continue; 
+	if ( EpRatio > 1.2 ||  EpRatio < 0.9) continue; 
 	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
@@ -1304,9 +1374,20 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	MMiss = abs(Vec_PMiss_DEMP_Rec.M()); // Use PMiss_DEMP which is the sum of all DEMP particles - .M() returns -sqrt(-M2) if M2 is negative, take abs so always +ve
 	MMiss2 = Vec_PMiss_DEMP_Rec.M2(); // Can be -ve or +ve
 	SigmaEPz = (Vec_eSc_Rec.E() + Vec_Pi_Rec.E() + Vec_n_RecCorr.E())-(Vec_eSc_Rec.Pz() + Vec_Pi_Rec.Pz() + Vec_n_RecCorr.Pz());
+	if(ResultsPlots == kTRUE){
+	  gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+	  FillHist1D("h1_Result_DeltaTheta_PreCut", nRotTheta_Diff, weight[0]);
+	  gDirectory->cd("../../");
+	}
 	
 	if(KinPlots == kTRUE){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	}
+	
+	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
+	  gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+	  FillHist1D("h1_Result_DeltaTheta", nRotTheta_Diff, weight[0]);
+	  gDirectory->cd("../../");
 	}
 
 	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > ZDCDeltaTheta_Min && nRotTheta_Diff < ZDCDeltaTheta_Max && nRotPhi_Diff > ZDCDeltaPhi_Min && nRotPhi_Diff < ZDCDeltaPhi_Max && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
@@ -1327,11 +1408,13 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	    FillHist1D("h1_FECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]); 
 	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
+	    FillHist2D("h2_FECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE, weight[0]);
 	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]); 
 	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
+	    FillHist2D("h2_BECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(),weight[0]);
 	  }
 	  gDirectory->cd("../../");
 	  // Fill lots of plots and fill histograms
@@ -1349,10 +1432,14 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  }
 	  // Fill result plots binned in Q2
 	  if( ResultsPlots == kTRUE) {
+	    gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
+	    FillHist1D("h1_Result_teXBABE_Full", t_eXBABE, weight[0]);
+	    gDirectory->cd("../../");
 	    // Fill result histograms
 	    FillDEMP_Results(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, Vec_eSc_Rec, Vec_Pi_Rec, Vec_n_RecCorr, ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	    FillDEMP_QAKin(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	    FillDEMP_QAPartRes(Vec_eSc_MC, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_Rec, Vec_n_MC, Vec_n_Rec, ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
+	    FillDEMP_ResultsEffCorr(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0]);
 	  }
 	} // End main cut loop	
       } //end Q2 cut loop
@@ -1361,6 +1448,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 
   // Function to write rates to csv file, comment out if unwanted
   if (ResultsPlots == kTRUE){
+    Calc_tEff();
     WriteCSV(OutDir, BeamE, Date, BeamConfig, part, ZDCPlots, B0Plots);
   }
   if(QAPlots == kTRUE){
