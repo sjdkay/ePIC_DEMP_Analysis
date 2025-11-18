@@ -1002,6 +1002,7 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     MissMassHigh->SetLineWidth(5);
     MissMassHigh->SetLineStyle(kDashed);
     MissMassHigh->Draw("same");
+    ePIC_Plot(0.48, 0.88, 0.85, 0.8, InBeamE);
     c_MissMass_NoCuts_v2->Print(Form("%s/PaperPlots/%s_MissMass.png", OutDir.Data(), InBeamE.Data()));
     tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass2_NoCuts");
     TCanvas* c_MissMass2_NoCuts = new TCanvas("c_MissMass2_NoCuts", "(Missing Mass)^{2}, No Cuts", 100, 0, 2560, 1920);
@@ -1013,6 +1014,7 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     MissMass2Low->SetLineWidth(5);
     MissMass2Low->SetLineStyle(kDashed);
     MissMass2Low->Draw("same");
+    ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
     c_MissMass2_NoCuts->Print(Form("%s/PaperPlots/%s_MissMass2.png", OutDir.Data(), InBeamE.Data()));
     
     tmpHist1D = (TH1D*)gDirectory->FindObject("h1_MissMass");
@@ -1397,6 +1399,28 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
       }
       else{
 	c_WResults[i]->Print(StampPDF);
+      }
+    }
+    TCanvas* c_WResults_v2[3];
+    TString StampPDF_v2 = Form("%s/PaperPlots/%s_WResult_v2_StampCollection.pdf", OutDir.Data(), InBeamE.Data());
+    for(int i =0; i<3; i++){
+      c_WResults_v2[i] = new TCanvas(Form("c_WResults_v2_%i", i+1), Form("W Results v2 Page %i", 1+1), 100, 0, 2560, 1920);
+      c_WResults_v2[i]->Divide(5,2);
+      for (int j = 0; j < 10; j++){
+	c_WResults_v2[i]->cd(j+1);
+	tmpHist1D = ((TH1D*)gDirectory->FindObject(Form("h1_WResult_v2_ZDC_%i", (i*10)+(j+1))));
+	tmpHist1D->SetTitle("");
+	tmpHist1D->SetLineWidth(3);
+	tmpHist1D->Draw("histerr");
+      }
+      if(i == 0){
+	c_WResults_v2[i]->Print(StampPDF_v2 +"(");
+      }
+      else if(i == 2){
+	c_WResults_v2[i]->Print(StampPDF_v2 + ")");
+      }
+      else{
+	c_WResults_v2[i]->Print(StampPDF_v2);
       }
     }
     gDirectory->cd("../");

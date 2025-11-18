@@ -612,6 +612,24 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
 	FillHist1D(Form("h1_Q2Result_B0_%i", i+1), Q2_DA, wgt);
 	FillHist1D(Form("h1_WResult_B0_%i", i+1), W_Rec, wgt);
       }
+      if (i < 5 && t_eXBABE < 0.12){
+	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec, wgt);
+	if ( nZDC == kTRUE && ZDC == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec, wgt);
+	}
+	if ( nB0 == kTRUE && B0 == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec, wgt);
+	}
+      }
+      else if( i >= 5 && t_eXBABE < 0.18){
+	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec, wgt);
+	if ( nZDC == kTRUE && ZDC == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec, wgt);
+	}
+	if ( nB0 == kTRUE && B0 == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec, wgt);
+	}
+      }
     }
   }
   gDirectory->cd("../");
@@ -1052,9 +1070,9 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     if ( EventCounter % ( nEntries / 20 ) == 0 ) {
       cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;	  
     }
-    if (EventCounter > EscapeEvent){
-      continue;
-    }
+    // if (EventCounter > EscapeEvent){
+    //   continue;
+    // }
     Good_eSc_Clust = kFALSE, Good_FECal_Clust = kFALSE, Good_BECal_Clust = kFALSE, Good_eSc_Track = kFALSE, Good_Pi_Track = kFALSE, Good_nRec = kFALSE, nZDCHit = kFALSE, nB0Hit = kFALSE, DEMP_PassCuts = kFALSE;
     nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");

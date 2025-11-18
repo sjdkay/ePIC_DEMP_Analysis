@@ -746,12 +746,15 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH1D* h1_tResult[31];
     TH1D* h1_Q2Result[31];
     TH1D* h1_WResult[31];
+    TH1D* h1_WResult_v2[31];
     TH1D* h1_tResult_ZDC[31];
     TH1D* h1_Q2Result_ZDC[31];
     TH1D* h1_WResult_ZDC[31];
+    TH1D* h1_WResult_v2_ZDC[31];
     TH1D* h1_tResult_B0[31];
     TH1D* h1_Q2Result_B0[31];
     TH1D* h1_WResult_B0[31];
+    TH1D* h1_WResult_v2_B0[31];
 
     TH1D* h1_tMC_Truth[31];
     TH1D* h1_tMC_Result[31];
@@ -760,6 +763,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     h1_tResult[0] = new TH1D("h1_tResult_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
     h1_Q2Result[0] = new TH1D("h1_Q2Result_0", "Q^{2}_{DA}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35; Q^{2}_{DA} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
     h1_WResult[0] = new TH1D("h1_WResult_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
+    h1_WResult_v2[0] = new TH1D("h1_WResult_v2_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, -t_{eXBABE} < 0.18; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
 
     h1_tMC_Truth[0] = new TH1D("h1_tMC_Truth_0","-t_{MC} Full Distribution 5 <Q^{2} < 35; -t_{MC} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
     h1_tMC_Result[0] = new TH1D("h1_tMC_Result_0", "-t_{MC}, DEMP Events with Cuts, 5 <Q^{2} < 35;  -t_{MC} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
@@ -769,11 +773,13 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
       h1_tResult_ZDC[0] = new TH1D("h1_tResult_ZDC_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in ZDC only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
       h1_Q2Result_ZDC[0] = new TH1D("h1_Q2Result_ZDC_0", "Q^{2}_{DA}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in ZDC only); Q^{2}_{DA} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
       h1_WResult_ZDC[0] = new TH1D("h1_WResult_ZDC_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
+      h1_WResult_v2_ZDC[0] = new TH1D("h1_WResult_v2_ZDC_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, -t_{eXBABE} < 0.18, (n in ZDC only) < 0.18; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
     }
     if (B0 == kTRUE){
       h1_tResult_B0[0] = new TH1D("h1_tResult_B0_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in B0 only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);
       h1_Q2Result_B0[0] = new TH1D("h1_Q2Result_B0_0", "Q^{2}_{DA}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in B0 only); Q^{2}_{DA} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", 60, 5, 35);
       h1_WResult_B0[0] = new TH1D("h1_WResult_B0_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
+      h1_WResult_v2_B0[0] = new TH1D("h1_WResult_v2_B0_0", "W, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, -t_{eXBABE} < 0.18, (n in B0 only) < 0.18; W (GeV); Rate/(0.5 GeV) (Hz)", 80, -10, 30);
     }
 
     for(Int_t i = 0; i < 30; i++){
@@ -790,6 +796,24 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
 	h1_tResult_B0[i+1] = new TH1D(Form("h1_tResult_B0_%i", i+1), Form("-t_{eXBABE}, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, (n in B0 only); -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, 0, 1.6);
 	h1_Q2Result_B0[i+1] = new TH1D(Form("h1_Q2Result_B0_%i", i+1), Form("Q^{2}_{DA}, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, (n in B0 only); Q^{2}_{DA} (GeV^{2}); Rate/(0.5 GeV^{2}) (Hz)", Q2Vals[i], Q2Vals[i+1]), 60, 5, 35);
 	h1_WResult_B0[i+1] = new TH1D(Form("h1_WResult_B0_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
+      }
+      if(i < 5){
+	h1_WResult_v2[i+1] = new TH1D(Form("h1_WResult_v2_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.12; W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);      
+	if(ZDC == kTRUE){
+	  h1_WResult_v2_ZDC[i+1] = new TH1D(Form("h1_WResult_v2_ZDC_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.12, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
+	}
+	if(B0 == kTRUE){
+	  h1_WResult_v2_B0[i+1] = new TH1D(Form("h1_WResult_v2_B0_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.12, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
+	}
+      }
+      else{
+	h1_WResult_v2[i+1] = new TH1D(Form("h1_WResult_v2_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.18; W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);      
+	if(ZDC == kTRUE){
+	  h1_WResult_v2_ZDC[i+1] = new TH1D(Form("h1_WResult_v2_ZDC_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.18, (n in ZDC only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
+	}
+	if(B0 == kTRUE){
+	  h1_WResult_v2_B0[i+1] = new TH1D(Form("h1_WResult_v2_B0_%i", i+1), Form("W, DEMP Events with Cuts, %2.1f < Q^{2}_{DA} < %2.1f, -t_{eXBABE} < 0.18, (n in B0 only); W (GeV); Rate/(0.5 GeV) (Hz)", Q2Vals[i], Q2Vals[i+1]), 80, -10, 30);
+	}
       }
     }
     gDirectory->cd("../");
