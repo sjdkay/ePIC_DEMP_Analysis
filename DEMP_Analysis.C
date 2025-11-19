@@ -614,20 +614,26 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
       }
       if (i < 5 && t_eXBABE < 0.12){
 	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec, wgt);
+	FillHist1D(Form("h1_WResult_MC_v2_%i", i+1), W_MC_NoAB, wgt);
 	if ( nZDC == kTRUE && ZDC == kTRUE){
 	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec, wgt);
+	  FillHist1D(Form("h1_WResult_MC_v2_ZDC_%i", i+1), W_MC_NoAB, wgt);
 	}
 	if ( nB0 == kTRUE && B0 == kTRUE){
 	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec, wgt);
+	  FillHist1D(Form("h1_WResult_MC_v2_B0_%i", i+1), W_MC_NoAB, wgt);
 	}
       }
       else if( i >= 5 && t_eXBABE < 0.18){
 	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec, wgt);
+	FillHist1D(Form("h1_WResult_MC_v2_%i", i+1), W_MC_NoAB, wgt);
 	if ( nZDC == kTRUE && ZDC == kTRUE){
 	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec, wgt);
+	  FillHist1D(Form("h1_WResult_MC_v2_ZDC_%i", i+1), W_MC_NoAB, wgt);
 	}
 	if ( nB0 == kTRUE && B0 == kTRUE){
 	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec, wgt);
+	  FillHist1D(Form("h1_WResult_MC_v2_B0_%i", i+1), W_MC_NoAB, wgt);
 	}
       }
     }
