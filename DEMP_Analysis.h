@@ -423,7 +423,7 @@ TGraphErrors* extractResolution(TH2D* twoDHisto){
     }
 
     x_vals.push_back(twoDHisto->GetXaxis()->GetBinCenter(bin));
-    xerr_vals.push_back(xBinWidth);
+    xerr_vals.push_back(xBinWidth*0.5);
     y_vals.push_back(rmsReso);
     yerr_vals.push_back(rmsErr);
 
