@@ -585,6 +585,8 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist1D("h1_tResult_0", t_eXBABE, wgt);
   FillHist1D("h1_Q2Result_0", Q2_DA, wgt);
   FillHist1D("h1_WResult_0", W_Rec, wgt);
+  FillHist2D("h2_tRes_Result_0",t_MC_NoAB, t_eXBABE-t_MC_NoAB, wgt);
+  FillHist2D("h2_Q2Res_Result_0",Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB, wgt);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist1D("h1_tResult_ZDC_0", t_eXBABE, wgt);
     FillHist1D("h1_Q2Result_ZDC_0", Q2_DA, wgt);
@@ -602,6 +604,8 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
       FillHist1D(Form("h1_tResult_%i", i+1), t_eXBABE, wgt);
       FillHist1D(Form("h1_Q2Result_%i", i+1), Q2_DA, wgt);
       FillHist1D(Form("h1_WResult_%i", i+1), W_Rec, wgt);
+      FillHist2D(Form("h2_tRes_Result_%i", i+1),  t_MC_NoAB, t_eXBABE-t_MC_NoAB, wgt);
+      FillHist2D(Form("h2_Q2Res_Result_%i", i+1), Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB, wgt);
       if ( nZDC == kTRUE && ZDC == kTRUE){
 	FillHist1D(Form("h1_tResult_ZDC_%i", i+1), t_eXBABE, wgt);
 	FillHist1D(Form("h1_Q2Result_ZDC_%i", i+1), Q2_DA, wgt);
