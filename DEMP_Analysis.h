@@ -399,10 +399,10 @@ TGraphErrors* extractResolution(TH2D* twoDHisto){
   double xBinWidth = twoDHisto->GetXaxis()->GetBinWidth(1);
   double xMin = twoDHisto->GetXaxis()->GetBinCenter(1) - xBinWidth*0.5;
   double xMax = twoDHisto->GetXaxis()->GetBinCenter(num_bins) + xBinWidth*0.5;
-  const std::vector<double> x_vals;
-  const std::vector<double> xerr_vals;
-  const std::vector<double> y_vals;
-  const std::vector<double> yerr_vals;
+  std::vector<double> x_vals;
+  std::vector<double> xerr_vals;
+  std::vector<double> y_vals;
+  std::vector<double> yerr_vals;
 
   TH1D* tmp;
   double rmsReso = 0.0;
@@ -429,7 +429,7 @@ TGraphErrors* extractResolution(TH2D* twoDHisto){
 
     delete func;
   }
-  TGraphErrors* finalResoGraph = new TGraphErrors(num_bins,x_vals,y_vals,xerr_vals,yerr_vals);
+  TGraphErrors* finalResoGraph = new TGraphErrors(num_bins, x_vals.data(), y_vals.data(), xerr_vals.data(), yerr_vals.data());
   return finalResoGraph;
 }
 
@@ -1495,7 +1495,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
 
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_13"));
     tRes_Graphs[2] = extractResolution(tmpHist2D);
-    c_tResResults[2] = new TCanvas("c_tResResults_1", "-t Resolution, 17-18 Q2 bin", 100, 0, 2560, 1920);
+    c_tResResults[2] = new TCanvas("c_tResResults_2", "-t Resolution, 17-18 Q2 bin", 100, 0, 2560, 1920);
     tRes_Graphs[2]->SetMarkerColor(kP6Red);
     tRes_Graphs[2]->SetMarkerStyle(21);
     tRes_Graphs[2]->GetXaxis()->SetRangeUser(0, 0.5);
@@ -1508,7 +1508,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
 
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_28"));
     tRes_Graphs[3] = extractResolution(tmpHist2D);
-    c_tResResults[3] = new TCanvas("c_tResResults_1", "-t Resolution, 32-33 Q2 bin", 100, 0, 2560, 1920);
+    c_tResResults[3] = new TCanvas("c_tResResults_3", "-t Resolution, 32-33 Q2 bin", 100, 0, 2560, 1920);
     tRes_Graphs[3]->SetMarkerColor(kP6Red);
     tRes_Graphs[3]->SetMarkerStyle(21);
     tRes_Graphs[3]->GetXaxis()->SetRangeUser(0, 0.5);

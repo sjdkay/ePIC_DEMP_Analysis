@@ -10,6 +10,7 @@ using namespace ROOT::Math;
 #include "DEMP_Analysis.h"
 #include "DEMP_Hists.h"
 #include "ePICStyle.C"
+#include <vector>
 
 void FillEffRaw(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC, float wgt){
   gDirectory->cd("QADists/Efficiencies");
