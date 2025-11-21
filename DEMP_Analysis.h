@@ -394,46 +394,43 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
 }
 
 TGraphErrors* extractResolution(TH2D* twoDHisto){
-
-	int num_bins  = twoDHisto->GetNbinsX();
-	double xBinWidth = twoDHisto->GetXaxis()->GetBinWidth(1);
-	double xMin = twoDHisto->GetXaxis()->GetBinCenter(1) - xBinWidth*0.5;
-	double xMax = twoDHisto->GetXaxis()->GetBinCenter(num_bins) + xBinWidth*0.5;
-    double x_vals[num_bins];
-    double xerr_vals[num_bins];
-    double y_vals[num_bins];
-    double yerr_vals[num_bins];
-
-	TH1D* tmp;
-	double rmsReso = 0.0;
-	double rmsErr = 0.0;
-	for(int bin = 0; bin < num_bins+1; bin++){
-
-		rmsReso = 0.0;
-		tmp = (TH1D*)twoDHisto->ProjectionY("NEIN", bin, bin+1);
-		TF1 * func = new TF1("fitFunc", "gaus", -1.0, 1.0);
-		tmp->Fit(func);
-
-		rmsReso = func->GetParameter(2);
-		rmsErr  = func->GetParError(2);
-
-		if(rmsErr > rmsReso){
-			rmsReso = tmp->GetRMS();
-			rmsErr  = tmp->GetRMSError();
-		}
-
-		x_vals[bin]=twoDHisto->GetXaxis()->GetBinCenter(bin+1);
-        xerr_vals[bin]=xBinWidth;
-        y_vals[bin]=rmsReso;
-        yerr_vals[bin]=rmsErr;
-
-		delete func;
-	}
-
-    TGraphErrors* finalResoGraph = new TGraphErrors(num_bins,x_vals,y_vals,xerr_vals,yerr_vals);
-
-	return finalResoGraph;
-
+  
+  int num_bins  = twoDHisto->GetNbinsX();
+  double xBinWidth = twoDHisto->GetXaxis()->GetBinWidth(1);
+  double xMin = twoDHisto->GetXaxis()->GetBinCenter(1) - xBinWidth*0.5;
+  double xMax = twoDHisto->GetXaxis()->GetBinCenter(num_bins) + xBinWidth*0.5;
+  double x_vals[num_bins];
+  double xerr_vals[num_bins];
+  double y_vals[num_bins];
+  double yerr_vals[num_bins];
+  
+  TH1D* tmp;
+  double rmsReso = 0.0;
+  double rmsErr = 0.0;
+  for(int bin = 0; bin < num_bins+1; bin++){
+    
+    rmsReso = 0.0;
+    tmp = (TH1D*)twoDHisto->ProjectionY("NEIN", bin, bin+1);
+    TF1 * func = new TF1("fitFunc", "gaus", -1.0, 1.0);
+    tmp->Fit(func);
+    
+    rmsReso = func->GetParameter(2);
+    rmsErr  = func->GetParError(2);
+    
+    if(rmsErr > rmsReso){
+      rmsReso = tmp->GetRMS();
+      rmsErr  = tmp->GetRMSError();
+    }
+    
+    x_vals[bin]=twoDHisto->GetXaxis()->GetBinCenter(bin+1);
+    xerr_vals[bin]=xBinWidth;
+    y_vals[bin]=rmsReso;
+    yerr_vals[bin]=rmsErr;
+    
+    delete func;
+  }
+  TGraphErrors* finalResoGraph = new TGraphErrors(num_bins,x_vals,y_vals,xerr_vals,yerr_vals);
+  return finalResoGraph;
 }
 
 void WriteResultsPDF(TString OutDir, TString InBeamE, TString InDate, TString InBeamConfig, TString Inpart, Bool_t Results){
@@ -1469,15 +1466,58 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     }
 
     TGraphErrors* tRes_Graphs[4];
-    TCanvas c_tResResults[4];
+    TCanvas* c_tResResults[4];
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_0")); // Overall -t dist, all Q2 bins
-    tResGraphs[0] = extractResolution(tmpHist2D);
+    tRes_Graphs[0] = extractResolution(tmpHist2D);
     c_tResResults[0] = new TCanvas("c_tResResults_0", "-t Resolution, all Q2 bins", 100, 0, 2560, 1920);
-    tResGraphs[0]->SetMarkerColor(kP6Red);
-    tResGraphs[0]->SetMarkerStyle(21);
-    tResGraphs[0]->Draw("ALP");
+    tRes_Graphs[0]->SetMarkerColor(kP6Red);
+    tRes_Graphs[0]->SetMarkerStyle(21);
+    tRes_Graphs[0]->GetXaxis()->SetRangeUser(0, 0.5);
+    tRes_Graphs[0]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[0]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
+    tRes_Graphs[0]->GetYaxis()->SetTitle("RMS(#Delta t)");
+    tRes_Graphs[0]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[0]->Draw("LP");
     c_tResResults[0]->Print(Form("%s/PaperPlots/%s_tRes_AllQ2.png", OutDir.Data(), InBeamE.Data()));
 
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_1"));
+    tRes_Graphs[1] = extractResolution(tmpHist2D);
+    c_tResResults[1] = new TCanvas("c_tResResults_1", "-t Resolution, 5-6 Q2 bin", 100, 0, 2560, 1920);
+    tRes_Graphs[1]->SetMarkerColor(kP6Red);
+    tRes_Graphs[1]->SetMarkerStyle(21);
+    tRes_Graphs[1]->GetXaxis()->SetRangeUser(0, 0.5);
+    tRes_Graphs[1]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[1]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
+    tRes_Graphs[1]->GetYaxis()->SetTitle("RMS(#Delta t)");
+    tRes_Graphs[1]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[1]->Draw("LP");
+    c_tResResults[1]->Print(Form("%s/PaperPlots/%s_tRes_5_6_Q2.png", OutDir.Data(), InBeamE.Data()));
+
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_13"));
+    tRes_Graphs[2] = extractResolution(tmpHist2D);
+    c_tResResults[2] = new TCanvas("c_tResResults_1", "-t Resolution, 17-18 Q2 bin", 100, 0, 2560, 1920);
+    tRes_Graphs[2]->SetMarkerColor(kP6Red);
+    tRes_Graphs[2]->SetMarkerStyle(21);
+    tRes_Graphs[2]->GetXaxis()->SetRangeUser(0, 0.5);
+    tRes_Graphs[2]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[2]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
+    tRes_Graphs[2]->GetYaxis()->SetTitle("RMS(#Delta t)");
+    tRes_Graphs[2]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[2]->Draw("LP");
+    c_tResResults[2]->Print(Form("%s/PaperPlots/%s_tRes_17_18_Q2.png", OutDir.Data(), InBeamE.Data()));
+
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_28"));
+    tRes_Graphs[3] = extractResolution(tmpHist2D);
+    c_tResResults[3] = new TCanvas("c_tResResults_1", "-t Resolution, 32-33 Q2 bin", 100, 0, 2560, 1920);
+    tRes_Graphs[3]->SetMarkerColor(kP6Red);
+    tRes_Graphs[3]->SetMarkerStyle(21);
+    tRes_Graphs[3]->GetXaxis()->SetRangeUser(0, 0.5);
+    tRes_Graphs[3]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[3]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
+    tRes_Graphs[3]->GetYaxis()->SetTitle("RMS(#Delta t)");
+    tRes_Graphs[3]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[3]->Draw("LP");
+    c_tResResults[3]->Print(Form("%s/PaperPlots/%s_tRes_32_33_Q2.png", OutDir.Data(), InBeamE.Data()));
     gDirectory->cd("../");
 
     gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
