@@ -81,7 +81,7 @@ void FillNeutAccept(PxPyPzEVector n_Rec, PxPyPzEVector nRot_Rec, XYZVector n_Ver
       FillHist2D("h2_Q2t_MCAcceptZDC_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);
       FillHist2D("h2_WQ2_MCAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
       gDirectory->cd("../../../");
-    }	    
+    }
   }
 }
 
@@ -122,7 +122,7 @@ void FillB0Accept(int nClus, int nClusAccept, PxPyPzEVector n_Rec, PxPyPzEVector
     FillHist2D("h2_Q2t_MCAcceptB0_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);
     FillHist2D("h2_WQ2_MCAcceptB0_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
     gDirectory->cd("../../../");
-  }	    
+  }
 }
 
 void FillEffAccept(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC, float wgt, Bool_t eSc, Bool_t Pi, Bool_t n, Bool_t nZDC, Bool_t nB0){
@@ -131,7 +131,7 @@ void FillEffAccept(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC
     FillHist1D("h1_eSc_eta_eff_Accept", eSc_MC.eta(), wgt);
     FillHist1D("h1_eSc_p_eff_Accept", eSc_MC.P(), wgt);
   }
-  if(Pi == kTRUE){  
+  if(Pi == kTRUE){
     FillHist1D("h1_Pi_eta_eff_Accept", Pi_MC.eta(), wgt);
     FillHist1D("h1_Pi_p_eff_Accept", Pi_MC.P(), wgt);
   }
@@ -201,7 +201,7 @@ void FillDEMPAccept_EventDists_NoCuts(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC
   FillHist2D("h2_n_pTheta_MCDEMPAccept_NoCuts", n_MC.Theta()*TMath::RadToDeg(), n_MC.P(), wgt);
   FillHist2D("h2_eSc_pTheta_MCDEMPAccept_NoCuts_NoAB", eSc_MC_NoAB.Theta()*TMath::RadToDeg(), eSc_MC_NoAB.P(), wgt);
   FillHist2D("h2_Pi_pTheta_MCDEMPAccept_NoCuts_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
-  FillHist2D("h2_n_pTheta_MCDEMPAccept_NoCuts_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);	
+  FillHist2D("h2_n_pTheta_MCDEMPAccept_NoCuts_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
   gDirectory->cd("../../");
   gDirectory->cd("EventDists/Reco");
   FillHist2D("h2_eSc_pTheta_RecoDEMPAccept_NoCuts", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
@@ -270,7 +270,7 @@ void FillDEMPAccept_Kin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, f
   FillHist1D("h1_x_MCDEMPAccept_NoCuts_NoAB", x_MC_NoAB, wgt);
   FillHist2D("h2_WQ2_MCDEMPAccept_NoCuts_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
   gDirectory->cd("../../");
-  
+
   if(ZDC == kTRUE && nZDC== kTRUE){
     gDirectory->cd("KinematicDists/Reco/ZDC");
     FillHist1D("h1_Q2_ZDCReco_NoCuts", Q2_DA ,wgt);
@@ -303,7 +303,7 @@ void FillDEMPAccept_Kin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, f
     FillHist1D("h1_y_B0Reco_NoCuts", y_DA, wgt);
     FillHist1D("h1_x_B0Reco_NoCuts", x_DA, wgt);
     FillHist2D("h2_WQ2_B0Reco_NoCuts", W_Rec, Q2_DA, wgt);
-    gDirectory->cd("../../../");    
+    gDirectory->cd("../../../");
     gDirectory->cd("KinematicDists/MC/B0");
     FillHist1D("h1_Q2_MCDEMPAcceptB0_NoCuts", Q2_MC, wgt);
     FillHist1D("h1_W_MCDEMPAcceptB0_NoCuts", W_MC, wgt);
@@ -347,7 +347,7 @@ void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, 
     FillHist2D("h2_Pi_pTheta_MCDEMPAcceptZDC_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
     FillHist2D("h2_n_pTheta_MCDEMPAcceptZDC_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
     gDirectory->cd("../../");
-    gDirectory->cd("ZDCDists/Reco");    
+    gDirectory->cd("ZDCDists/Reco");
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptZDC", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptZDC", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptZDC", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
@@ -363,13 +363,13 @@ void FillDEMPAccept_EventDists(PxPyPzEVector eSc_MC, PxPyPzEVector eSc_MC_NoAB, 
     FillHist2D("h2_Pi_pTheta_MCDEMPAcceptB0_NoAB", Pi_MC_NoAB.Theta()*TMath::RadToDeg(), Pi_MC_NoAB.P(), wgt);
     FillHist2D("h2_n_pTheta_MCDEMPAcceptB0_NoAB", n_MC_NoAB.Theta()*TMath::RadToDeg(), n_MC_NoAB.P(), wgt);
     gDirectory->cd("../../");
-    gDirectory->cd("B0Dists/Reco");    
+    gDirectory->cd("B0Dists/Reco");
     FillHist2D("h2_eSc_pTheta_RecoDEMPAcceptB0", eSc_Rec.Theta()*TMath::RadToDeg(), eSc_Rec.P(), wgt);
     FillHist2D("h2_Pi_pTheta_RecoDEMPAcceptB0", Pi_Rec.Theta()*TMath::RadToDeg(), Pi_Rec.P(), wgt);
     FillHist2D("h2_n_pTheta_RecoDEMPAcceptB0", n_Rec.Theta()*TMath::RadToDeg(), n_Rec.P(), wgt);
     FillHist2D("h2_n_XY_10m_RecoDEMPAcceptB0", 10000*sin(n_Rec.Theta())*cos(n_Rec.Phi()), 10000*sin(n_Rec.Theta())*sin(n_Rec.Phi()), wgt);
     gDirectory->cd("../../");
-  }  
+  }
 }
 
 void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){;
@@ -411,8 +411,8 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
   FillHist1D("h1_Q2_MCDEMPAccept_NoAB", Q2_MC_NoAB, wgt);
   FillHist1D("h1_W_MCDEMPAccept_NoAB", W_MC_NoAB, wgt);
   FillHist1D("h1_eps_MCDEMPAccept_NoAB", eps_MC_NoAB, wgt);
-  FillHist1D("h1_y_MCDEMPAccept_NoAB", y_MC_NoAB, wgt);	
-  FillHist1D("h1_x_MCDEMPAccept_NoAB", x_MC_NoAB, wgt);	
+  FillHist1D("h1_y_MCDEMPAccept_NoAB", y_MC_NoAB, wgt);
+  FillHist1D("h1_x_MCDEMPAccept_NoAB", x_MC_NoAB, wgt);
   FillHist1D("h1_t_MCDEMPAccept_NoAB", t_MC_NoAB, wgt);
   FillHist2D("h2_WQ2_MCDEMPAccept_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
   FillHist2D("h2_Q2t_MCDEMPAccept_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);
@@ -451,8 +451,8 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_Q2_MCDEMPAcceptZDC_NoAB", Q2_MC_NoAB, wgt);
     FillHist1D("h1_W_MCDEMPAcceptZDC_NoAB", W_MC_NoAB, wgt);
     FillHist1D("h1_eps_MCDEMPAcceptZDC_NoAB", eps_MC_NoAB, wgt);
-    FillHist1D("h1_y_MCDEMPAcceptZDC_NoAB", y_MC_NoAB, wgt);	
-    FillHist1D("h1_x_MCDEMPAcceptZDC_NoAB", x_MC_NoAB, wgt);	
+    FillHist1D("h1_y_MCDEMPAcceptZDC_NoAB", y_MC_NoAB, wgt);
+    FillHist1D("h1_x_MCDEMPAcceptZDC_NoAB", x_MC_NoAB, wgt);
     FillHist1D("h1_t_MCDEMPAcceptZDC_NoAB", t_MC_NoAB, wgt);
     FillHist2D("h2_WQ2_MCDEMPAcceptZDC_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
     FillHist2D("h2_Q2t_MCDEMPAcceptZDC_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);
@@ -492,8 +492,8 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_Q2_MCDEMPAcceptB0_NoAB", Q2_MC_NoAB, wgt);
     FillHist1D("h1_W_MCDEMPAcceptB0_NoAB", W_MC_NoAB, wgt);
     FillHist1D("h1_eps_MCDEMPAcceptB0_NoAB", eps_MC_NoAB, wgt);
-    FillHist1D("h1_y_MCDEMPAcceptB0_NoAB", y_MC_NoAB, wgt);	
-    FillHist1D("h1_x_MCDEMPAcceptB0_NoAB", x_MC_NoAB, wgt);	
+    FillHist1D("h1_y_MCDEMPAcceptB0_NoAB", y_MC_NoAB, wgt);
+    FillHist1D("h1_x_MCDEMPAcceptB0_NoAB", x_MC_NoAB, wgt);
     FillHist1D("h1_t_MCDEMPAcceptB0_NoAB", t_MC_NoAB, wgt);
     FillHist2D("h2_WQ2_MCDEMPAcceptB0_NoAB", W_MC_NoAB, Q2_MC_NoAB, wgt);
     FillHist2D("h2_Q2t_MCDEMPAcceptB0_NoAB", Q2_MC_NoAB, t_MC_NoAB, wgt);
@@ -586,7 +586,7 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist1D("h1_Q2Result_0", Q2_DA, wgt);
   FillHist1D("h1_WResult_0", W_Rec, wgt);
   FillHist2D("h2_tRes_Result_0",t_MC_NoAB, t_eXBABE-t_MC_NoAB, wgt);
-  FillHist2D("h2_Q2Res_Result_0",Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB, wgt);
+  FillHist2D("h2_Q2Res_Result",Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB, wgt);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist1D("h1_tResult_ZDC_0", t_eXBABE, wgt);
     FillHist1D("h1_Q2Result_ZDC_0", Q2_DA, wgt);
@@ -597,7 +597,7 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
     FillHist1D("h1_Q2Result_B0_0", Q2_DA, wgt);
     FillHist1D("h1_WResult_B0_0", W_Rec, wgt);
   }
-  
+
   for(Int_t i = 0; i < 30; i++){
     //for(Int_t i = 0; i < 7; i++){
     if( Q2_DA > Q2Vals[i] && Q2_DA < Q2Vals[i+1]){
@@ -605,7 +605,6 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
       FillHist1D(Form("h1_Q2Result_%i", i+1), Q2_DA, wgt);
       FillHist1D(Form("h1_WResult_%i", i+1), W_Rec, wgt);
       FillHist2D(Form("h2_tRes_Result_%i", i+1),  t_MC_NoAB, t_eXBABE-t_MC_NoAB, wgt);
-      FillHist2D(Form("h2_Q2Res_Result_%i", i+1), Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB, wgt);
       if ( nZDC == kTRUE && ZDC == kTRUE){
 	FillHist1D(Form("h1_tResult_ZDC_%i", i+1), t_eXBABE, wgt);
 	FillHist1D(Form("h1_Q2Result_ZDC_%i", i+1), Q2_DA, wgt);
@@ -896,7 +895,7 @@ void CalcEff(Bool_t ZDC, Bool_t B0){
 }
 
 void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", TString BeamConfig = "", TString part = ""){
-  
+
   gROOT->SetBatch(kTRUE);
   gROOT->ProcessLine("SetePICStyle()");
   gStyle->SetOptStat(0);
@@ -913,7 +912,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     CampaignFiles = kFALSE;
     cout << "Campaign file flag set to false, looking for local files." << endl;
   }
-  
+
   if (BeamE == ""){
     cout << "Enter a beam energy combination in the format - XonY - where X is the electron beam energy in GeV and Y is the proton beam energy:" << endl;
     cin >> BeamE;
@@ -961,11 +960,11 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	TSystemFile *file;
 	TString fname, fpath;
 	TIter next(files);
-	
+
 	while ((file=(TSystemFile*)next())) {
 	  fname = file->GetName();
 	  {
-	    if (!file->IsDirectory() && fname.EndsWith(".root")){ 
+	    if (!file->IsDirectory() && fname.EndsWith(".root")){
 	      fpath = Form("%s%s", CampaignDirs[i].Data(), fname.Data());
 	      if(CheckFile(fpath) == kFALSE) cout << "!!!!! File either missing or broken !!!!!" << endl << fpath << endl << "!!!!! File either missing or broken !!!!!" << endl;
 	      else AnalysisChain->Add(fpath);
@@ -976,7 +975,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
       }
     } // End of for loop over directories
   }
-  
+
   // Note, from April 2025 onwards, MCParticles and EventHeader are no longer floats, they are doubles, change if needed
   // Initialize reader
   TTreeReader tree_reader(AnalysisChain);
@@ -997,7 +996,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   TTreeReaderArray<int>    NoABPartPdg(tree_reader, "MCParticlesHeadOnFrameNoBeamFX.PDG");
   TTreeReaderArray<double> NoABPartMass(tree_reader,"MCParticlesHeadOnFrameNoBeamFX.mass");
   // Get Reconstructed Track Information
-  TTreeReaderArray<float> trackMomX(tree_reader,"ReconstructedChargedParticles.momentum.x"); 
+  TTreeReaderArray<float> trackMomX(tree_reader,"ReconstructedChargedParticles.momentum.x");
   TTreeReaderArray<float> trackMomY(tree_reader,"ReconstructedChargedParticles.momentum.y");
   TTreeReaderArray<float> trackMomZ(tree_reader,"ReconstructedChargedParticles.momentum.z");
   TTreeReaderArray<float> trackE(tree_reader,"ReconstructedChargedParticles.energy");
@@ -1012,7 +1011,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   TTreeReaderArray<float> BECalClustE = {tree_reader, "EcalBarrelClusters.energy"};
   TTreeReaderArray<float> BECalX = {tree_reader, "EcalBarrelClusters.position.x"};
   TTreeReaderArray<float> BECalY = {tree_reader, "EcalBarrelClusters.position.y"};
-  TTreeReaderArray<float> BECalZ = {tree_reader, "EcalBarrelClusters.position.z"};  
+  TTreeReaderArray<float> BECalZ = {tree_reader, "EcalBarrelClusters.position.z"};
   // ZDC Neutrons
   TTreeReaderArray<float> neutE(tree_reader, "ReconstructedFarForwardZDCNeutrals.energy");
   TTreeReaderArray<float> neutMomX(tree_reader, "ReconstructedFarForwardZDCNeutrals.momentum.x");
@@ -1052,12 +1051,12 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
       gSystem->mkdir(OutDir+"/PaperPlots");
     }
   }
-  
+
   TFile *ofile = TFile::Open(Form("%s/%s_%s_%s_%s_OutputHists.root", OutDir.Data(), part.Data(), BeamE.Data(), BeamConfig.Data(), Date.Data()),"RECREATE");
-  
+
   Double_t ElecE = ((TObjString *)((BeamE.Tokenize("on"))->At(0)))->String().Atof();
   Double_t HadE = ((TObjString *)((BeamE.Tokenize("on"))->At(1)))->String().Atof();
-  
+
   Bool_t EventDistPlots = kTRUE;
   Bool_t KinPlots = kTRUE;
   Bool_t ZDCPlots = kTRUE;
@@ -1065,7 +1064,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   Bool_t QAPlots = kTRUE;
   Bool_t ResultsPlots = kTRUE;
   Int_t nElecCandidates, nPionCandidates, nNeutCandidates;
-  
+
   // Set cut values depending upon beam energy combination
   SetCutVals(ElecE, HadE);
   // Set directories in file ahead of defining histograms
@@ -1078,7 +1077,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   while(tree_reader.Next()) { // Loop over all events
     EventCounter++;
     if ( EventCounter % ( nEntries / 20 ) == 0 ) {
-      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;	  
+      cout << "Processed " << setw(4) << ceil(((1.0*EventCounter)/(1.0*nEntries))*100.0) << " % of events - " << EventCounter << endl;
     }
     // if (EventCounter > EscapeEvent){
     //   continue;
@@ -1087,7 +1086,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     nElecCandidates = 0; nPionCandidates = 0; nNeutCandidates = 0;
     gDirectory->cd("EventDists/MC");
     // Loop over MC particles, assign e'/pi/n info - Segment into function?
-    for (unsigned int i = 0; i < PartGenStat.GetSize(); i++){ 
+    for (unsigned int i = 0; i < PartGenStat.GetSize(); i++){
       PartE = sqrt(pow(PartMomX[i],2) + pow(PartMomY[i],2) + pow(PartMomZ[i],2) + pow(PartMass[i],2)); // Energy of MC Particle
       // Assign beam 4 vectors
       if(PartGenStat[i] == 4 && PartPdg[i] == 11){ Vec_e_beam.SetPxPyPzE(PartMomX[i], PartMomY[i], PartMomZ[i], PartE);}
@@ -1117,7 +1116,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
       FillEffRaw(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0]);
     }
     gDirectory->cd("EventDists/MC");
-    
+
     // Loop over MC NoABParticles without beam effects, assign e'/pi/n info - Segment into function?
     for (unsigned int i = 0; i < NoABPartGenStat.GetSize(); i++){
       NoABPartE = sqrt(pow(NoABPartMomX[i],2) + pow(NoABPartMomY[i],2) + pow(NoABPartMomZ[i],2) + pow(NoABPartMass[i],2)); // Energy of MC Non Afterbruned particle
@@ -1156,7 +1155,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     // for(unsigned int i = 0; i < ChargedSim_Assoc.GetSize(); i++){
     //   if (ChargedSim_Assoc[i] == eSc_Index){ // If matching track for electron found, assign reconstructed electron 4 vector
     // 	Vec_eSc_Rec.SetPxPyPzE(trackMomX[ChargedRec_Assoc[i]], trackMomY[ChargedRec_Assoc[i]], trackMomZ[ChargedRec_Assoc[i]], trackE[ChargedRec_Assoc[i]]);
-    // 	gDirectory->cd("EventDists/MC");	    
+    // 	gDirectory->cd("EventDists/MC");
     // 	FillHist2D("h2_eSc_pTheta_MCMatched", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
     // 	FillHist2D("h2_eSc_pTheta_MCMatched_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
     // 	gDirectory->cd("../../");
@@ -1165,7 +1164,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     // 	gDirectory->cd("../../");
     // 	if(trackCharge[ChargedRec_Assoc[i]] < 0 && trackMomZ[ChargedRec_Assoc[i]] < 0){ // Check if track LOOKS like an electron
     // 	  Good_eSc_Track = kTRUE;
-    // 	  gDirectory->cd("EventDists/MC");	
+    // 	  gDirectory->cd("EventDists/MC");
     // 	  FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
     // 	  FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
     // 	  gDirectory->cd("../../");
@@ -1182,7 +1181,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     // 	gDirectory->cd("../../");
     // 	gDirectory->cd("EventDists/Reco");
     // 	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
-    // 	gDirectory->cd("../../");	
+    // 	gDirectory->cd("../../");
     // 	if(trackCharge[ChargedRec_Assoc[i]] > 0 && trackMomZ[ChargedRec_Assoc[i]] > 0){ // Check if track LOOKS like an electron
     // 	  Good_Pi_Track = kTRUE;
     // 	  gDirectory->cd("EventDists/MC");
@@ -1229,7 +1228,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
     for(unsigned int i = 0; i < trackCharge.GetSize(); i++){
       Vec_tmp.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
       // -ve charge, -ve z direction, high momentum (~ 80% of beam electron or higher), require a GOOD cluster from the EEMC
-      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kTRUE){ // If track looks like a good scattered electron track, assign it 
+      if(trackCharge[i] < 0 && trackMomZ[i] < 0 && Vec_tmp.P() > (0.8*ElecE) && Good_eSc_Clust == kTRUE){ // If track looks like a good scattered electron track, assign it
 	// Add loop on using/matching cluster information
 	eSc_P = sqrt((ClusE*ClusE)-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
@@ -1242,26 +1241,26 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	// Add some versions of the first six which are BECal or FECal only
 	if( Good_FECal_Clust == kTRUE ){
 	  FillHist1D("h1_FECal_ClustE_NoCuts", ClusE, weight[0]);
-	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
+	  FillHist1D("h1_FECal_Ep_Ratio_NoCuts", EpRatio, weight[0]);
 	  FillHist2D("h2_FECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	  FillHist2D("h2_FECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
 	}
 	if( Good_BECal_Clust == kTRUE ){
 	  FillHist1D("h1_BECal_ClustE_NoCuts", ClusE, weight[0]);
-	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]); 
+	  FillHist1D("h1_BECal_Ep_Ratio_NoCuts", EpRatio, weight[0]);
 	  FillHist2D("h2_BECal_Ep_Ratio_P_NoCuts", EpRatio, Vec_tmp.P(), weight[0]);
 	  FillHist2D("h2_BECal_Ep_Ratio_Theta_NoCuts", EpRatio, Vec_tmp.Theta()*TMath::RadToDeg(), weight[0]);
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
-	if ( EpRatio > 1.2 ||  EpRatio < 0.9) continue; 
+	if ( EpRatio > 1.2 ||  EpRatio < 0.9) continue;
 	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
 	Good_eSc_Track = kTRUE;
-	gDirectory->cd("EventDists/MC");	
+	gDirectory->cd("EventDists/MC");
 	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
 	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
 	gDirectory->cd("../../");
@@ -1278,21 +1277,21 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	FillHist2D("h2_eSc_pTheta_Reco", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
 	Good_eSc_Track = kTRUE;
-	gDirectory->cd("EventDists/MC");	
+	gDirectory->cd("EventDists/MC");
 	FillHist2D("h2_eSc_pTheta_MCAccept", Vec_eSc_MC.Theta()*TMath::RadToDeg(), Vec_eSc_MC.P(), weight[0]);
 	FillHist2D("h2_eSc_pTheta_MCAccept_NoAB", Vec_eSc_MC_NoAB.Theta()*TMath::RadToDeg(), Vec_eSc_MC_NoAB.P(), weight[0]);
 	gDirectory->cd("../../");
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_eSc_pTheta_RecoAccept", Vec_eSc_Rec.Theta()*TMath::RadToDeg(), Vec_eSc_Rec.P(), weight[0]);
 	gDirectory->cd("../../");
-	nElecCandidates+=1;	
+	nElecCandidates+=1;
       }
       // +ve charge, +ve z direction, > 1 GeV/c momentum
       else if (trackCharge[i] > 0 && trackMomZ[i] > 0 && Vec_tmp.P() > 1){ // If track looks like a good scattered pion track, assign it
-	Vec_Pi_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]); 
+	Vec_Pi_Rec.SetPxPyPzE(trackMomX[i], trackMomY[i], trackMomZ[i], trackE[i]);
 	gDirectory->cd("EventDists/Reco");
 	FillHist2D("h2_Pi_pTheta_Reco", Vec_Pi_Rec.Theta()*TMath::RadToDeg(), Vec_Pi_Rec.P(), weight[0]);
-	gDirectory->cd("../../");	
+	gDirectory->cd("../../");
 	Good_Pi_Track = kTRUE;
 	gDirectory->cd("EventDists/MC");
 	FillHist2D("h2_Pi_pTheta_MCAccept", Vec_Pi_MC.Theta()*TMath::RadToDeg(), Vec_Pi_MC.P(), weight[0]);
@@ -1304,7 +1303,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	nPionCandidates+=1;
       }
     } // End loop over charged particles
-    
+
     // Check ZDC info to find neutrons
     for(unsigned int i=0; i<neutE.GetSize(); i++) { // Loop over zdc neutrons
       Vec_n_Rec.SetPxPyPzE(neutMomX[i],neutMomY[i],neutMomZ[i], neutE[i]);
@@ -1322,12 +1321,12 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
       }
       if(Vec_nRot_Rec.Theta()*1000 < ThetaStar_Max && Vec_nRot_Rec.E() > n_Emin){
 	Good_nRec = kTRUE;
-	nZDCHit = kTRUE; 
+	nZDCHit = kTRUE;
 	FillNeutAccept(Vec_n_Rec, Vec_nRot_Rec, Vec_n_Vertex, Vec_n_MC, Vec_n_MC_NoAB, weight[0], ZDCPlots, KinPlots);
 	nNeutCandidates+=1;
       }
     }// End loop over ZDC info
-    
+
     // Check B0 too - If enabled and ZDC doesn't find anything! Could be improved with combinatorics
     if(B0Plots == kTRUE && Good_nRec == kFALSE && E_B0.GetSize() != 0){ // Explicitly only check B0 if enabled AND no neutron hit in the ZDC
       // Determine the index of the highest energy hit in the B0
@@ -1342,7 +1341,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	FillHist2D("h2_B0_XY_Raw", PosX_B0[i],PosY_B0[i]);
 	FillHist2D("h2_B0_XY_Raw_EWeight", PosX_B0[i],PosY_B0[i], E_B0[i]);
 	gDirectory->cd("../../");
-	if (E_B0[MaxB0_E_Index] < E_B0[i]){{ 
+	if (E_B0[MaxB0_E_Index] < E_B0[i]){{
 	    MaxB0_E_Index = i;
 	  }
 	}
@@ -1386,7 +1385,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
       if(QAPlots == kTRUE){
 	FillEffDEMPAccept(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0], nZDCHit, nB0Hit);
 	FillDEMP_Q2Alt(weight[0]);
-      }      
+      }
       if(EventDistPlots == kTRUE){
 	FillDEMPAccept_EventDists_NoCuts(Vec_eSc_MC, Vec_eSc_MC_NoAB, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_MC_NoAB, Vec_Pi_Rec, Vec_n_MC, Vec_n_MC_NoAB, Vec_n_Rec, Vec_nRot_Rec, weight[0], ZDCPlots, B0Plots, nZDCHit, nB0Hit);
       }
@@ -1407,11 +1406,11 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  FillHist1D("h1_Result_DeltaTheta_PreCut", nRotTheta_Diff, weight[0]);
 	  gDirectory->cd("../../");
 	}
-	
+
 	if(KinPlots == kTRUE){
 	  FillDEMPAccept_tKin_NoCuts(ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	}
-	
+
 	if (nZDCHit == kTRUE && t_eXBABE > 0 && t_eXBABE < 1.4 && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
 	  gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
 	  FillHist1D("h1_Result_DeltaTheta", nRotTheta_Diff, weight[0]);
@@ -1422,7 +1421,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  DEMP_PassCuts = kTRUE;
 	}
 	else if (nB0Hit == kTRUE &&  t_eXBABE > 0 && t_eXBABE < 1.4 && nRotTheta_Diff > B0DeltaTheta_Min && nRotTheta_Diff < B0DeltaTheta_Max && nRotPhi_Diff > B0DeltaPhi_Min && nRotPhi_Diff < B0DeltaPhi_Max && W_Rec > W_Tol  && W_Rec < W_High && SigmaEPz > SigmaEPzTol_Low && SigmaEPz < SigmaEPzTol_High && MMiss < 0.75 && MMiss2 > -1){
-	  DEMP_PassCuts = kTRUE;	  
+	  DEMP_PassCuts = kTRUE;
 	}
 
 	if(DEMP_PassCuts == kTRUE){
@@ -1434,13 +1433,13 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	  // Add some versions of the first six which are BECal or FECal only
 	  if( Good_FECal_Clust == kTRUE ){
 	    FillHist1D("h1_FECal_ClustE", ClusE, weight[0]);
-	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]); 
+	    FillHist1D("h1_FECal_Ep_Ratio", EpRatio, weight[0]);
 	    FillHist2D("h2_FECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	    FillHist2D("h2_FECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(), weight[0]);
 	  }
 	  if( Good_BECal_Clust == kTRUE ){
 	    FillHist1D("h1_BECal_ClustE", ClusE, weight[0]);
-	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]); 
+	    FillHist1D("h1_BECal_Ep_Ratio", EpRatio, weight[0]);
 	    FillHist2D("h2_BECal_Ep_Ratio_P", EpRatio, Vec_eSc_Rec.P(), weight[0]);
 	    FillHist2D("h2_BECal_Ep_Ratio_Theta", EpRatio, Vec_eSc_Rec.Theta()*TMath::RadToDeg(),weight[0]);
 	  }
@@ -1469,7 +1468,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
 	    FillDEMP_QAPartRes(Vec_eSc_MC, Vec_eSc_Rec, Vec_Pi_MC, Vec_Pi_Rec, Vec_n_MC, Vec_n_Rec, ZDCPlots, nZDCHit, B0Plots, nB0Hit, weight[0]);
 	    FillDEMP_ResultsEffCorr(Vec_eSc_MC, Vec_Pi_MC, Vec_n_MC, weight[0]);
 	  }
-	} // End main cut loop	
+	} // End main cut loop
       } //end Q2 cut loop
     } // End of loop over DEMP events
   } // End of event while loop
@@ -1488,7 +1487,7 @@ void DEMP_Analysis(TString SimCam = "", TString BeamE = "", TString Date = "", T
   WritePlots(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlotsKin(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
   WritePlotsQA(OutDir,BeamE, Date, BeamConfig, part, EventDistPlots, KinPlots, ZDCPlots, B0Plots, QAPlots, ResultsPlots);
-  
+
   ofile->Write(); // Write histograms to file
-  ofile->Close(); // Close output file  
+  ofile->Close(); // Close output file
 }
