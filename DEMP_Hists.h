@@ -777,7 +777,7 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     h1_tMC_Eff[0] = new TH1D("h1_tMC_Eff_0", "-t{MC} DEMP Accepted/Truth Ratio 5 <Q^{2} < 35; -t_{MC} (GeV^{2}); Efficiency", 80, 0, 1.6);
 
     h2_tRes_Result[0] = new TH2D("h2_tRes_Result_0", "(t_{eXBABE} - t_{MC}) as a fn of -t_{MC}, DEMP Events with Cuts, 5 < Q^{2} < 35; -t_{MC} (GeV^{2}); (t_{eXBABE} - t_{MC}) (GeV^{2}); Rate (Hz)", 80, 0, 1.6, 200, -0.5, 0.5);
-    h2_Q2Res_Result = new TH2D("h2_Q2Res_Result", "(Q^{2}_{DA} - Q^{2}_{MC}) as a fn of -Q^{2}_{MC}, DEMP Events with Cuts, 5 < Q^{2} < 35; -Q^{2}_{MC} (GeV/c^{2}); (Q^{2}_{DA} - Q^{2}_{MC}) (GeV/c^{2}); Rate (Hz)", 200, 0, 50, 200, -1, 1);
+    h2_Q2Res_Result = new TH2D("h2_Q2Res_Result", "(Q^{2}_{DA} - Q^{2}_{MC}) as a fn of -Q^{2}_{MC}, DEMP Events with Cuts, 5 < Q^{2} < 35; -Q^{2}_{MC} (GeV/c^{2}); (Q^{2}_{DA} - Q^{2}_{MC}) (GeV/c^{2}); Rate (Hz)", 100, 0, 50, 200, -1, 1);
 
     if(ZDC == kTRUE){
       h1_tResult_ZDC[0] = new TH1D("h1_tResult_ZDC_0", "-t_{eXBABE}, DEMP Events with Cuts, 5 < Q^{2}_{DA} < 35, (n in ZDC only) ; -t_{eXBABE} (GeV^{2}); Rate/(0.02 GeV^{2}) (Hz)", 80, 0, 1.6);

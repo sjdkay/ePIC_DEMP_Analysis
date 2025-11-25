@@ -394,7 +394,6 @@ void SetDirectories(Bool_t EventDist, Bool_t Kin, Bool_t ZDC, Bool_t B0, Bool_t 
 }
 
 TGraphErrors* extractResolution(TH2D* twoDHisto){
-
   int num_bins  = twoDHisto->GetNbinsX();
   double xBinWidth = twoDHisto->GetXaxis()->GetBinWidth(1);
   double xMin = twoDHisto->GetXaxis()->GetBinCenter(1) - xBinWidth*0.5;
@@ -403,31 +402,25 @@ TGraphErrors* extractResolution(TH2D* twoDHisto){
   std::vector<double> xerr_vals;
   std::vector<double> y_vals;
   std::vector<double> yerr_vals;
-
   TH1D* tmp;
   double rmsReso = 0.0;
   double rmsErr = 0.0;
-  for(int bin = 1; bin < num_bins; bin++){
-
+  for(int bin = 1; bin < num_bins+1; bin++){
     rmsReso = 0.0;
     tmp = (TH1D*)twoDHisto->ProjectionY("tmp_proj", bin, bin+1);
-    TF1 * func = new TF1("fitFunc", "gaus", -1.0, 1.0);
-    tmp->Fit(func);
-
-    rmsReso = func->GetParameter(2);
-    rmsErr  = func->GetParError(2);
-
-    if(rmsErr > rmsReso){
-      rmsReso = tmp->GetRMS();
-      rmsErr  = tmp->GetRMSError();
-    }
-
+    //TF1 * func = new TF1("fitFunc", "gaus", -1.0, 1.0);
+    //tmp->Fit(func);
+    //rmsReso = func->GetParameter(2);
+    //rmsErr  = func->GetParError(2);
+    // if(rmsErr > rmsReso){
+    rmsReso = tmp->GetRMS();
+    rmsErr  = tmp->GetRMSError();
+    //}
     x_vals.push_back(twoDHisto->GetXaxis()->GetBinCenter(bin));
-    xerr_vals.push_back(xBinWidth);
+    xerr_vals.push_back(xBinWidth*0.5);
     y_vals.push_back(rmsReso);
     yerr_vals.push_back(rmsErr);
-
-    delete func;
+    //delete func;
   }
   TGraphErrors* finalResoGraph = new TGraphErrors(num_bins, x_vals.data(), y_vals.data(), xerr_vals.data(), yerr_vals.data());
   return finalResoGraph;
@@ -1038,8 +1031,8 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     tmpHist1D->Draw("hist");
     gPad->Update();
     TLine *MissMassHigh = new TLine(0.75, 0, 0.75, gPad->GetUymax());
-    MissMassHigh->SetLineColor(kRed);
-    MissMassHigh->SetLineWidth(5);
+    MissMassHigh->SetLineColor(kP6Red);
+    MissMassHigh->SetLineWidth(8);
     MissMassHigh->SetLineStyle(kDashed);
     MissMassHigh->Draw("same");
     ePIC_Plot(0.48, 0.88, 0.85, 0.8, InBeamE);
@@ -1050,8 +1043,8 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     tmpHist1D->Draw("hist");
     gPad->Update();
     TLine *MissMass2Low = new TLine(-1, 0, -1, gPad->GetUymax());
-    MissMass2Low->SetLineColor(kRed);
-    MissMass2Low->SetLineWidth(5);
+    MissMass2Low->SetLineColor(kP6Red);
+    MissMass2Low->SetLineWidth(8);
     MissMass2Low->SetLineStyle(kDashed);
     MissMass2Low->Draw("same");
     ePIC_Plot(0.18, 0.88, 0.85, 0.8, InBeamE);
@@ -1075,23 +1068,23 @@ void WritePlotsKin(TString OutDir, TString InBeamE, TString InDate, TString InBe
     tmpHist2D->SetTitle("");
     tmpHist2D->Draw("colz");
     TLine *ThetaLow = new TLine(ZDCDeltaTheta_Min, -100, ZDCDeltaTheta_Min, 100);
-    ThetaLow->SetLineColor(kRed);
-    ThetaLow->SetLineWidth(5);
+    ThetaLow->SetLineColor(kBlack);
+    ThetaLow->SetLineWidth(8);
     ThetaLow->SetLineStyle(kDashed);
     ThetaLow->Draw("same");
     TLine *ThetaHigh = new TLine(ZDCDeltaTheta_Max, -100, ZDCDeltaTheta_Max, 100);
-    ThetaHigh->SetLineColor(kRed);
-    ThetaHigh->SetLineWidth(5);
+    ThetaHigh->SetLineColor(kBlack);
+    ThetaHigh->SetLineWidth(8);
     ThetaHigh->SetLineStyle(kDashed);
     ThetaHigh->Draw("same");
     TLine *PhiLow = new TLine(-1, ZDCDeltaPhi_Min, 1, ZDCDeltaPhi_Min);
-    PhiLow->SetLineColor(kRed);
-    PhiLow->SetLineWidth(5);
+    PhiLow->SetLineColor(kBlack);
+    PhiLow->SetLineWidth(8);
     PhiLow->SetLineStyle(kDashed);
     PhiLow->Draw("same");
     TLine *PhiHigh = new TLine(-1, ZDCDeltaPhi_Max, 1, ZDCDeltaPhi_Max);
-    PhiHigh->SetLineColor(kRed);
-    PhiHigh->SetLineWidth(5) ;
+    PhiHigh->SetLineColor(kBlack);
+    PhiHigh->SetLineWidth(8) ;
     PhiHigh->SetLineStyle(kDashed);
     c_DeltaRotThetaRotPhi_NoCuts_v2->SetLogz();
     PhiHigh->Draw("same");
@@ -1467,18 +1460,23 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
 
     TGraphErrors* tRes_Graphs[4];
     TCanvas* c_tResResults[4];
+    TCanvas* c_tResResults_2D[4];
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_0")); // Overall -t dist, all Q2 bins
     tRes_Graphs[0] = extractResolution(tmpHist2D);
     c_tResResults[0] = new TCanvas("c_tResResults_0", "-t Resolution, all Q2 bins", 100, 0, 2560, 1920);
     tRes_Graphs[0]->SetMarkerColor(kP6Red);
     tRes_Graphs[0]->SetMarkerStyle(21);
     tRes_Graphs[0]->GetXaxis()->SetRangeUser(0, 0.5);
-    tRes_Graphs[0]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[0]->GetYaxis()->SetRangeUser(0, 0.1);
     tRes_Graphs[0]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
     tRes_Graphs[0]->GetYaxis()->SetTitle("RMS(#Delta t)");
-    tRes_Graphs[0]->GetYaxis()->SetRangeUser(-0.5,0.5);
-    tRes_Graphs[0]->Draw("LP");
+    tRes_Graphs[0]->Draw("AP");
     c_tResResults[0]->Print(Form("%s/PaperPlots/%s_tRes_AllQ2.png", OutDir.Data(), InBeamE.Data()));
+    c_tResResults_2D[0] = new TCanvas("c_tResResults_2D_0", "-t Resolution, all Q2 bins, 2D", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("COLZ");
+    c_tResResults_2D[0]->SetLogz();
+    c_tResResults_2D[0]->Print(Form("%s/PaperPlots/%s_tRes_2D_AllQ2.png", OutDir.Data(), InBeamE.Data()));
 
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_1"));
     tRes_Graphs[1] = extractResolution(tmpHist2D);
@@ -1486,12 +1484,16 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tRes_Graphs[1]->SetMarkerColor(kP6Red);
     tRes_Graphs[1]->SetMarkerStyle(21);
     tRes_Graphs[1]->GetXaxis()->SetRangeUser(0, 0.5);
-    tRes_Graphs[1]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[1]->GetYaxis()->SetRangeUser(0, 0.1);
     tRes_Graphs[1]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
     tRes_Graphs[1]->GetYaxis()->SetTitle("RMS(#Delta t)");
-    tRes_Graphs[1]->GetYaxis()->SetRangeUser(-0.5,0.5);
-    tRes_Graphs[1]->Draw("LP");
+    tRes_Graphs[1]->Draw("AP");
     c_tResResults[1]->Print(Form("%s/PaperPlots/%s_tRes_5_6_Q2.png", OutDir.Data(), InBeamE.Data()));
+    c_tResResults_2D[1] = new TCanvas("c_tResResults_2D_1", "-t Resolution, 5-6 Q2 bin, 2D", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("COLZ");
+    c_tResResults_2D[1]->SetLogz();
+    c_tResResults_2D[1]->Print(Form("%s/PaperPlots/%s_tRes_2D_5_6_Q2.png", OutDir.Data(), InBeamE.Data()));
 
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_13"));
     tRes_Graphs[2] = extractResolution(tmpHist2D);
@@ -1499,12 +1501,16 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tRes_Graphs[2]->SetMarkerColor(kP6Red);
     tRes_Graphs[2]->SetMarkerStyle(21);
     tRes_Graphs[2]->GetXaxis()->SetRangeUser(0, 0.5);
-    tRes_Graphs[2]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[2]->GetYaxis()->SetRangeUser(0, 0.1);
     tRes_Graphs[2]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
     tRes_Graphs[2]->GetYaxis()->SetTitle("RMS(#Delta t)");
-    tRes_Graphs[2]->GetYaxis()->SetRangeUser(-0.5,0.5);
-    tRes_Graphs[2]->Draw("LP");
+    tRes_Graphs[2]->Draw("AP");
     c_tResResults[2]->Print(Form("%s/PaperPlots/%s_tRes_17_18_Q2.png", OutDir.Data(), InBeamE.Data()));
+    c_tResResults_2D[2] = new TCanvas("c_tResResults_2D_2", "-t Resolution, 17-18 Q2 bin, 2D", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("COLZ");
+    c_tResResults_2D[2]->SetLogz();
+    c_tResResults_2D[2]->Print(Form("%s/PaperPlots/%s_tRes_2D_17_18_Q2.png", OutDir.Data(), InBeamE.Data()));
 
     tmpHist2D=((TH2D*)gDirectory->FindObject("h2_tRes_Result_28"));
     tRes_Graphs[3] = extractResolution(tmpHist2D);
@@ -1512,12 +1518,34 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tRes_Graphs[3]->SetMarkerColor(kP6Red);
     tRes_Graphs[3]->SetMarkerStyle(21);
     tRes_Graphs[3]->GetXaxis()->SetRangeUser(0, 0.5);
-    tRes_Graphs[3]->GetYaxis()->SetRangeUser(-0.5,0.5);
+    tRes_Graphs[3]->GetYaxis()->SetRangeUser(0, 0.1);
     tRes_Graphs[3]->GetXaxis()->SetTitle("-t_{MC} (GeV^{2})");
     tRes_Graphs[3]->GetYaxis()->SetTitle("RMS(#Delta t)");
-    tRes_Graphs[3]->GetYaxis()->SetRangeUser(-0.5,0.5);
-    tRes_Graphs[3]->Draw("LP");
+    tRes_Graphs[3]->Draw("AP");
     c_tResResults[3]->Print(Form("%s/PaperPlots/%s_tRes_32_33_Q2.png", OutDir.Data(), InBeamE.Data()));
+    c_tResResults_2D[3] = new TCanvas("c_tResResults_2D_3", "-t Resolution, 32-33 Q2 bin, 2D", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("COLZ");
+    c_tResResults_2D[3]->SetLogz();
+    c_tResResults_2D[3]->Print(Form("%s/PaperPlots/%s_tRes_2D_32_33_Q2.png", OutDir.Data(), InBeamE.Data()));
+
+    TGraphErrors* Q2Res_Graph;
+    tmpHist2D=((TH2D*)gDirectory->FindObject("h2_Q2Res_Result")); // Overall Q2 dist, all Q2 bins
+    Q2Res_Graph = extractResolution(tmpHist2D);
+    TCanvas* c_Q2ResResult = new TCanvas("c_Q2ResResult", "Q2 Resolution, all Q2 bins", 100, 0, 2560, 1920);
+    Q2Res_Graph->SetMarkerColor(kP6Red);
+    Q2Res_Graph->SetMarkerStyle(21);
+    Q2Res_Graph->GetXaxis()->SetRangeUser(5, 35);
+    Q2Res_Graph->GetYaxis()->SetRangeUser(0, 0.5);
+    Q2Res_Graph->GetXaxis()->SetTitle("Q^{2}_{MC} (GeV/c^{2})");
+    Q2Res_Graph->GetYaxis()->SetTitle("RMS(#Delta Q^{2})");
+    Q2Res_Graph->Draw("AP");
+    c_Q2ResResult->Print(Form("%s/PaperPlots/%s_Q2Res_AllQ2.png", OutDir.Data(), InBeamE.Data()));
+    TCanvas* c_Q2ResResult_2D = new TCanvas("c_Q2ResResult_2D", "Q2 Resolution, all  Q2 bins, 2D", 100, 0, 2560, 1920);
+    tmpHist2D->SetTitle("");
+    tmpHist2D->Draw("COLZ");
+    c_Q2ResResult_2D->SetLogz();
+    c_Q2ResResult_2D->Print(Form("%s/PaperPlots/%s_Q2Res_2D_AllQ2.png", OutDir.Data(), InBeamE.Data()));
     gDirectory->cd("../");
 
     gDirectory->cd("ResultsDists/Exclusive_Paper_Plots");
