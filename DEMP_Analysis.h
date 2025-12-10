@@ -36,16 +36,15 @@ PxPyPzEVector Vec_e_beam_NoAB; // initialized the 4 vector for proton beam for n
 PxPyPzEVector Vec_p_beam_NoAB; // initialized the 4 vector for proton beam for nbf */
 
 PxPyPzEVector Vec_tmp;
-//PxPyPzEVector Vec_eSc_Rec;
 PtEtaPhiMVector Vec_eSc_Rec;
 PxPyPzEVector Vec_Pi_Rec;
 PxPyPzEVector Vec_n_Rec;
 PxPyPzEVector Vec_nRot_Rec;
 PxPyPzEVector Vec_n_RecCorr;
 PxPyPzEVector Vec_PMiss_Rec;
-PxPyPzEVector Vec_PMiss_RecCorr; // For t_eXBE
 PxPyPzEVector Vec_PMissRot_Rec;
 PxPyPzEVector Vec_PMiss_DEMP_Rec;
+PxPyPzEVector Vec_PMiss_RecCorr;
 
 XYZVector Vec_n_Vertex;
 

@@ -63,8 +63,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_nRot_pTheta_RecoDEMPAccept_NoCuts = new TH2D("h2_nRot_pTheta_RecoDEMPAccept_NoCuts", "Neutron Reconstructed (Rotated 25 mrad) DEMP Accepted, No Cuts; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_n_pTheta_RecoDEMPAccept = new TH2D("h2_n_pTheta_RecoDEMPAccept", "Neutron Reconstructed DEMP Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_nRot_pTheta_RecoDEMPAccept = new TH2D("h2_nRot_pTheta_RecoDEMPAccept", "Neutron Reconstructed (Rotated 25 mrad) DEMP Accepted; #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_XY_10m_RecoDEMPAccept_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAccept_NoCuts", "Neutron Reconstructed XY position (@10m); x (mm); y (mm); Rate/bin (hz)",250,-500,0,200,-200,200);
-    TH2D* h2_n_XY_10m_RecoDEMPAccept = new TH2D("h2_n_XY_10m_RecoDEMPAccept", "Neutron Reconstructed XY position (@10m); x (mm); y (mm); Rate/bin (hz)",250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAccept_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAccept_NoCuts", "Neutron Reconstructed XY position (@10m); x (mm); y (mm); Rate/bin (Hz)",250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAccept = new TH2D("h2_n_XY_10m_RecoDEMPAccept", "Neutron Reconstructed XY position (@10m); x (mm); y (mm); Rate/bin (Hz)",250,-500,0,200,-200,200);
     // 01/09/25 - Added some new hists to look at calorimeter cluster dists before/after cuts
     TH1D* h1_ECal_ClustE_NoCuts = new TH1D("h1_ECal_ClustE_NoCuts", "E Cal Cluster Energy, No Cuts; E_{Clust}; Rate/bin (Hz)", 200, 0, 20);
     TH1D* h1_ECal_ClustE = new TH1D("h1_ECal_ClustE", "E Cal Cluster Energy; E_{Clust}; Rate/bin (Hz)", 200, 0, 20);
@@ -446,8 +446,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_nRot_XY_RecoAccept = new TH2D("h2_nRot_XY_RecoAccept", "Neutron reconstructed (Rotated 25 mrad) XY position at ZDC;x (mm) ;y (mm); Rate/bin (Hz)", 100,-200,200,100,-200,200);
     TH2D* h2_n_pTheta_RecoAcceptZDC = new TH2D("h2_n_pTheta_RecoAcceptZDC", "ZDC Reconstructed;#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
     TH2D* h2_nRot_pTheta_RecoAcceptoZDC = new TH2D("h2_nRot_pTheta_RecoAcceptZDC", "ZDC Reconstructed (Rotated 25 mrad);#theta (Deg); p (GeV/c); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_XY_10m_RecoDEMPAcceptZDC_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAcceptZDC_NoCuts", "Neutron Reconstructed XY position (@10m, n in ZDC only); x (mm); y (mm); Rate/bin (hz)", 250,-500,0,200,-200,200);
-    TH2D* h2_n_XY_10m_RecoDEMPAcceptZDC = new TH2D("h2_n_XY_10m_RecoDEMPAcceptZDC", "Neutron Reconstructed XY position (@10m, n in ZDC only); x (mm); y (mm); Rate/bin (hz)", 250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAcceptZDC_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAcceptZDC_NoCuts", "Neutron Reconstructed XY position (@10m, n in ZDC only); x (mm); y (mm); Rate/bin (Hz)", 250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAcceptZDC = new TH2D("h2_n_XY_10m_RecoDEMPAcceptZDC", "Neutron Reconstructed XY position (@10m, n in ZDC only); x (mm); y (mm); Rate/bin (Hz)", 250,-500,0,200,-200,200);
     gDirectory->cd("../../");
   }
 
@@ -488,8 +488,8 @@ void DefHists(TString InBeamE, Bool_t EventDists, Bool_t Kinematics, Bool_t ZDC,
     TH2D* h2_eSc_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_eSc_pTheta_RecoDEMPAcceptB0", "e' Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 120, 180, NBins_Energy, ElecBeamE-1, ElecBeamE+2);
     TH2D* h2_Pi_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_Pi_pTheta_RecoDEMPAcceptB0", "#pi Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta, 0, 60, NBins_Energy, 0, 100);
     TH2D* h2_n_pTheta_RecoDEMPAcceptB0 = new TH2D("h2_n_pTheta_RecoDEMPAcceptB0", "Neutron Reconstructed DEMP Accepted (B0); #theta (deg); P(GeV/C); Rate/bin (Hz)", NBins_Theta+50, 0, 2.5, NBins_Energy, 0, HadBeamE+(0.2*HadBeamE));
-    TH2D* h2_n_XY_10m_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAcceptB0_NoCuts", "Neutron Reconstructed XY position (@10m, n in B0 only); x (mm); y (mm); Rate/bin (hz)",250,-500,0,200,-200,200);
-    TH2D* h2_n_XY_10m_RecoDEMPAcceptB0 = new TH2D("h2_n_XY_10m_RecoDEMPAcceptB0", "Neutron Reconstructed XY position (@10m, n in B0 only); x (mm); y (mm); Rate/bin (hz)",250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAcceptB0_NoCuts = new TH2D("h2_n_XY_10m_RecoDEMPAcceptB0_NoCuts", "Neutron Reconstructed XY position (@10m, n in B0 only); x (mm); y (mm); Rate/bin (Hz)",250,-500,0,200,-200,200);
+    TH2D* h2_n_XY_10m_RecoDEMPAcceptB0 = new TH2D("h2_n_XY_10m_RecoDEMPAcceptB0", "Neutron Reconstructed XY position (@10m, n in B0 only); x (mm); y (mm); Rate/bin (Hz)",250,-500,0,200,-200,200);
     gDirectory->cd("../../");
   }
 

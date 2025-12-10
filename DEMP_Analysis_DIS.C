@@ -585,6 +585,8 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist1D("h1_tResult_0", t_eXBABE);
   FillHist1D("h1_Q2Result_0", Q2_DA);
   FillHist1D("h1_WResult_0", W_Rec);
+  FillHist2D("h2_tRes_Result_0",t_MC_NoAB, t_eXBABE-t_MC_NoAB);
+  FillHist2D("h2_Q2Res_Result",Q2_MC_NoAB, Q2_DA-Q2_MC_NoAB);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist1D("h1_tResult_ZDC_0", t_eXBABE);
     FillHist1D("h1_Q2Result_ZDC_0", Q2_DA);
@@ -595,13 +597,14 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
     FillHist1D("h1_Q2Result_B0_0", Q2_DA);
     FillHist1D("h1_WResult_B0_0", W_Rec);
   }
-  
+
   for(Int_t i = 0; i < 30; i++){
     //for(Int_t i = 0; i < 7; i++){
     if( Q2_DA > Q2Vals[i] && Q2_DA < Q2Vals[i+1]){
       FillHist1D(Form("h1_tResult_%i", i+1), t_eXBABE);
       FillHist1D(Form("h1_Q2Result_%i", i+1), Q2_DA);
       FillHist1D(Form("h1_WResult_%i", i+1), W_Rec);
+      FillHist2D(Form("h2_tRes_Result_%i", i+1),  t_MC_NoAB, t_eXBABE-t_MC_NoAB);
       if ( nZDC == kTRUE && ZDC == kTRUE){
 	FillHist1D(Form("h1_tResult_ZDC_%i", i+1), t_eXBABE);
 	FillHist1D(Form("h1_Q2Result_ZDC_%i", i+1), Q2_DA);
@@ -611,6 +614,30 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
 	FillHist1D(Form("h1_tResult_B0_%i", i+1), t_eXBABE);
 	FillHist1D(Form("h1_Q2Result_B0_%i", i+1), Q2_DA);
 	FillHist1D(Form("h1_WResult_B0_%i", i+1), W_Rec);
+      }
+      if (i < 5 && t_eXBABE < 0.12){
+	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec);
+	FillHist1D(Form("h1_WResult_MC_v2_%i", i+1), W_MC_NoAB);
+	if ( nZDC == kTRUE && ZDC == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec);
+	  FillHist1D(Form("h1_WResult_MC_v2_ZDC_%i", i+1), W_MC_NoAB);
+	}
+	if ( nB0 == kTRUE && B0 == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec);
+	  FillHist1D(Form("h1_WResult_MC_v2_B0_%i", i+1), W_MC_NoAB);
+	}
+      }
+      else if( i >= 5 && t_eXBABE < 0.18){
+	FillHist1D(Form("h1_WResult_v2_%i", i+1), W_Rec);
+	FillHist1D(Form("h1_WResult_MC_v2_%i", i+1), W_MC_NoAB);
+	if ( nZDC == kTRUE && ZDC == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_ZDC_%i", i+1), W_Rec);
+	  FillHist1D(Form("h1_WResult_MC_v2_ZDC_%i", i+1), W_MC_NoAB);
+	}
+	if ( nB0 == kTRUE && B0 == kTRUE){
+	  FillHist1D(Form("h1_WResult_v2_B0_%i", i+1), W_Rec);
+	  FillHist1D(Form("h1_WResult_MC_v2_B0_%i", i+1), W_MC_NoAB);
+	}
       }
     }
   }
@@ -646,6 +673,15 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   FillHist2D("h2_Result_DEMPx", x_MC_NoAB, x_DA);
   FillHist2D("h2_Result_DEMPy", y_MC_NoAB, y_DA);
   FillHist2D("h2_Result_DEMPt", t_MC_NoAB, t_eXBABE);
+  if(Q2_MC_NoAB >= 5 && Q2_MC_NoAB < 10){
+    FillHist2D("h2_Result_DEMPt_Q2_1", t_MC_NoAB, t_eXBABE);
+  }
+  else if(Q2_MC_NoAB >= 10 && Q2_MC_NoAB < 20){
+    FillHist2D("h2_Result_DEMPt_Q2_2", t_MC_NoAB, t_eXBABE);
+  }
+  else if(Q2_MC_NoAB >= 20 && Q2_MC_NoAB < 35){
+    FillHist2D("h2_Result_DEMPt_Q2_3", t_MC_NoAB, t_eXBABE);
+  }
   FillHist2D("h2_Result_DEMP_eScTheta", eSc_MC.Theta()*TMath::RadToDeg(), eSc_Rec.Theta()*TMath::RadToDeg());
   FillHist2D("h2_Result_DEMP_eScE", eSc_MC.E(), eSc_Rec.E());
   FillHist2D("h2_Result_DEMP_piEPz", Pi_MC.E() - abs(Pi_MC.Pz()), Pi_Rec.E() - abs(Pi_Rec.Pz()));
@@ -656,27 +692,75 @@ void FillDEMP_Results(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n
   gDirectory->cd("../../");
 }
 
+void FillDEMP_ResultsEffCorr(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  FillHist1D("h1_tMC_Result_0", t_MC);
+  for(Int_t i = 0; i < 30; i++){
+    if( Q2_MC > Q2Vals[i] && Q2_MC < Q2Vals[i+1]){
+      FillHist1D(Form("h1_tMC_Result_%i", i+1), t_MC);
+    }
+  }
+  gDirectory->cd("../../");
+}
+
+void FillDEMP_TruthEffCorr(PxPyPzEVector eSc_MC, PxPyPzEVector Pi_MC, PxPyPzEVector n_MC){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  FillHist1D("h1_tMC_Truth_0", t_MC);
+  for(Int_t i = 0; i < 30; i++){
+    if( Q2_MC > Q2Vals[i] && Q2_MC < Q2Vals[i+1]){
+      FillHist1D(Form("h1_tMC_Truth_%i", i+1), t_MC);
+    }
+  }
+  gDirectory->cd("../../");
+}
+
+void Calc_tEff(){
+  gDirectory->cd("ResultsDists/tEff_Plots");
+  DivideHists1D("h1_tMC_Eff_0", "h1_tMC_Result_0", "h1_tMC_Truth_0");
+  for(Int_t i = 0; i < 30; i++){
+    DivideHists1D(Form("h1_tMC_Eff_%i", i+1), Form("h1_tMC_Result_%i", i+1), Form("h1_tMC_Truth_%i", i+1));
+  }
+  gDirectory->cd("../../");
+}
+
 void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   gDirectory->cd("QADists/Kin");
   FillHist1D("h1_tBABE_Res_QA", ((t_BABE - t_MC)/t_MC)*100);
   FillHist1D("h1_teX_Res_QA", ((t_eX - t_MC)/t_MC)*100);
+  FillHist1D("h1_teXBE_Res_QA", ((t_eXBE - t_MC)/t_MC)*100);
   FillHist1D("h1_teXPT_Res_QA", ((t_eXPT - t_MC)/t_MC)*100);
   FillHist1D("h1_teXBABE_Res_QA", ((t_eXBABE - t_MC)/t_MC)*100);
+  FillHist1D("h1_tBABE_Res_Abs_QA", (t_BABE - t_MC));
+  FillHist1D("h1_teX_Res_Abs_QA", (t_eX - t_MC));
+  FillHist1D("h1_teXBE_Res_Abs_QA", (t_eXBE - t_MC));
+  FillHist1D("h1_teXPT_Res_Abs_QA", (t_eXPT - t_MC));
+  FillHist1D("h1_teXBABE_Res_Abs_QA", (t_eXBABE - t_MC));
   FillHist1D("h1_Q2_Res_QA", ((Q2_DA - Q2_MC)/Q2_MC)*100);
   FillHist1D("h1_W_Res_QA", ((W_Rec - W_MC)/W_MC)*100);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist1D("h1_tBABE_Res_QA_ZDC", ((t_BABE - t_MC)/t_MC)*100);
     FillHist1D("h1_teX_Res_QA_ZDC", ((t_eX - t_MC)/t_MC)*100);
+    FillHist1D("h1_teXBE_Res_QA_ZDC", ((t_eXBE - t_MC)/t_MC)*100);
     FillHist1D("h1_teXPT_Res_QA_ZDC", ((t_eXPT - t_MC)/t_MC)*100);
     FillHist1D("h1_teXBABE_Res_QA_ZDC", ((t_eXBABE - t_MC)/t_MC)*100);
+    FillHist1D("h1_tBABE_Res_Abs_QA_ZDC", (t_BABE - t_MC));
+    FillHist1D("h1_teX_Res_Abs_QA_ZDC", (t_eX - t_MC));
+    FillHist1D("h1_teXBE_Res_Abs_QA_ZDC", (t_eXBE - t_MC));
+    FillHist1D("h1_teXPT_Res_Abs_QA_ZDC", (t_eXPT - t_MC));
+    FillHist1D("h1_teXBABE_Res_Abs_QA_ZDC", (t_eXBABE - t_MC));
     FillHist1D("h1_Q2_Res_QA_ZDC", ((Q2_DA - Q2_MC)/Q2_MC)*100);
     FillHist1D("h1_W_Res_QA_ZDC", ((W_Rec - W_MC)/W_MC)*100);
   }
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist1D("h1_tBABE_Res_QA_B0", ((t_BABE - t_MC)/t_MC)*100);
     FillHist1D("h1_teX_Res_QA_B0", ((t_eX - t_MC)/t_MC)*100);
+    FillHist1D("h1_teXBE_Res_QA_B0", ((t_eXBE - t_MC)/t_MC)*100);
     FillHist1D("h1_teXPT_Res_QA_B0", ((t_eXPT - t_MC)/t_MC)*100);
     FillHist1D("h1_teXBABE_Res_QA_B0", ((t_eXBABE - t_MC)/t_MC)*100);
+    FillHist1D("h1_tBABE_Res_Abs_QA_B0", (t_BABE - t_MC));
+    FillHist1D("h1_teX_Res_Abs_QA_B0", (t_eX - t_MC));
+    FillHist1D("h1_teXPT_Res_Abs_QA_B0", (t_eXPT - t_MC));
+    FillHist1D("h1_teXBABE_Res_Abs_QA_B0", (t_eXBABE - t_MC));
     FillHist1D("h1_Q2_Res_QA_B0", ((Q2_DA - Q2_MC)/Q2_MC)*100);
     FillHist1D("h1_W_Res_QA_B0", ((W_Rec - W_MC)/W_MC)*100);
   }
@@ -684,12 +768,14 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   gDirectory->cd("QADists/tComp");
   FillHist2D("h2_tBABEComp", t_BABE, t_MC);
   FillHist2D("h2_teXComp", t_eX, t_MC);
+  FillHist2D("h2_teXBEComp", t_eXBE, t_MC);
   FillHist2D("h2_teXPTComp", t_eXPT, t_MC);
   FillHist2D("h2_teXBABEComp", t_eXBABE, t_MC);
   FillHist2D("h2_teXBABECompAlt", t_eXBABE, t_MC);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist2D("h2_tBABEComp_ZDC", t_BABE, t_MC);
     FillHist2D("h2_teXComp_ZDC", t_eX, t_MC);
+    FillHist2D("h2_teXBEComp_ZDC", t_eXBE, t_MC);
     FillHist2D("h2_teXPTComp_ZDC", t_eXPT, t_MC);
     FillHist2D("h2_teXBABEComp_ZDC", t_eXBABE, t_MC);
     FillHist2D("h2_teXBABECompAlt_ZDC", t_eXBABE, t_MC);
@@ -697,6 +783,7 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0){
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist2D("h2_tBABEComp_B0", t_BABE, t_MC);
     FillHist2D("h2_teXComp_B0", t_eX, t_MC);
+    FillHist2D("h2_teXBEComp_B0", t_eXBE, t_MC);
     FillHist2D("h2_teXPTComp_B0", t_eXPT, t_MC);
     FillHist2D("h2_teXBABEComp_B0", t_eXBABE, t_MC);
     FillHist2D("h2_teXBABECompAlt_B0", t_eXBABE, t_MC);
@@ -722,6 +809,10 @@ void FillDEMP_Q2Alt(){
   FillHist1D("h1_QA_Q2JB_Res",(Q2_JB-Q2_MC)/Q2_MC*100);
   FillHist1D("h1_QA_Q2DA_Res",(Q2_DA-Q2_MC)/Q2_MC*100);
   FillHist1D("h1_QA_Q2Sig_Res",(Q2_Sig-Q2_MC)/Q2_MC*100);
+  FillHist1D("h1_QA_Q2Rec_Res_Abs",(Q2_Rec-Q2_MC));
+  FillHist1D("h1_QA_Q2JB_Res_Abs",(Q2_JB-Q2_MC));
+  FillHist1D("h1_QA_Q2DA_Res_Abs",(Q2_DA-Q2_MC));
+  FillHist1D("h1_QA_Q2Sig_Res_Abs",(Q2_Sig-Q2_MC));
   FillHist1D("h1_QA_yRec_Res",(y_Rec-y_MC)/y_MC*100);
   FillHist1D("h1_QA_yJB_Res",(y_JB-y_MC)/y_MC*100);
   FillHist1D("h1_QA_yDA_Res",(y_DA-y_MC)/y_MC*100);
@@ -1045,7 +1136,7 @@ void DEMP_Analysis_DIS(TString BeamE = ""){
 	}
 	gDirectory->cd("../../");
 	// If E/p looks bad, continue - Within +/- 0.2
-	if ( EpRatio > 1.2 ||  EpRatio < 0.8) continue; 
+	if ( EpRatio > 1.2 ||  EpRatio < 0.9) continue; 
        	eSc_P = sqrt((Vec_tmp.E()*Vec_tmp.E())-(eMass*eMass));
 	Vec_eSc_Rec.SetCoordinates((eSc_P*(TMath::Sin(Vec_tmp.Theta()))), Vec_tmp.eta(), Vec_tmp.Phi(), eMass);
 	gDirectory->cd("EventDists/Reco");
