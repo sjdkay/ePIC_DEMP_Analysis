@@ -43,6 +43,7 @@ PxPyPzEVector Vec_n_Rec;
 PxPyPzEVector Vec_nRot_Rec;
 PxPyPzEVector Vec_n_RecCorr;
 PxPyPzEVector Vec_PMiss_Rec;
+PxPyPzEVector Vec_PMiss_RecCorr; // For t_eXBE
 PxPyPzEVector Vec_PMissRot_Rec;
 PxPyPzEVector Vec_PMiss_DEMP_Rec;
 
@@ -55,6 +56,7 @@ PxPyPzEVector Vec_t_MC_NoAB;
 PxPyPzEVector Vec_Q_Rec;
 PxPyPzEVector Vec_t_BABE;
 PxPyPzEVector Vec_t_eX;
+PxPyPzEVector Vec_t_eXBE;
 PxPyPzEVector Vec_t_eXPT;
 PxPyPzEVector Vec_t_eXBABE;
 
@@ -70,7 +72,7 @@ int eSc_Index, pi_Index, n_Index, MaxClusIndex, MaxBClusIndex;
 
 Double_t Q2_MC, t_MC, W_MC, y_MC, x_MC, eps_MC;
 Double_t Q2_MC_NoAB, t_MC_NoAB, W_MC_NoAB, y_MC_NoAB, x_MC_NoAB, eps_MC_NoAB;
-Double_t Q2_Rec, W_Rec, y_Rec, x_Rec, eps_Rec, t_BABE, t_eX, t_eXPT, t_eXBABE; // Add other methods if needed
+Double_t Q2_Rec, W_Rec, y_Rec, x_Rec, eps_Rec, t_BABE, t_eX, t_eXBE, t_eXPT, t_eXBABE; // Add other methods if needed
 Double_t nTheta_Diff, nPhi_Diff, MMiss, MMiss2, nRotTheta_Diff, nRotPhi_Diff, SigmaEPz;
 //Double_t Q2Vals[8]={5, 7.5, 10, 15, 20, 25, 30, 35};
 Double_t Q2Vals[31]={5, 6, 7, 8 ,9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
@@ -222,6 +224,7 @@ void CalculateKinematics_Q2Alt_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi
 void CorrectNeutronTrack(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   Vec_PMiss_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec);
   Vec_PMissRot_Rec = rot*Vec_PMiss_Rec;
+  Vec_PMiss_RecCorr.SetPxPyPzE(Vec_PMiss_Rec.Px(), Vec_PMiss_Rec.Py(), Vec_PMiss_Rec.Pz(), sqrt(pow(Vec_PMiss_Rec.P(),2)+(pow(neutMass,2))));
   Vec_n_RecCorr.SetPxPyPzE(Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*cos(n_Rec.Phi()), Vec_PMiss_Rec.P()*sin(n_Rec.Theta())*sin(n_Rec.Phi()), Vec_PMiss_Rec.P()*cos(n_Rec.Theta()), sqrt(pow(Vec_PMiss_Rec.P(),2)+(pow(neutMass,2))));
   Vec_PMiss_DEMP_Rec = (EBeam + HBeam) - (eSc_Rec + pi_Rec + Vec_n_RecCorr);
 }
@@ -229,10 +232,13 @@ void CorrectNeutronTrack(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEV
 void Calculate_t_DEMPRec(PtEtaPhiMVector eSc_Rec, PxPyPzEVector pi_Rec, PxPyPzEVector n_Rec, PxPyPzEVector n_RecCorr, PxPyPzEVector EBeam, PxPyPzEVector HBeam){
   Vec_t_BABE = (HBeam - n_Rec);
   Vec_t_eX = ((EBeam - eSc_Rec) - pi_Rec);
+  Vec_PMiss_RecCorr.SetPxPyPzE(((EBeam + HBeam) - (eSc_Rec + pi_Rec)).Px(), ((EBeam + HBeam) - (eSc_Rec + pi_Rec)).Py(), ((EBeam + HBeam) - (eSc_Rec + pi_Rec)).Pz(), sqrt(pow(((EBeam + HBeam) - (eSc_Rec + pi_Rec)).P(),2)+(pow(neutMass,2))));
+  Vec_t_eXBE = (HBeam - Vec_PMiss_RecCorr);
   Vec_t_eXPT = rot*(eSc_Rec + pi_Rec); // Rotate vetors prior to getting perpendicular component
   Vec_t_eXBABE = (HBeam - n_RecCorr);
   t_BABE = -1*(Vec_t_BABE.mag2());
   t_eX = -1*(Vec_t_eX.mag2());
+  t_eXBE = -1*(Vec_t_eXBE.mag2());
   t_eXPT = Vec_t_eXPT.Perp2();
   t_eXBABE = -1*(Vec_t_eXBABE.mag2());
 }
@@ -1256,11 +1262,11 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_tComp->AddEntry(tmpHist1D, "t_{BABE}");
-    /* tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_QA_ZDC")); */
-    /* tmpHist1D->SetFillColorAlpha(kP6Red, 0.3); */
-    /* tmpHist1D->SetTitle(""); */
-    /* tmpHist1D->Draw("SAMEHIST"); */
-    /* Leg_tComp->AddEntry(tmpHist1D, "t_{eXPT}"); */
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBE_Res_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Blue, 0.9);
+    tmpHist1D->SetTitle("");
+    tmpHist1D->Draw("SAMEHIST");
+    Leg_tComp->AddEntry(tmpHist1D, "t_{eXBE}");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_QA_ZDC"));
     tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.9);
     tmpHist1D->SetTitle("");
@@ -1285,11 +1291,11 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
     Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{BABE}");
-    /* tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_Abs_QA_ZDC"));
-    tmpHist1D->SetFillColorAlpha(kP6Red, 0.3);
+    tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXBE_Res_Abs_QA_ZDC"));
+    tmpHist1D->SetFillColorAlpha(kP6Blue, 0.9);
     tmpHist1D->SetTitle("");
     tmpHist1D->Draw("SAMEHIST");
-    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{eXPT}"); */
+    Leg_tComp_Abs->AddEntry(tmpHist1D, "t_{eXBE}");
     tmpHist1D = ((TH1D*)gDirectory->FindObject("h1_teXPT_Res_Abs_QA_ZDC"));
     tmpHist1D->SetFillColorAlpha(kP6Yellow, 0.9);
     tmpHist1D->SetTitle("");
@@ -1474,6 +1480,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     c_tResResults[0]->Print(Form("%s/PaperPlots/%s_tRes_AllQ2.png", OutDir.Data(), InBeamE.Data()));
     c_tResResults_2D[0] = new TCanvas("c_tResResults_2D_0", "-t Resolution, all Q2 bins, 2D", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist2D->Draw("COLZ");
     c_tResResults_2D[0]->SetLogz();
     c_tResResults_2D[0]->Print(Form("%s/PaperPlots/%s_tRes_2D_AllQ2.png", OutDir.Data(), InBeamE.Data()));
@@ -1491,6 +1498,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     c_tResResults[1]->Print(Form("%s/PaperPlots/%s_tRes_5_6_Q2.png", OutDir.Data(), InBeamE.Data()));
     c_tResResults_2D[1] = new TCanvas("c_tResResults_2D_1", "-t Resolution, 5-6 Q2 bin, 2D", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist2D->Draw("COLZ");
     c_tResResults_2D[1]->SetLogz();
     c_tResResults_2D[1]->Print(Form("%s/PaperPlots/%s_tRes_2D_5_6_Q2.png", OutDir.Data(), InBeamE.Data()));
@@ -1508,6 +1516,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     c_tResResults[2]->Print(Form("%s/PaperPlots/%s_tRes_17_18_Q2.png", OutDir.Data(), InBeamE.Data()));
     c_tResResults_2D[2] = new TCanvas("c_tResResults_2D_2", "-t Resolution, 17-18 Q2 bin, 2D", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist2D->Draw("COLZ");
     c_tResResults_2D[2]->SetLogz();
     c_tResResults_2D[2]->Print(Form("%s/PaperPlots/%s_tRes_2D_17_18_Q2.png", OutDir.Data(), InBeamE.Data()));
@@ -1525,6 +1534,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     c_tResResults[3]->Print(Form("%s/PaperPlots/%s_tRes_32_33_Q2.png", OutDir.Data(), InBeamE.Data()));
     c_tResResults_2D[3] = new TCanvas("c_tResResults_2D_3", "-t Resolution, 32-33 Q2 bin, 2D", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 0.5);
     tmpHist2D->Draw("COLZ");
     c_tResResults_2D[3]->SetLogz();
     c_tResResults_2D[3]->Print(Form("%s/PaperPlots/%s_tRes_2D_32_33_Q2.png", OutDir.Data(), InBeamE.Data()));
@@ -1543,6 +1553,7 @@ void WritePlotsQA(TString OutDir, TString InBeamE, TString InDate, TString InBea
     c_Q2ResResult->Print(Form("%s/PaperPlots/%s_Q2Res_AllQ2.png", OutDir.Data(), InBeamE.Data()));
     TCanvas* c_Q2ResResult_2D = new TCanvas("c_Q2ResResult_2D", "Q2 Resolution, all  Q2 bins, 2D", 100, 0, 2560, 1920);
     tmpHist2D->SetTitle("");
+    tmpHist2D->GetXaxis()->SetRangeUser(0, 40);
     tmpHist2D->Draw("COLZ");
     c_Q2ResResult_2D->SetLogz();
     c_Q2ResResult_2D->Print(Form("%s/PaperPlots/%s_Q2Res_2D_AllQ2.png", OutDir.Data(), InBeamE.Data()));

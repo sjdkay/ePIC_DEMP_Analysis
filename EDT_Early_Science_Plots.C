@@ -61,7 +61,7 @@ void EDT_Early_Science_Plots(string InFilename = "", TString InBeamE =""){
   TString EDT_EarlyScience_rootFile;
   
   if(InFilename == ""){
-    cout << "Enter a calorimeter filename to analyse: ";
+    cout << "Enter a filename to analyse: ";
     cin >> InFilename;
   }
 
@@ -84,12 +84,13 @@ void EDT_Early_Science_Plots(string InFilename = "", TString InBeamE =""){
   TFile *InFile = new TFile(EDT_EarlyScience_rootFile);
   
   // Somewhat tedious, but manually grab each
+  TH1F* DeltaThetaStar_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/Exclusive_Paper_Plots/h1_Result_DeltaTheta_PreCut")))->Clone("DeltaThetaStar_Dist"); DeltaThetaStar_Dist->Sumw2();
   TH1F* tMC_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/tEff_Plots/h1_tMC_Truth_0")))->Clone("tMC_Dist"); tMC_Dist->Sumw2();
   TH1F* tResult_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/h1_tResult_0")))->Clone("tResult_Dist"); tResult_Dist->Sumw2();
   TH1F* tMCResult_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/tEff_Plots/h1_tMC_Result_0")))->Clone("tMCResult_Dist"); tMCResult_Dist->Sumw2();
   TH1F* tEff_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/tEff_Plots/h1_tMC_Eff_0")))->Clone("tEff_Dist"); tEff_Dist->Sumw2();
   TH1F* tResult_Scaled_Dist = (TH1F*)(((TH1F*)InFile->Get("ResultsDists/h1_tResult_0")))->Clone("tResult_Scaled_Dist"); tResult_Scaled_Dist->Sumw2();
-
+  
   double InitialContent;
   for(int bin = 0; bin < tResult_Scaled_Dist->GetNbinsX(); bin++){
     InitialContent = tResult_Scaled_Dist->GetBinContent(bin);
@@ -111,11 +112,37 @@ void EDT_Early_Science_Plots(string InFilename = "", TString InBeamE =""){
   else{
     Output_Name = TInFilename.ReplaceAll(".root","");
   }
+  
+  Output_Name.ReplaceAll("OutputHists", "EDT_Paper_Plots");
 
+  // Figure 1
+  TCanvas *c_DeltaTheta = new TCanvas("c_DeltaThata","Delta Theta Distribution", 100, 0, 2560, 1920);
+  DeltaThetaStar_Dist->GetXaxis()->SetTitleOffset(1);
+  DeltaThetaStar_Dist->GetXaxis()->SetTitle("#Delta#theta *(#theta_{Miss}*- #theta_{ZDC}*) [Deg]");
+  DeltaThetaStar_Dist->GetYaxis()->SetTitle("Rate [Hz] (Unscaled)");
+  DeltaThetaStar_Dist->Draw("Histerr");
+  TLine *ThetaLow = new TLine(-0.09, 0, -0.09, gPad->GetUymax()); //10x130
+  //TLine *ThetaLow = new TLine(-0.07, 0, -0.07, gPad->GetUymax()); //10x250
+  ThetaLow->SetLineColor(TColor::GetColor(kp6[3].Data()));
+  ThetaLow->SetLineWidth(8);
+  ThetaLow->SetLineStyle(kDashed);
+  ThetaLow->Draw("same");
+  TLine *ThetaHigh = new TLine(0.14, 0, 0.14, gPad->GetUymax()); //10x130
+  //TLine *ThetaHigh = new TLine(0.17, 0, 0.17, gPad->GetUymax()); //10x250
+  ThetaHigh->SetLineColor(TColor::GetColor(kp6[3].Data()));
+  ThetaHigh->SetLineWidth(8);
+  ThetaHigh->SetLineStyle(kDashed);
+  ThetaHigh->Draw("same");
+  ePIC_Plot(0.18, 0.88, 0.87, 0.8, InBeamE);  
+  c_DeltaTheta->Print(Output_Name+"_Fig1.pdf");
+  c_DeltaTheta->Print(Output_Name+"_Fig1.png");
+  // Figure 2
   TCanvas *c_tDist = new TCanvas("c_tDist", "t Distribution", 100, 0, 2560, 1920);
   tMC_Dist->SetMarkerColor(TColor::GetColor(kp6[0].Data())); tMC_Dist->SetLineColor(TColor::GetColor(kp6[0].Data()));
   tMC_Dist->GetXaxis()->SetRangeUser(0, 0.5);
   tMC_Dist->GetXaxis()->SetTitleOffset(1);
+  tMC_Dist->GetXaxis()->SetTitle("Momentum Transfer, -t [GeV^{2}]");
+  tMC_Dist->GetYaxis()->SetTitle("Rate/(0.02 GeV^{2}) [Hz]");
   tMC_Dist->Draw("Histerr");
   tResult_Dist->SetMarkerColor(TColor::GetColor(kp6[4].Data())); tResult_Dist->SetLineColor(TColor::GetColor(kp6[4].Data()));
   tResult_Scaled_Dist->SetMarkerColor(TColor::GetColor(kp6[3].Data())); tResult_Scaled_Dist->SetLineColor(TColor::GetColor(kp6[3].Data()));
@@ -131,10 +158,12 @@ void EDT_Early_Science_Plots(string InFilename = "", TString InBeamE =""){
   t_Legend->AddEntry(tMCResult_Dist, "MC Accept", "l");
   t_Legend->Draw("SAME");
   ePIC_Plot(0.35, 0.88, 0.87, 0.8, InBeamE);  
-  c_tDist->Print(Output_Name+".pdf");
-  c_tDist->Print(Output_Name+".png");
+  c_tDist->Print(Output_Name+"_Fig2.pdf");
+  c_tDist->Print(Output_Name+"_Fig2.png");
 
   TFile *OutFile = new TFile(Output_Name+".root", "RECREATE");
+  DeltaThetaStar_Dist->Write();
+  c_DeltaTheta->Write();
   tMC_Dist->Write();
   tResult_Dist->Write();
   tResult_Scaled_Dist->Write();

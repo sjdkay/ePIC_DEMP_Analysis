@@ -378,6 +378,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
   FillHist1D("h1_Q2_Reco", Q2_DA, wgt);
   FillHist1D("h1_tBABE_Reco", t_BABE, wgt);
   FillHist1D("h1_teX_Reco", t_eX, wgt);
+  FillHist1D("h1_teXBE_Reco", t_eXBE, wgt);
   FillHist1D("h1_teXPT_Reco", t_eXPT, wgt);
   FillHist1D("h1_teXBABE_Reco", t_eXBABE, wgt);
   FillHist1D("h1_W_Reco", W_Rec, wgt);
@@ -390,6 +391,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
   FillHist1D("h1_MissMass2", MMiss2, wgt);
   FillHist2D("h2_Q2tBABE_Reco", Q2_DA, t_BABE, wgt);
   FillHist2D("h2_Q2teX_Reco", Q2_DA, t_eX, wgt);
+  FillHist2D("h2_Q2teXBE_Reco", Q2_DA, t_eXBE, wgt);
   FillHist2D("h2_Q2teXPT_Reco", Q2_DA, t_eXPT, wgt);
   FillHist2D("h2_Q2teXBABE_Reco", Q2_DA, t_eXBABE, wgt);
   FillHist2D("h2_WQ2_Reco", W_Rec, Q2_DA, wgt);
@@ -423,6 +425,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_Q2_ZDCReco", Q2_DA, wgt);
     FillHist1D("h1_tBABE_ZDCReco", t_BABE, wgt);
     FillHist1D("h1_teX_ZDCReco", t_eX, wgt);
+    FillHist1D("h1_teXBE_ZDCReco", t_eXBE, wgt);
     FillHist1D("h1_teXPT_ZDCReco", t_eXPT, wgt);
     FillHist1D("h1_teXBABE_ZDCReco", t_eXBABE, wgt);
     FillHist1D("h1_W_ZDCReco", W_Rec, wgt);
@@ -434,6 +437,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_MissMass_ZDCReco", MMiss, wgt);
     FillHist2D("h2_Q2tBABE_ZDCReco",Q2_DA, t_BABE, wgt);
     FillHist2D("h2_Q2teX_ZDCReco",Q2_DA, t_eX, wgt);
+    FillHist2D("h2_Q2teXBE_ZDCReco",Q2_DA, t_eXBE, wgt);
     FillHist2D("h2_Q2teXPT_ZDCReco", Q2_DA, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_ZDCReco", Q2_DA, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_ZDCReco", W_Rec, Q2_DA, wgt);
@@ -464,6 +468,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_Q2_B0Reco", Q2_DA, wgt);
     FillHist1D("h1_tBABE_B0Reco", t_BABE, wgt);
     FillHist1D("h1_teX_B0Reco", t_eX, wgt);
+    FillHist1D("h1_teXBE_B0Reco", t_eXBE, wgt);
     FillHist1D("h1_teXPT_B0Reco", t_eXPT, wgt);
     FillHist1D("h1_teXBABE_B0Reco", t_eXBABE, wgt);
     FillHist1D("h1_W_B0Reco", W_Rec, wgt);
@@ -475,6 +480,7 @@ void FillDEMPAccept_Kin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wg
     FillHist1D("h1_MissMass_B0Reco", MMiss, wgt);
     FillHist2D("h2_Q2tBABE_B0Reco",Q2_DA, t_BABE, wgt);
     FillHist2D("h2_Q2teX_B0Reco",Q2_DA, t_eX, wgt);
+    FillHist2D("h2_Q2teXBE_B0Reco",Q2_DA, t_eXBE, wgt);
     FillHist2D("h2_Q2teXPT_B0Reco", Q2_DA, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_B0Reco", Q2_DA, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_B0Reco", W_Rec, Q2_DA, wgt);
@@ -507,6 +513,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   // Fill reconstructed t, Theta/phi diff and Emiss distributions for DEMP events before cuts
   FillHist1D("h1_tBABE_Reco_NoCuts", t_BABE, wgt);
   FillHist1D("h1_teX_Reco_NoCuts", t_eX, wgt);
+  FillHist1D("h1_teXBE_Reco_NoCuts", t_eXBE, wgt);
   FillHist1D("h1_teXPT_Reco_NoCuts", t_eXPT, wgt);
   FillHist1D("h1_teXBABE_Reco_NoCuts", t_eXBABE, wgt);
   FillHist1D("h1_DeltaTheta_Reco_NoCuts", nTheta_Diff, wgt);
@@ -515,6 +522,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
   FillHist1D("h1_MissMass2_NoCuts", MMiss2, wgt);
   FillHist2D("h2_Q2tBABE_Reco_NoCuts", Q2_DA, t_BABE, wgt);
   FillHist2D("h2_Q2teX_Reco_NoCuts", Q2_DA, t_eX, wgt);
+  FillHist2D("h2_Q2teXBE_Reco_NoCuts", Q2_DA, t_eXBE, wgt);
   FillHist2D("h2_Q2teXPT_Reco_NoCuts", Q2_DA, t_eXPT, wgt);
   FillHist2D("h2_Q2teXBABE_Reco_NoCuts", Q2_DA, t_eXBABE, wgt);
   FillHist2D("h2_WQ2_Reco_NoCuts", W_Rec, Q2_DA, wgt);
@@ -536,6 +544,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     gDirectory->cd("KinematicDists/Reco/ZDC");
     FillHist1D("h1_tBABE_ZDCReco_NoCuts", t_BABE, wgt);
     FillHist1D("h1_teX_ZDCReco_NoCuts", t_eX, wgt);
+    FillHist1D("h1_teXBE_ZDCReco_NoCuts", t_eXBE, wgt);
     FillHist1D("h1_teXPT_ZDCReco_NoCuts", t_eXPT, wgt);
     FillHist1D("h1_teXBABE_ZDCReco_NoCuts", t_eXBABE, wgt);
     FillHist1D("h1_DeltaTheta_ZDCReco_NoCuts", nTheta_Diff, wgt);
@@ -543,6 +552,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     FillHist2D("h2_Q2tBABE_ZDCReco_NoCuts", Q2_DA, t_BABE, wgt);
     FillHist1D("h1_MissMass_ZDCReco_NoCuts", MMiss, wgt);
     FillHist2D("h2_Q2teX_ZDCReco_NoCuts", Q2_DA, t_eX, wgt);
+    FillHist2D("h2_Q2teXBE_ZDCReco_NoCuts", Q2_DA, t_eXBE, wgt);
     FillHist2D("h2_Q2teXPT_ZDCReco_NoCuts", Q2_DA, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_ZDCReco_NoCuts", Q2_DA, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_ZDCReco_NoCuts", W_Rec, Q2_DA, wgt);
@@ -559,6 +569,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     gDirectory->cd("KinematicDists/Reco/B0");
     FillHist1D("h1_tBABE_B0Reco_NoCuts", t_BABE, wgt);
     FillHist1D("h1_teX_B0Reco_NoCuts", t_eX, wgt);
+    FillHist1D("h1_teXBE_B0Reco_NoCuts", t_eXBE, wgt);
     FillHist1D("h1_teXPT_B0Reco_NoCuts", t_eXPT, wgt);
     FillHist1D("h1_teXBABE_B0Reco_NoCuts", t_eXBABE, wgt);
     FillHist1D("h1_DeltaTheta_B0Reco_NoCuts", nTheta_Diff, wgt);
@@ -566,6 +577,7 @@ void FillDEMPAccept_tKin_NoCuts(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, 
     FillHist1D("h1_MissMass_B0Reco_NoCuts", MMiss, wgt);
     FillHist2D("h2_Q2tBABE_B0Reco_NoCuts", Q2_DA, t_BABE, wgt);
     FillHist2D("h2_Q2teX_B0Reco_NoCuts", Q2_DA, t_eX, wgt);
+    FillHist2D("h2_Q2teXBE_B0Reco_NoCuts", Q2_DA, t_eXBE, wgt);
     FillHist2D("h2_Q2teXPT_B0Reco_NoCuts", Q2_DA, t_eXPT, wgt);
     FillHist2D("h2_Q2teXBABE_B0Reco_NoCuts", Q2_DA, t_eXBABE, wgt);
     FillHist2D("h2_WQ2_B0Reco_NoCuts", W_Rec, Q2_DA, wgt);
@@ -728,10 +740,12 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("QADists/Kin");
   FillHist1D("h1_tBABE_Res_QA", ((t_BABE - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teX_Res_QA", ((t_eX - t_MC)/t_MC)*100, wgt);
+  FillHist1D("h1_teXBE_Res_QA", ((t_eXBE - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teXPT_Res_QA", ((t_eXPT - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_teXBABE_Res_QA", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
   FillHist1D("h1_tBABE_Res_Abs_QA", (t_BABE - t_MC), wgt);
   FillHist1D("h1_teX_Res_Abs_QA", (t_eX - t_MC), wgt);
+  FillHist1D("h1_teXBE_Res_Abs_QA", (t_eXBE - t_MC), wgt);
   FillHist1D("h1_teXPT_Res_Abs_QA", (t_eXPT - t_MC), wgt);
   FillHist1D("h1_teXBABE_Res_Abs_QA", (t_eXBABE - t_MC), wgt);
   FillHist1D("h1_Q2_Res_QA", ((Q2_DA - Q2_MC)/Q2_MC)*100, wgt);
@@ -739,10 +753,12 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist1D("h1_tBABE_Res_QA_ZDC", ((t_BABE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teX_Res_QA_ZDC", ((t_eX - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXBE_Res_QA_ZDC", ((t_eXBE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXPT_Res_QA_ZDC", ((t_eXPT - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXBABE_Res_QA_ZDC", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_tBABE_Res_Abs_QA_ZDC", (t_BABE - t_MC), wgt);
     FillHist1D("h1_teX_Res_Abs_QA_ZDC", (t_eX - t_MC), wgt);
+    FillHist1D("h1_teXBE_Res_Abs_QA_ZDC", (t_eXBE - t_MC), wgt);
     FillHist1D("h1_teXPT_Res_Abs_QA_ZDC", (t_eXPT - t_MC), wgt);
     FillHist1D("h1_teXBABE_Res_Abs_QA_ZDC", (t_eXBABE - t_MC), wgt);
     FillHist1D("h1_Q2_Res_QA_ZDC", ((Q2_DA - Q2_MC)/Q2_MC)*100, wgt);
@@ -751,6 +767,7 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist1D("h1_tBABE_Res_QA_B0", ((t_BABE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teX_Res_QA_B0", ((t_eX - t_MC)/t_MC)*100, wgt);
+    FillHist1D("h1_teXBE_Res_QA_B0", ((t_eXBE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXPT_Res_QA_B0", ((t_eXPT - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_teXBABE_Res_QA_B0", ((t_eXBABE - t_MC)/t_MC)*100, wgt);
     FillHist1D("h1_tBABE_Res_Abs_QA_B0", (t_BABE - t_MC), wgt);
@@ -764,12 +781,14 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   gDirectory->cd("QADists/tComp");
   FillHist2D("h2_tBABEComp", t_BABE, t_MC, wgt);
   FillHist2D("h2_teXComp", t_eX, t_MC, wgt);
+  FillHist2D("h2_teXBEComp", t_eXBE, t_MC, wgt);
   FillHist2D("h2_teXPTComp", t_eXPT, t_MC, wgt);
   FillHist2D("h2_teXBABEComp", t_eXBABE, t_MC, wgt);
   FillHist2D("h2_teXBABECompAlt", t_eXBABE, t_MC, wgt);
   if ( nZDC == kTRUE && ZDC == kTRUE){
     FillHist2D("h2_tBABEComp_ZDC", t_BABE, t_MC, wgt);
     FillHist2D("h2_teXComp_ZDC", t_eX, t_MC, wgt);
+    FillHist2D("h2_teXBEComp_ZDC", t_eXBE, t_MC, wgt);
     FillHist2D("h2_teXPTComp_ZDC", t_eXPT, t_MC, wgt);
     FillHist2D("h2_teXBABEComp_ZDC", t_eXBABE, t_MC, wgt);
     FillHist2D("h2_teXBABECompAlt_ZDC", t_eXBABE, t_MC, wgt);
@@ -777,6 +796,7 @@ void FillDEMP_QAKin(Bool_t ZDC, Bool_t nZDC, Bool_t B0, Bool_t nB0, float wgt){
   if ( nB0 == kTRUE && B0 == kTRUE){
     FillHist2D("h2_tBABEComp_B0", t_BABE, t_MC, wgt);
     FillHist2D("h2_teXComp_B0", t_eX, t_MC, wgt);
+    FillHist2D("h2_teXBEComp_B0", t_eXBE, t_MC, wgt);
     FillHist2D("h2_teXPTComp_B0", t_eXPT, t_MC, wgt);
     FillHist2D("h2_teXBABEComp_B0", t_eXBABE, t_MC, wgt);
     FillHist2D("h2_teXBABECompAlt_B0", t_eXBABE, t_MC, wgt);
